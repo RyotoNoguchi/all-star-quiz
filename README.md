@@ -92,3 +92,10 @@ Nx Cloud pairs with Nx in order to enable you to build and test code more rapidl
 Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
 
 Visit [Nx Cloud](https://nx.app/) to learn more.
+
+## Next.js + Nest.js + Axios + React + TypeScript　Monorepo環境構築
+1. npx create-nx-workspace 
+2. yarn add @nrwl/nest @nrwl/react -D
+3. nx g @nrwl/nest:app api <!-- :appはアプリケーションを作るという意味。apiはディレクトリの名前を決める -->
+4. nx serve api
+5. yarn add axios
