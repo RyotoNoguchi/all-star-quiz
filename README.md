@@ -93,9 +93,11 @@ Teams using Nx gain the advantage of building full-stack applications with their
 
 Visit [Nx Cloud](https://nx.app/) to learn more.
 
-## Next.js + Nest.js + Axios + React + TypeScript　Monorepo環境構築
+## Next.js + Nest.js + Axios + React + TypeScript　+ firebase Monorepo環境構築
+
 1. npx create-nx-workspace 
 2. yarn add @nrwl/nest @nrwl/react -D
 3. nx g @nrwl/nest:app api <!-- :appはアプリケーションを作るという意味。apiはディレクトリの名前を決める -->
 4. nx serve api
 5. yarn add axios
+6. sudo yarn add firebase react-firebase-hooks react-firebaseui

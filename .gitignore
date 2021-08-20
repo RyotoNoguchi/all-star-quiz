@@ -7,6 +7,8 @@
 
 # dependencies
 /node_modules
+.node-version
+target/
 
 # IDEs and editors
 /.idea
@@ -38,3 +40,12 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+yarn.lock
+package-lock.json
+
+# Lint
+.prettierignore
+.prettierrc
+
+# config files
+.editorconfig
