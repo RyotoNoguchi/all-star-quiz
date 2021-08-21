@@ -51,3 +51,8 @@ package-lock.json
 .editorconfig
 .jest.config.js
 .babel.config.json
+.editorconfig
+.eslintrc.json
+
+# test
+/apps/quiz-e2e
