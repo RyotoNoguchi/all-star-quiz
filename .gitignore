@@ -49,3 +49,5 @@ package-lock.json
 
 # config files
 .editorconfig
+.jest.config.js
+.babel.config.json
