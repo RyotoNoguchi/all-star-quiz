@@ -101,3 +101,4 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 4. nx serve api
 5. yarn add axios
 6. sudo yarn add firebase react-firebase-hooks react-firebaseui
+<!-- firebaseのインストールまで完了。Youtube（nextjs + firebase）の続きを見る -->
