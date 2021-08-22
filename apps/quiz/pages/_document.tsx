@@ -19,7 +19,7 @@ export default class CustomDocument extends Document<{
 
   render() {
     return (
-      <Html>
+      <Html lang="ja">
         <Head>{this.props.styleTags}</Head>
         <body>
           <Main />
