@@ -20,7 +20,9 @@ export default class CustomDocument extends Document<{
   render() {
     return (
       <Html lang="ja">
-        <Head>{this.props.styleTags}</Head>
+        <Head>{this.props.styleTags}
+          <title>アソビュー オールスター感謝祭2021</title>
+        </Head>
         <body>
           <Main />
           <NextScript />
