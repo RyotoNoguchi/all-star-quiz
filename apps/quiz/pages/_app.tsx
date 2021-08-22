@@ -9,11 +9,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <title>Welcome to quiz!</title>
       </Head>
       <div className="app">
-        <header className="flex">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/nx-logo-white.svg" alt="Nx logo" width="75" height="50" />
-          <h1>Welcome to quiz!</h1>
-        </header>
+        <h1>Welcome to quiz!</h1>
         <main>
           <Component {...pageProps} />
         </main>

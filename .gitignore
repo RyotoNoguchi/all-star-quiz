@@ -53,6 +53,16 @@ package-lock.json
 .babel.config.json
 .editorconfig
 .eslintrc.json
+.env.local
+.firebaserc
+
+# functions
+/functions/tsconfig.dev.json
+
+# components
+/components/Auth.tsx
+/components/VoterList.tsx
+
 
 # test
 /apps/quiz-e2e
