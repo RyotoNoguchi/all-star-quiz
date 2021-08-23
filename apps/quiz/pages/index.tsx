@@ -4,25 +4,57 @@ import firebase from '../../../firebase/clientApp';
 import styled from 'styled-components';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollection } from 'react-firebase-hooks/firestore'; // firebaseに作ったDBを接続する
-import Auth from 'components/Auth';
-import VoterList from 'components/VoterList';
+import Auth from '../components/Auth';
+import VoterList from '../components/VoterList';
 import Link from 'next/link';
+import { colors } from '../components/styles/colors';
 
-const TopBackGroundImg = styled.section<{ url: string }>`
-  background-image: url(${(p) => p.url});
+const db = firebase.firestore();
+
+const TopBackGroundImg = styled.section``;
+
+const TopTitlePart = styled.span`
+  display: inline-block;
+  position: relative;
+  /* color: transparent; */
+  background-clip: border-box;
+  background: linear-gradient(
+    ${colors.titleOrange},
+    ${colors.titleYellow},
+    ${colors.titleOrange}
+  );
+  -webkit-background-clip: text; //テキストでくり抜く
+  -webkit-text-fill-color: transparent;//くり抜いた部分は背景を表示
+  &::after {
+    background: none;
+    content: attr(data-text);
+    left: 0;
+    position: absolute;
+    text-shadow: 6px 6px 1px ${colors.titlePurple}, -6px -6px 1px ${colors.titlePurple};
+    top: 0;
+    z-index: -1;
+  }
 `;
 
-const TopTitle = styled.h1``;
+const TopTitle = styled.h1`
+  font-family: 'Dela Gothic One', cursive;
+  font-size: 8rem;
+  font-weight: 400;
+`;
+// db.collection()
 
 const Index = () => {
   return (
     <>
-      <TopBackGroundImg
-        url={'https://dummyimage.com/600x400/4aabcc/0011ff.jpg'}
-      >
-        <TopTitle>アソビュー オールスター感謝祭2021</TopTitle>
+      <TopBackGroundImg>
+        <TopTitle>
+          <TopTitlePart data-text="アソビュー">アソビュー</TopTitlePart>
+          <TopTitlePart data-text="オールスター感謝祭">
+            オールスター感謝祭
+          </TopTitlePart>
+          <TopTitlePart data-text="２０２１">２０２１</TopTitlePart>
+        </TopTitle>
       </TopBackGroundImg>
-      ;
     </>
   );
 };

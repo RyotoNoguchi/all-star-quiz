@@ -1,8 +1,16 @@
+body {
+  margin: 0;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/img%2Fbackground-image.png?alt=media&token=5f79ec55-4a49-4d6b-af0d-746a92193bbf');
+}
+
 .app {
   font-family: sans-serif;
-  min-width: 300px;
-  max-width: 600px;
+  // min-width: 300px;
+  // max-width: 600px;
   margin: 50px auto;
+  & h1 {
+    text-align: center;
+  }
 }
 
 .app .gutter-left {
@@ -35,9 +43,7 @@
 }
 
 .app h1 {
-  text-align: center;
-  margin-left: 18px;
-  font-size: 24px;
+
 }
 
 .app h2 {

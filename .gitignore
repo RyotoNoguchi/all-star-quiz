@@ -60,8 +60,7 @@ package-lock.json
 /functions/tsconfig.dev.json
 
 # components
-/components/Auth.tsx
-/components/VoterList.tsx
+apps/quiz/components/
 
 
 # test

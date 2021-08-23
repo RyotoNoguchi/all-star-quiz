@@ -21,7 +21,7 @@ export default class CustomDocument extends Document<{
     return (
       <Html lang="ja">
         <Head>{this.props.styleTags}
-          <title>アソビュー オールスター感謝祭2021</title>
+        <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Roboto&display=swap" rel="stylesheet" />
         </Head>
         <body>
           <Main />
