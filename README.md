@@ -111,3 +111,5 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 13. nx run api:serve <!-- バックエンド側のサーバー立てる>
 14. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
 　　
+<!-- TODO https://github.com/Kahoot-Clone/kahoot-clone見てどうやって異なるURLのウインドウで1つのページでのウインドウでのイベント発火で別のウインドウの変更を加えることができるか把握 -->
+<!-- TODO <Link/>を使って「問題です」の出題ページに -->

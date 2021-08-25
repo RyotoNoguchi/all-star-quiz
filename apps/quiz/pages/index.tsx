@@ -13,10 +13,15 @@ const db = firebase.firestore();
 
 const TopBackGroundImg = styled.section``;
 
+const TopTitle = styled.h1`
+  font-family: 'Dela Gothic One', cursive;
+  font-size: 8rem;
+  font-weight: 400;
+`;
+
 const TopTitlePart = styled.span`
   display: inline-block;
   position: relative;
-  /* color: transparent; */
   background-clip: border-box;
   background: linear-gradient(
     ${colors.titleOrange},
@@ -24,23 +29,19 @@ const TopTitlePart = styled.span`
     ${colors.titleOrange}
   );
   -webkit-background-clip: text; //テキストでくり抜く
-  -webkit-text-fill-color: transparent;//くり抜いた部分は背景を表示
+  -webkit-text-fill-color: transparent; //くり抜いた部分は背景を表示
   &::after {
     background: none;
     content: attr(data-text);
     left: 0;
     position: absolute;
-    text-shadow: 6px 6px 1px ${colors.titlePurple}, -6px -6px 1px ${colors.titlePurple};
+    text-shadow: 6px 6px 1px ${colors.titlePurple},
+      -6px -6px 1px ${colors.titlePurple};
     top: 0;
     z-index: -1;
   }
 `;
 
-const TopTitle = styled.h1`
-  font-family: 'Dela Gothic One', cursive;
-  font-size: 8rem;
-  font-weight: 400;
-`;
 // db.collection()
 
 const Index = () => {
