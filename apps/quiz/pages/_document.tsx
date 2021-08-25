@@ -19,8 +19,10 @@ export default class CustomDocument extends Document<{
 
   render() {
     return (
-      <Html>
-        <Head>{this.props.styleTags}</Head>
+      <Html lang="ja">
+        <Head>{this.props.styleTags}
+        <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Roboto&display=swap" rel="stylesheet" />
+        </Head>
         <body>
           <Main />
           <NextScript />

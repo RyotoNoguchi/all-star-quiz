@@ -1,15 +1,16 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import './styles.css';
+import './styles.scss';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Welcome to quiz!</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com"/>
+      <title>アソビュー オールスター感謝祭2021</title>
       </Head>
       <div className="app">
-        <h1>Welcome to quiz!</h1>
         <main>
           <Component {...pageProps} />
         </main>
