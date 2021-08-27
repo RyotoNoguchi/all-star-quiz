@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import firebase from '../../../firebase/clientApp';
@@ -8,6 +9,7 @@ import Auth from '../components/Auth';
 import VoterList from '../components/VoterList';
 import Link from 'next/link';
 import { colors } from '../components/styles/colors';
+import { io } from 'socket.io-client';
 
 const db = firebase.firestore();
 
@@ -45,6 +47,16 @@ const TopTitlePart = styled.span`
 // db.collection()
 
 const Index = () => {
+  const connect = () => {
+    
+    const socket = io('http://localhost:3333');
+    console.log(socket);
+  };
+
+  useEffect(() => {
+    connect();
+  }, []);
+
   return (
     <>
       <TopBackGroundImg>

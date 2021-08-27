@@ -71,6 +71,7 @@
           "executor": "@nrwl/next:server",
           "options": {
             "buildTarget": "quiz:build",
+            "proxyConfig": "apps/todos/proxy.conf.json",
             "dev": true
           },
           "configurations": {
