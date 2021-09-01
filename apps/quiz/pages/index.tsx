@@ -48,12 +48,13 @@ const TopTitlePart = styled.span`
 
 const Index = () => {
   const connect = () => {
-    
     const socket = io('http://localhost:3333');
     console.log(socket);
   };
 
   useEffect(() => {
+    console.log('useEffect'); 
+    
     connect();
   }, []);
 
