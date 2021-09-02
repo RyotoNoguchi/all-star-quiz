@@ -120,5 +120,5 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 <!-- 　　https://www.youtube.com/watch?v=RGmBjliEZZ0 -->
 <!-- TODO socket.tsの設定 Tic-Tac-ToeのYoutubeを18:35~再視聴 -->
 <!-- TODO [nestjsとsocket使うにはこれかも](https://docs.nestjs.com/websockets/gateways) -->
-<!-- TODO https://github.com/Kahoot-Clone/kahoot-clone見てどうやって異なるURLのウインドウで1つのページでのウインドウでのイベント発火で別のウインドウの変更を加えることができるか把握 -->
+<!-- TODO https://github.com/Kahoot-Clone/kahoot-clone 見てどうやって異なるURLのウインドウで1つのページでのウインドウでのイベント発火で別のウインドウの変更を加えることができるか把握 -->
 <!-- TODO <Link/>を使って「問題です」の出題ページに -->

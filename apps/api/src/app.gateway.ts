@@ -1,4 +1,6 @@
 import {
+  ConnectedSocket,
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
@@ -8,14 +10,18 @@ import {
   WsResponse,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
-import { MessageBody } from 'socket-controllers';
+// import { MessageBody } from 'socket-controllers';
 import { Logger } from '@nestjs/common';
+
+type Person = {
+  name: string
+  age: number
+}
 
 @WebSocketGateway({ cors: true })
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-
   private logger: Logger = new Logger('AppGateway');
 
   afterInit(server: Server) {
@@ -33,11 +39,21 @@ export class AppGateway
   // @WebSocketServer()
   // server: Server;
 
-  @SubscribeMessage('mapToServer')
-  handleMessage(@MessageBody() message: string): WsResponse<string> {
-    // this.server.emit('message', message); // サーバーに接続しているすべてのユーザにemitとしたときは←のようにする
-    return { event: 'mapToClient', data: message} // client.emit('mapToClient', data)と同じだが、型定義できない
-  }
-  
 
+  @SubscribeMessage('mapToServer')
+  handleMessage(@MessageBody() payload: Person): WsResponse<Person> {
+    console.log(`受け取ったデータ:${payload.name}`);
+    // const nameAndAge = `${payload.name}: ${payload.age}歳`
+
+    const futureInfo = {
+      ...payload,
+      age: payload.age + 1
+    }
+
+    return { event: 'mapToClient', data: futureInfo}
+    
+    
+    // this.server.emit('message', message); // サーバーに接続しているすべてのユーザにemitとしたときは←のようにする
+    // return { event: 'mapToClient', data: message }; // client.emit('mapToClient', data)と同じだが、型定義できない
+  }
 }

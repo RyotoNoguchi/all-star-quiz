@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import firebase from '../../../firebase/clientApp';
@@ -10,6 +10,7 @@ import VoterList from '../components/VoterList';
 import Link from 'next/link';
 import { colors } from '../components/styles/colors';
 import { io } from 'socket.io-client';
+const socket = io('http://localhost:3333');
 
 const db = firebase.firestore();
 
@@ -44,20 +45,33 @@ const TopTitlePart = styled.span`
   }
 `;
 
-// db.collection()
-
+type Payload = {
+  name: string
+  age: number
+}
 const Index = () => {
+  const [personalInfo, setPersonalInfo] = useState('Jack: 30 years old')
   const connect = () => {
     const socket = io('http://localhost:3333');
-    console.log(socket);
+    socket.on("connect", () => {
+      const message = {name: "Alex", age: 24}
+      socket.emit('mapToServer', message)
+    })
+    socket.on('mapToClient', data => {
+      console.log(data);
+      // const newPersonalInfo = `${data.name} ${data.age}years old`
+      // setPersonalInfo(newPersonalInfo);
+    })
   };
 
   useEffect(() => {
-    console.log('useEffect'); 
-    
     connect();
-  }, []);
-
+  }, [personalInfo]);
+  
+  // const handleClick = () => {
+  //   const message = "Hello"
+  //   socket.emit('mapToServer', message)
+  // }
   return (
     <>
       <TopBackGroundImg>
@@ -67,7 +81,13 @@ const Index = () => {
             オールスター感謝祭
           </TopTitlePart>
           <TopTitlePart data-text="２０２１">２０２１</TopTitlePart>
+          {/* <TopTitlePart>司会は{personalInfo}</TopTitlePart> */}
         </TopTitle>
+        {/* <input type="" />
+        <button type="submit" onClick={()=>handleClick()}>Next</button> */}
+        <div>
+
+        </div>
       </TopBackGroundImg>
     </>
   );
@@ -80,7 +100,7 @@ export default Index;
 // };
 // export function Index() {
 //   const db = firebase.firestore();
-//   // Desctructure user, loading, and error out of the hook
+//   // Destruct user, loading, and error out of the hook
 //   // user: 現在サインインしているユーザ情報。undefinedが返ってきたら、サインインしているユーザがないということ
 //   // loading: ユーザ情報がloading状態であるかどうかの真偽値
 //   // error: ユーザ情報のロードに失敗したときの情報
