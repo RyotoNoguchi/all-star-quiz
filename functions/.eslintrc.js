@@ -29,5 +29,6 @@ module.exports = {
     "quotes": "off",
     "import/no-unresolved": 0,
     "indent": "off",
+    "@typescript-eslint/no-var-requires": "off",
   },
 };
