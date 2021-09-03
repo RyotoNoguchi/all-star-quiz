@@ -114,11 +114,15 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 16. yarn add -D @types/socket.io
 17. yarn add socket-controllers
 18. yarn add reflect-metadata
-19. nx run api:serve <!-- バックエンド側のサーバー立てる>
-20. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
+19. yarn add @material-ui/core @material-ui/icons <!-- https://www.youtube.com/watch?v=0rnVfshKqDI -->
+20. nx run api:serve <!-- バックエンド側のサーバー立てる>
+21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
 
 <!-- 　　https://www.youtube.com/watch?v=RGmBjliEZZ0 -->
 <!-- TODO socket.tsの設定 Tic-Tac-ToeのYoutubeを18:35~再視聴 -->
 <!-- TODO [nestjsとsocket使うにはこれかも](https://docs.nestjs.com/websockets/gateways) -->
 <!-- TODO https://github.com/Kahoot-Clone/kahoot-clone 見てどうやって異なるURLのウインドウで1つのページでのウインドウでのイベント発火で別のウインドウの変更を加えることができるか把握 -->
 <!-- TODO <Link/>を使って「問題です」の出題ページに -->
+
+<!-- TODO Adminページに「問題です」をタイトルとするページを作成し、そこにモニター遷移ボタンを作成する-->
+
