@@ -4,8 +4,17 @@ import '../styles/styles.scss';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from '../components/styles/theme';
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 function CustomApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles?.parentElement?.removeChild(jssStyles);
+    }
+  }, []);
   return (
     <>
       <Head>
@@ -32,3 +41,8 @@ function CustomApp({ Component, pageProps }: AppProps) {
 }
 
 export default CustomApp;
+
+CustomApp.propTypes = {
+  Component: PropTypes.elementType.isRequired,
+  pageProps: PropTypes.object.isRequired,
+};
