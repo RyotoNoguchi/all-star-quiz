@@ -118,11 +118,4 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 20. nx run api:serve <!-- バックエンド側のサーバー立てる>
 21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
 
-<!-- 　　https://www.youtube.com/watch?v=RGmBjliEZZ0 -->
-<!-- TODO socket.tsの設定 Tic-Tac-ToeのYoutubeを18:35~再視聴 -->
-<!-- TODO [nestjsとsocket使うにはこれかも](https://docs.nestjs.com/websockets/gateways) -->
-<!-- TODO https://github.com/Kahoot-Clone/kahoot-clone 見てどうやって異なるURLのウインドウで1つのページでのウインドウでのイベント発火で別のウインドウの変更を加えることができるか把握 -->
-<!-- TODO <Link/>を使って「問題です」の出題ページに -->
-
-<!-- TODO Adminページに「問題です」をタイトルとするページを作成し、そこにモニター遷移ボタンを作成する-->
-
+<!-- TODO Adminページの[NEXT]ボタンクリックでMonitorページの出題画面を動的に切り替えられるように修正 -->

@@ -10,36 +10,68 @@ const StyledButton = styled(Button)`
   box-shadow: 0 3px 5px 2px rgba(255, 105, 135, 0.3);
 `;
 import { io } from 'socket.io-client';
-
-const handleClick = () => {
-  const socket = io('http://localhost:3333');
-  console.log('クリックされました');
-  const path = '/monitor/cue'
-  socket.emit('go_to_cue_page', path);
-};
-
-const goToQuestionPage = () => {
-  const socket = io('http://localhost:3333');
-  console.log('クリックされました');
-  const path = '/monitor/question/1';
-  socket.emit('go_to_question_page', path);
-};
+import { useState } from 'react';
 
 const Index = () => {
+  const socket = io('http://localhost:3333');
+  const MONITOR_BASE_URL = '/monitor';
+
+  const goToCuePage = () => {
+    console.log('クリックされました');
+    const path = `${MONITOR_BASE_URL}/cue`;
+    setMonitorCurrentPath(path)
+    socket.emit('go_to_cue_page', path);
+  };
+
+  const goToQuestionPage = () => {
+    const path = `${MONITOR_BASE_URL}/question/${questionId}`;
+    setMonitorCurrentPath(path)
+    socket.emit('go_to_question_page', path);
+    // socket.on('go_to_designated_page', (designatedPath) => {
+    //   const newCurrentPath = designatedPath;
+    //   setMonitorCurrentPath(newCurrentPath);
+    //   console.log(newCurrentPath);
+    // });
+  };
+
+  const goToNextQuestion = () => {
+    let nextQuestionId = ''
+    {questionId === '' ? nextQuestionId = '1' : nextQuestionId = (parseInt(questionId) + 1).toString()}
+    setQuestionId(nextQuestionId)
+    const path = `${MONITOR_BASE_URL}/question/${nextQuestionId}`;
+    setMonitorCurrentPath(path)
+    socket.emit('go_to_next_question', path);
+  };
+
+  const [questionId, setQuestionId] = useState('');
+  const [monitorCurrentPath, setMonitorCurrentPath] = useState('');
   return (
     <>
       <Typography variant="h1">管理者画面です</Typography>
+      <Typography variant="h6">現在のモニターのパス: {monitorCurrentPath === '' ? '/' : monitorCurrentPath}</Typography>
+      <Typography variant="h6">現在の問題番号: {questionId === '' ? 0 : questionId}</Typography>
       <div>
         <Button
           color="primary"
           variant="contained"
-          onClick={() => handleClick()}
+          onClick={() => goToCuePage()}
         >
           Cue
         </Button>
-        <StyledButton color="primary" variant="contained" onClick={() => goToQuestionPage()}>
-          TEST
+        <StyledButton
+          color="primary"
+          variant="contained"
+          onClick={() => goToQuestionPage()}
+        >
+          Question
         </StyledButton>
+        <Button
+          color="secondary"
+          variant="contained"
+          onClick={() => goToNextQuestion()}
+        >
+          NEXT
+        </Button>
       </div>
     </>
   );
