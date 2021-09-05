@@ -19,9 +19,6 @@ import { orange } from '@material-ui/core/colors'
 // Create a theme instance.
 const theme = createTheme({
   palette: {
-    danger: {
-      main: orange[500]
-    },
     common: {
       black: '#19192B',
       white: '#ffffff',

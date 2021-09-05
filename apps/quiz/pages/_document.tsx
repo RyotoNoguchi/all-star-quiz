@@ -1,12 +1,10 @@
-import { ReactElement } from 'react';
+// import { ReactElement } from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 import { ServerStyleSheets } from '@material-ui/core/styles';
 import React from 'react';
 
-export default class MyDocument extends Document<{
-  styleTags: ReactElement[];
-}> {
+export default class MyDocument extends Document {
   static getInitialProps({ renderPage }) {
     const sheet = new ServerStyleSheet();
 

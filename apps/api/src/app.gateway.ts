@@ -13,11 +13,6 @@ import { Socket, Server } from 'socket.io';
 // import { MessageBody } from 'socket-controllers';
 import { Logger } from '@nestjs/common';
 
-type Person = {
-  name: string
-  age: number
-}
-
 @WebSocketGateway({ cors: true })
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -36,24 +31,27 @@ export class AppGateway
   }
 
   // サーバーに接続しているすべてのユーザにemitとしたときは↓のようにする
-  // @WebSocketServer()
-  // server: Server;
+  @WebSocketServer()
+  server: Server;
 
+  @SubscribeMessage('go_to_top_page')
+  goToTopPage(@MessageBody() payload: string): WsResponse<string> {
+    console.log(`現在のURL: http://localhost:4200${payload}`);
 
-  @SubscribeMessage('mapToServer')
-  handleMessage(@MessageBody() payload: Person): WsResponse<Person> {
-    console.log(`受け取ったデータ:${payload.name}`);
-    // const nameAndAge = `${payload.name}: ${payload.age}歳`
-
-    const futureInfo = {
-      ...payload,
-      age: payload.age + 1
-    }
-
-    return { event: 'mapToClient', data: futureInfo}
-    
-    
+    return { event: 'go_to_designated_page', data: payload };
     // this.server.emit('message', message); // サーバーに接続しているすべてのユーザにemitとしたときは←のようにする
     // return { event: 'mapToClient', data: message }; // client.emit('mapToClient', data)と同じだが、型定義できない
+  }
+
+  @SubscribeMessage('go_to_cue_page')
+  goToCuePage(@MessageBody() payload: string): void {
+    console.log(`受け取ったURL: http://localhost:4200${payload}`);
+    this.server.emit('go_to_designated_page', payload)
+  }
+
+  @SubscribeMessage('go_to_question_page')
+  goToAnotherPage(@MessageBody() payload: string): void {
+    console.log(`受け取ったURL: http://localhost:4200${payload}`);
+    this.server.emit('go_to_designated_page', payload)
   }
 }

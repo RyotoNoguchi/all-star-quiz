@@ -6,6 +6,7 @@ import theme from '../components/styles/theme';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { io } from 'socket.io-client';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
