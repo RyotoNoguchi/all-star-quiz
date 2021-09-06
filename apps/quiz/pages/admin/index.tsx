@@ -23,25 +23,20 @@ const Index = () => {
     socket.emit('go_to_cue_page', path);
   };
 
-  const goToQuestionPage = () => {
-    const path = `${MONITOR_BASE_URL}/question/${questionId}`;
+  const goToQuestion = (isQuestionIndex: boolean) => {
+    let path = ''
+    if (isQuestionIndex) { // 出題画面のIndexに戻りたいとき
+      setQuestionId('')
+      path = `${MONITOR_BASE_URL}/question`
+    } else { // 次の問題に行きたいとき
+      let nextQuestionId = '' 
+      {questionId === '' ? nextQuestionId = '1' : nextQuestionId = (parseInt(questionId) + 1).toString()}
+      setQuestionId(nextQuestionId)
+      path = `${MONITOR_BASE_URL}/question/${nextQuestionId}`;
+    }
     setMonitorCurrentPath(path)
     socket.emit('go_to_question_page', path);
-    // socket.on('go_to_designated_page', (designatedPath) => {
-    //   const newCurrentPath = designatedPath;
-    //   setMonitorCurrentPath(newCurrentPath);
-    //   console.log(newCurrentPath);
-    // });
-  };
-
-  const goToNextQuestion = () => {
-    let nextQuestionId = ''
-    {questionId === '' ? nextQuestionId = '1' : nextQuestionId = (parseInt(questionId) + 1).toString()}
-    setQuestionId(nextQuestionId)
-    const path = `${MONITOR_BASE_URL}/question/${nextQuestionId}`;
-    setMonitorCurrentPath(path)
-    socket.emit('go_to_next_question', path);
-  };
+  }
 
   const [questionId, setQuestionId] = useState('');
   const [monitorCurrentPath, setMonitorCurrentPath] = useState('');
@@ -50,6 +45,7 @@ const Index = () => {
       <Typography variant="h1">管理者画面です</Typography>
       <Typography variant="h6">現在のモニターのパス: {monitorCurrentPath === '' ? '/' : monitorCurrentPath}</Typography>
       <Typography variant="h6">現在の問題番号: {questionId === '' ? 0 : questionId}</Typography>
+      {/* TODO HStackを導入して横のmargin開ける */}
       <div>
         <Button
           color="primary"
@@ -61,17 +57,17 @@ const Index = () => {
         <StyledButton
           color="primary"
           variant="contained"
-          onClick={() => goToQuestionPage()}
+          onClick={() => goToQuestion(true)}
         >
-          Question
+          GO TO Q-INDEX
         </StyledButton>
-        <Button
-          color="secondary"
+        <StyledButton
+          color="primary"
           variant="contained"
-          onClick={() => goToNextQuestion()}
+          onClick={() => goToQuestion(false)}
         >
-          NEXT
-        </Button>
+          GO TO NEXT-Q
+        </StyledButton>
       </div>
     </>
   );

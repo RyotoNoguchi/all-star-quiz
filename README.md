@@ -118,4 +118,5 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 20. nx run api:serve <!-- バックエンド側のサーバー立てる>
 21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
 
-<!-- TODO Adminページの[NEXT]ボタンクリックでMonitorページの出題画面を動的に切り替えられるように修正 -->
+<!-- TODO goToQuestionPage()とgoToNextPage()のリファクタ -->
+****

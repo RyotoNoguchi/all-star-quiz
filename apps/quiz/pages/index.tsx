@@ -46,9 +46,9 @@ const TopTitlePart = styled.span`
 `;
 
 const Index = () => {
-  const socket = io('http://localhost:3333');
   const [currentPath, setCurrentPath] = useState('');
   const router = useRouter()
+  const socket = io('http://localhost:3333');
 
   const goToDesignatedPage =  useCallback(() => {
     try {
@@ -56,7 +56,7 @@ const Index = () => {
         const newCurrentPath = data;
         setCurrentPath(newCurrentPath);
         // ※この時点でconsole.log(currentPath)としてもcurrentPathは変更されていない
-        router.push(newCurrentPath)
+        router.replace(newCurrentPath)
       });
     } catch (error) {
       if (error.name === "AbortError") {
