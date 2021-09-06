@@ -13,10 +13,7 @@ import { Socket, Server } from 'socket.io';
 // import { MessageBody } from 'socket-controllers';
 import { Logger } from '@nestjs/common';
 
-type Person = {
-  name: string
-  age: number
-}
+const GO_TO_DESIGNATED_PAGE = 'go_to_designated_page'
 
 @WebSocketGateway({ cors: true })
 export class AppGateway
@@ -36,24 +33,34 @@ export class AppGateway
   }
 
   // サーバーに接続しているすべてのユーザにemitとしたときは↓のようにする
-  // @WebSocketServer()
-  // server: Server;
+  @WebSocketServer()
+  server: Server;
 
+  // @SubscribeMessage('go_to_top_page')
+  // goToTopPage(@MessageBody() payload: string): WsResponse<string> {
+  //   console.log(`現在のURL: http://localhost:4200${payload}`);
 
-  @SubscribeMessage('mapToServer')
-  handleMessage(@MessageBody() payload: Person): WsResponse<Person> {
-    console.log(`受け取ったデータ:${payload.name}`);
-    // const nameAndAge = `${payload.name}: ${payload.age}歳`
+  //   return { event: GO_TO_DESIGNATED_PAGE, data: payload };
+  //   // this.server.emit('message', message); // サーバーに接続しているすべてのユーザにemitとしたときは←のようにする
+  //   // return { event: 'mapToClient', data: message }; // client.emit('mapToClient', data)と同じだが、型定義できない
+  // }
 
-    const futureInfo = {
-      ...payload,
-      age: payload.age + 1
-    }
+  @SubscribeMessage('go_to_cue_page')
+  goToCuePage(@MessageBody() payload: string): void {
+    console.log(`受け取ったURL: http://localhost:4200${payload}`);
+    this.server.emit(GO_TO_DESIGNATED_PAGE, payload)
+  }
 
-    return { event: 'mapToClient', data: futureInfo}
+  @SubscribeMessage('go_to_question_page')
+  goToAnotherPage(@MessageBody() path: string): void {
+    console.log(`受け取ったURL: http://localhost:4200${path}`);
+    this.server.emit(GO_TO_DESIGNATED_PAGE, path)
+  }
+
+  @SubscribeMessage('go_to_next_question')
+  goToNextQuestion(@MessageBody() path: string): void {
+    console.log(`受け取ったURL: http://localhost:4200${path}`);
+    this.server.emit(GO_TO_DESIGNATED_PAGE, path)
     
-    
-    // this.server.emit('message', message); // サーバーに接続しているすべてのユーザにemitとしたときは←のようにする
-    // return { event: 'mapToClient', data: message }; // client.emit('mapToClient', data)と同じだが、型定義できない
   }
 }

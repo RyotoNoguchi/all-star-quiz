@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import firebase from '../../../firebase/clientApp';
@@ -10,7 +10,7 @@ import VoterList from '../components/VoterList';
 import Link from 'next/link';
 import { colors } from '../components/styles/colors';
 import { io } from 'socket.io-client';
-const socket = io('http://localhost:3333');
+import { useRouter } from 'next/router'
 
 const db = firebase.firestore();
 
@@ -45,49 +45,50 @@ const TopTitlePart = styled.span`
   }
 `;
 
-type Payload = {
-  name: string
-  age: number
-}
 const Index = () => {
-  const [personalInfo, setPersonalInfo] = useState('Jack: 30 years old')
-  const connect = () => {
-    const socket = io('http://localhost:3333');
-    socket.on("connect", () => {
-      const message = {name: "Alex", age: 24}
-      socket.emit('mapToServer', message)
-    })
-    socket.on('mapToClient', data => {
-      console.log(data);
-      // const newPersonalInfo = `${data.name} ${data.age}years old`
-      // setPersonalInfo(newPersonalInfo);
-    })
-  };
+  const [currentPath, setCurrentPath] = useState('');
+  const router = useRouter()
+  const socket = io('http://localhost:3333');
+
+  const goToDesignatedPage =  useCallback(() => {
+    try {
+      socket.on('go_to_designated_page', (data) => {
+        const newCurrentPath = data;
+        setCurrentPath(newCurrentPath);
+        // ※この時点でconsole.log(currentPath)としてもcurrentPathは変更されていない
+        router.replace(newCurrentPath)
+      });
+    } catch (error) {
+      if (error.name === "AbortError") {
+          console.log(error.message);
+      }
+    }
+  }, []);
 
   useEffect(() => {
-    connect();
-  }, [personalInfo]);
-  
-  // const handleClick = () => {
-  //   const message = "Hello"
-  //   socket.emit('mapToServer', message)
-  // }
+    const abortCtrl = new AbortController()
+    goToDesignatedPage()
+    return () => {
+      abortCtrl.abort()
+    }
+  }, []);
+
+  const title = 'アソビュー オールスター感謝祭 2021';
+  const titleArray = title.split(' ');
+  const title1stRow = titleArray[0];
+  const title2ndRow = titleArray[1];
+  const title3rdRow = titleArray[2];
   return (
     <>
       <TopBackGroundImg>
         <TopTitle>
-          <TopTitlePart data-text="アソビュー">アソビュー</TopTitlePart>
-          <TopTitlePart data-text="オールスター感謝祭">
-            オールスター感謝祭
-          </TopTitlePart>
-          <TopTitlePart data-text="２０２１">２０２１</TopTitlePart>
+          <TopTitlePart data-text={title1stRow}>{title1stRow}</TopTitlePart>
+          <TopTitlePart data-text={title2ndRow}>{title2ndRow}</TopTitlePart>
+          <TopTitlePart data-text={title3rdRow}>{title3rdRow}</TopTitlePart>
           {/* <TopTitlePart>司会は{personalInfo}</TopTitlePart> */}
         </TopTitle>
         {/* <input type="" />
         <button type="submit" onClick={()=>handleClick()}>Next</button> */}
-        <div>
-
-        </div>
       </TopBackGroundImg>
     </>
   );
