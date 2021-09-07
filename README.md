@@ -118,5 +118,4 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 20. nx run api:serve <!-- バックエンド側のサーバー立てる>
 21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
 
-<!-- TODO goToQuestionPage()とgoToNextPage()のリファクタ -->
-****
+<!-- TODO 4択の枠のCSS既存をローカルで立ち上げて確認し、Material-uiのGridに直す-->
