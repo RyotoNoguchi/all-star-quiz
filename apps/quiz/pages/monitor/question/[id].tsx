@@ -129,6 +129,10 @@ const QuestionCell = styled(Card)`
   background-image: linear-gradient(#2d3870, #586dd4);
 `;
 
+const ChoiceText = styled(Typography)`
+  
+`
+
 
 const Question = ({ post }) => {
   return (
@@ -136,27 +140,31 @@ const Question = ({ post }) => {
       <QuestionContainer container spacing={3}>
         <QuestionBox item xs={12}>
           <QuestionMark>Q</QuestionMark>
-          <QuestionText variant="body1">{post.title}</QuestionText>
+          <QuestionText variant="h1">{post.title}</QuestionText>
           <CountDownCircle>9</CountDownCircle>
         </QuestionBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
             <AlphabetCircle choice="A" color="red"/>
+            <ChoiceText variant="h2">{post.title}</ChoiceText>
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
             <AlphabetCircle choice="B" color="blue"/>
+            <ChoiceText variant="h2">{post.title}</ChoiceText>
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
             <AlphabetCircle choice="C" color="yellow"/>
+            <ChoiceText variant="h2">{post.title}</ChoiceText>
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
             <AlphabetCircle choice="D" color="green"/>
+            <ChoiceText variant="h2">{post.title}</ChoiceText>
           </QuestionCell>
         </ChoiceBox>
       </QuestionContainer>

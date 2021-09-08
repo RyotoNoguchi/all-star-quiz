@@ -118,4 +118,4 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 20. nx run api:serve <!-- バックエンド側のサーバー立てる>
 21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
 
-<!-- TODO atoms/Information/index.tsx を参考にして<Avatar>を拡張した、背景色をpropsで変更できるコンポーネントを作成し、[id].tsxでインポートして使うようにする　-->
+<!-- TODO 選択肢のテキスト挿入　-->

@@ -16,7 +16,6 @@ const Cue = () => {
       <Typography variant="h1">問題です！</Typography >
     </TopBackGroundImg>
   )
-  //...
 }
 
 export default Cue;
