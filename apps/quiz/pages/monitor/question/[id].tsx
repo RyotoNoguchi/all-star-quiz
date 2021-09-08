@@ -1,8 +1,9 @@
-import { Typography, Grid } from '@material-ui/core';
+import { Typography, Grid, Card, Avatar } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { Colors, colors  } from "../../../components/styles/colors";
 
 type Post = {
   userId: number;
@@ -41,7 +42,7 @@ export const getStaticProps = async (context) => {
   };
 };
 
-const QuestionBox = styled(Grid)`
+const QuestionContainer = styled(Grid)`
   height: 4.5rem;
   display: flex;
   justify-content: center;
@@ -51,15 +52,22 @@ const QuestionBox = styled(Grid)`
   text-shadow: 3px 3px 0.1rem black;
   font-size: 2rem;
   background-image: linear-gradient(#2d3870, #586dd4);
+  margin-bottom: 48px;
   /* margin-right: 3rem;
   margin-left: 3rem; */
   border-radius: 0.5rem;
   position: relative;
 `;
+
+const QuestionBox = styled(Grid)`
+  margin-bottom: 48px;
+`;
 const QuestionMark = styled.span`
   position: absolute;
-  left: 2rem;
-  font-size: 4rem;
+  top: -6px;
+  left: 12px;
+  font-size: 60px;
+  font-weight: 900;
   color: rgb(121, 184, 252);
   text-shadow: 0 0 4px skyblue, 0 -2px #fff;
 `;
@@ -77,6 +85,8 @@ const CountDownCircle = styled.span`
   border-radius: 50%;
   margin: 0;
   position: relative;
+  right: 8px;
+  top: 8px;
   text-align: center;
   vertical-align: middle;
   display: flex;
@@ -84,7 +94,6 @@ const CountDownCircle = styled.span`
   align-items: center;
   background-image: linear-gradient(rgb(255, 76, 76), red);
   position: absolute;
-  right: 1rem;
   color: white;
   text-shadow: 3px 3px 3px black;
   box-shadow: 1px 1px 1px 1px black;
@@ -99,21 +108,50 @@ const ChoiceBox = styled(Grid)`
   position: relative;
   background-color: rgba(4, 83, 255, 0.797);
   border-radius: 1rem;
+`;
 
-`
+const QuestionCell = styled(Card)`
+  border: none;
+  color: black;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 2px 2px 2px 2px #5f72d1;
+  text-shadow: 2px 2px #555;
+  font-size: 4rem;
+  color: white;
+  background-image: linear-gradient(#2d3870, #586dd4);
+`;
 
+type AlphabetCircleColorType = 'red' | 'blue' | 'green' | 'yellow';
+
+// const AlphabetCircle = styled(Avatar)<{}>`
+
+// `
 
 const Question = ({ post }) => {
   return (
     <>
-      <QuestionBox container spacing={3}>
-        <QuestionMark>Q</QuestionMark>
-        <QuestionText variant="body1">{post.title}</QuestionText>
-        <CountDownCircle>9</CountDownCircle>
-      </QuestionBox>
-      <ChoiceBox item xs={12}>
-
-      </ChoiceBox>
+      <QuestionContainer container spacing={3}>
+        <QuestionBox item xs={12}>
+          <QuestionMark>Q</QuestionMark>
+          <QuestionText variant="body1">{post.title}</QuestionText>
+          <CountDownCircle>9</CountDownCircle>
+        </QuestionBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell>
+            <Avatar aria-label="choice" alt="A">
+              A
+            </Avatar>
+          </QuestionCell>
+        </ChoiceBox>
+        <ChoiceBox item xs={6}></ChoiceBox>
+      </QuestionContainer>
     </>
   );
 };
