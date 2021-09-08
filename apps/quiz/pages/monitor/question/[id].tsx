@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Colors, colors  } from "../../../components/styles/colors";
+import AlphabetCircle from "../../../components/atoms/AlphabetCirce/index";
 
 type Post = {
   userId: number;
@@ -128,11 +129,6 @@ const QuestionCell = styled(Card)`
   background-image: linear-gradient(#2d3870, #586dd4);
 `;
 
-type AlphabetCircleColorType = 'red' | 'blue' | 'green' | 'yellow';
-
-// const AlphabetCircle = styled(Avatar)<{}>`
-
-// `
 
 const Question = ({ post }) => {
   return (
@@ -145,12 +141,24 @@ const Question = ({ post }) => {
         </QuestionBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
-            <Avatar aria-label="choice" alt="A">
-              A
-            </Avatar>
+            <AlphabetCircle choice="A" color="red"/>
           </QuestionCell>
         </ChoiceBox>
-        <ChoiceBox item xs={6}></ChoiceBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell>
+            <AlphabetCircle choice="B" color="blue"/>
+          </QuestionCell>
+        </ChoiceBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell>
+            <AlphabetCircle choice="C" color="yellow"/>
+          </QuestionCell>
+        </ChoiceBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell>
+            <AlphabetCircle choice="D" color="green"/>
+          </QuestionCell>
+        </ChoiceBox>
       </QuestionContainer>
     </>
   );
