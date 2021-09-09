@@ -170,6 +170,9 @@ const Question = ({ post }) => {
         setCountdownTimeSec((countdownTimeSec) => {
           if (countdownTimeSec === 0) {
             clearInterval(timerId);
+            setTimeout(() => {
+              setIsNumberCountShown(true)
+            }, 2400);
           }
           return countdownTimeSec;
         });
@@ -200,27 +203,33 @@ const Question = ({ post }) => {
           <QuestionCell>
             <AlphabetCircle choice="B" color="blue" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
-            <CountAnswerBox>
-              <AnswerCount variant="body1">{post.id}</AnswerCount>
-            </CountAnswerBox>
+            {isNumberCountShown && (
+              <CountAnswerBox>
+                <AnswerCount variant="body1">{post.id}</AnswerCount>
+              </CountAnswerBox>
+            )}
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
             <AlphabetCircle choice="C" color="yellow" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
-            <CountAnswerBox>
-              <AnswerCount variant="body1">{post.id}</AnswerCount>
-            </CountAnswerBox>
+            {isNumberCountShown && (
+              <CountAnswerBox>
+                <AnswerCount variant="body1">{post.id}</AnswerCount>
+              </CountAnswerBox>
+            )}
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
             <AlphabetCircle choice="D" color="green" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
-            <CountAnswerBox>
-              <AnswerCount variant="body1">{post.id}</AnswerCount>
-            </CountAnswerBox>
+            {isNumberCountShown && (
+              <CountAnswerBox>
+                <AnswerCount variant="body1">{post.id}</AnswerCount>
+              </CountAnswerBox>
+            )}
           </QuestionCell>
         </ChoiceBox>
       </QuestionContainer>
