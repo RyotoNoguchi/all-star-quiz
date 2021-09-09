@@ -1,10 +1,10 @@
-import { Typography, Grid, Card, Avatar } from '@material-ui/core';
+import { Typography, Grid, Card, Box } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Colors, colors  } from "../../../components/styles/colors";
-import AlphabetCircle from "../../../components/atoms/AlphabetCirce/index";
+import { Colors, colors } from '../../../components/styles/colors';
+import AlphabetCircle from '../../../components/atoms/AlphabetCirce/index';
 
 type Post = {
   userId: number;
@@ -54,8 +54,6 @@ const QuestionContainer = styled(Grid)`
   font-size: 2rem;
   background-image: linear-gradient(#2d3870, #586dd4);
   margin-bottom: 48px;
-  /* margin-right: 3rem;
-  margin-left: 3rem; */
   border-radius: 0.5rem;
   position: relative;
 `;
@@ -63,6 +61,7 @@ const QuestionContainer = styled(Grid)`
 const QuestionBox = styled(Grid)`
   margin-bottom: 48px;
 `;
+
 const QuestionMark = styled.span`
   position: absolute;
   top: -6px;
@@ -129,10 +128,34 @@ const QuestionCell = styled(Card)`
   background-image: linear-gradient(#2d3870, #586dd4);
 `;
 
-const ChoiceText = styled(Typography)`
-  
-`
+const ChoiceText = styled(Typography)``;
 
+const CountAnswerBox = styled(Box)`
+  width: 80px;
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  font-size: 2.5rem;
+  border: 2px solid grey;
+  border-radius: 12px;
+  line-height: 2.5rem;
+  box-shadow: 2px 2px 2px black;
+  text-shadow: 2px 2px #555;
+  background-image: linear-gradient(
+    to right,
+    rgb(125, 138, 255),
+    rgb(185, 231, 249)
+  );
+  color: blue;
+`;
+
+const AnswerCount = styled(Typography)`
+  font-size: 36px;
+  line-height: normal;
+  padding: 0;
+  margin: 0;
+  transform: translate(25%, 0);
+`;
 
 const Question = ({ post }) => {
   return (
@@ -145,26 +168,38 @@ const Question = ({ post }) => {
         </QuestionBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
-            <AlphabetCircle choice="A" color="red"/>
+            <AlphabetCircle choice="A" color="red" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
+            <CountAnswerBox>
+              <AnswerCount variant="body1">{post.id}</AnswerCount>
+            </CountAnswerBox>
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
-            <AlphabetCircle choice="B" color="blue"/>
+            <AlphabetCircle choice="B" color="blue" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
+            <CountAnswerBox>
+              <AnswerCount variant="body1">{post.id}</AnswerCount>
+            </CountAnswerBox>
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
-            <AlphabetCircle choice="C" color="yellow"/>
+            <AlphabetCircle choice="C" color="yellow" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
+            <CountAnswerBox>
+              <AnswerCount variant="body1">{post.id}</AnswerCount>
+            </CountAnswerBox>
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
-            <AlphabetCircle choice="D" color="green"/>
+            <AlphabetCircle choice="D" color="green" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
+            <CountAnswerBox>
+              <AnswerCount variant="body1">{post.id}</AnswerCount>
+            </CountAnswerBox>
           </QuestionCell>
         </ChoiceBox>
       </QuestionContainer>
