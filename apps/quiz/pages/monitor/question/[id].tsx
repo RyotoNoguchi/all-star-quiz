@@ -5,6 +5,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { Colors, colors } from '../../../components/styles/colors';
 import AlphabetCircle from '../../../components/atoms/AlphabetCirce/index';
+import { io } from 'socket.io-client';
 
 type Post = {
   userId: number;
@@ -158,21 +159,41 @@ const AnswerCount = styled(Typography)`
 `;
 
 const Question = ({ post }) => {
+  const socket = io('http://localhost:3333');
+  const [countdownTimeSec, setCountdownTimeSec] = useState(10);
+  const [isNumberCountShown, setIsNumberCountShown] = useState(false);
+
+  useEffect(() => {
+    socket.on('countdown', () => {
+      const timerId = setInterval(() => {
+        setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
+        setCountdownTimeSec((countdownTimeSec) => {
+          if (countdownTimeSec === 0) {
+            clearInterval(timerId);
+          }
+          return countdownTimeSec;
+        });
+      }, 1000);
+    });
+  }, []);
+
   return (
     <>
       <QuestionContainer container spacing={3}>
         <QuestionBox item xs={12}>
           <QuestionMark>Q</QuestionMark>
           <QuestionText variant="h1">{post.title}</QuestionText>
-          <CountDownCircle>9</CountDownCircle>
+          <CountDownCircle>{countdownTimeSec}</CountDownCircle>
         </QuestionBox>
         <ChoiceBox item xs={6}>
           <QuestionCell>
             <AlphabetCircle choice="A" color="red" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
-            <CountAnswerBox>
-              <AnswerCount variant="body1">{post.id}</AnswerCount>
-            </CountAnswerBox>
+            {isNumberCountShown && (
+              <CountAnswerBox>
+                <AnswerCount variant="body1">{post.id}</AnswerCount>
+              </CountAnswerBox>
+            )}
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
