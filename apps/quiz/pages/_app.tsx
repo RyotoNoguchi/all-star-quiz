@@ -1,9 +1,9 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import '../styles/styles.scss';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import theme from '../components/styles/theme';
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { CssBaseline, Container } from '@material-ui/core/';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { io } from 'socket.io-client';
@@ -31,10 +31,14 @@ function CustomApp({ Component, pageProps }: AppProps) {
       {/* ↓ ThemProviderでどのコンポーネントでもthemeを使えるようにする */}
       <ThemeProvider theme={theme}>
         <div className="app">
-          <CssBaseline/>
-          <main>
-            <Component {...pageProps} />
-          </main>
+          <CssBaseline />
+          <StylesProvider injectFirst>
+            <Container>
+              <main>
+                <Component {...pageProps} />
+              </main>
+            </Container>
+          </StylesProvider>
         </div>
       </ThemeProvider>
     </>
