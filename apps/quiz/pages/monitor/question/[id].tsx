@@ -111,9 +111,8 @@ const ChoiceBox = styled(Grid)`
   border-radius: 1rem;
 `;
 
-const QuestionCell = styled(Card)`
+const QuestionCell = styled(Card)<{ isCorrect: boolean }>`
   border: none;
-  color: black;
   width: 100%;
   height: 100%;
   border-radius: 0.5rem;
@@ -123,15 +122,27 @@ const QuestionCell = styled(Card)`
   justify-content: center;
   position: relative;
   box-shadow: 2px 2px 2px 2px #5f72d1;
-  text-shadow: 2px 2px #555;
   font-size: 4rem;
-  color: white;
-  background-image: linear-gradient(#2d3870, #586dd4);
+  ${(props) => {
+    if (props.isCorrect) {
+      return `
+      background-image: radial-gradient(rgb(183, 58, 58), rgb(249, 120, 120));
+      text-shadow: 2px 2px black;
+      color: #e4d039;
+      `;
+    } else {
+      return `
+      text-shadow: 2px 2px #555;
+      background-image: linear-gradient(#2d3870, #586dd4);
+      color: white;
+      `;
+    }
+  }}
 `;
 
 const ChoiceText = styled(Typography)``;
 
-const CountAnswerBox = styled(Box)`
+const CountAnswerBox = styled(Box)<{ isCorrect: boolean }>`
   width: 80px;
   position: absolute;
   right: 1rem;
@@ -141,13 +152,25 @@ const CountAnswerBox = styled(Box)`
   border-radius: 12px;
   line-height: 2.5rem;
   box-shadow: 2px 2px 2px black;
-  text-shadow: 2px 2px #555;
-  background-image: linear-gradient(
-    to right,
-    rgb(125, 138, 255),
-    rgb(185, 231, 249)
-  );
-  color: blue;
+  ${props => {
+    if (props.isCorrect) {
+      return `
+      background-image: radial-gradient(#e4d039, #fcf4b4);
+      text-shadow: 2px 2px black;
+      color: rgb(183, 58, 58);
+      `
+    } else {
+      return `
+      color: blue;
+      text-shadow: 2px 2px #555;
+      background-image: linear-gradient(
+        to right,
+        rgb(125, 138, 255),
+        rgb(185, 231, 249)
+      );
+      `
+    }
+  }}
 `;
 
 const AnswerCount = styled(Typography)`
@@ -162,6 +185,7 @@ const Question = ({ post }) => {
   const socket = io('http://localhost:3333');
   const [countdownTimeSec, setCountdownTimeSec] = useState(10);
   const [isNumberCountShown, setIsNumberCountShown] = useState(false);
+  const [isBlink, setIsBlink] = useState(false);
 
   useEffect(() => {
     socket.on('countdown', () => {
@@ -171,8 +195,14 @@ const Question = ({ post }) => {
           if (countdownTimeSec === 0) {
             clearInterval(timerId);
             setTimeout(() => {
-              setIsNumberCountShown(true)
+              setIsNumberCountShown(true);
             }, 2400);
+
+            // setTimeout(() => {
+            //   const BlinkTimerId = setInterval(() => {
+
+            //     })
+            //   }, 6000);
           }
           return countdownTimeSec;
         });
@@ -189,44 +219,44 @@ const Question = ({ post }) => {
           <CountDownCircle>{countdownTimeSec}</CountDownCircle>
         </QuestionBox>
         <ChoiceBox item xs={6}>
-          <QuestionCell>
+          <QuestionCell isCorrect={true}>
             <AlphabetCircle choice="A" color="red" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
             {isNumberCountShown && (
-              <CountAnswerBox>
+              <CountAnswerBox isCorrect={true}>
                 <AnswerCount variant="body1">{post.id}</AnswerCount>
               </CountAnswerBox>
             )}
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
-          <QuestionCell>
+          <QuestionCell isCorrect={false}>
             <AlphabetCircle choice="B" color="blue" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
             {isNumberCountShown && (
-              <CountAnswerBox>
+              <CountAnswerBox isCorrect={false}>
                 <AnswerCount variant="body1">{post.id}</AnswerCount>
               </CountAnswerBox>
             )}
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
-          <QuestionCell>
+          <QuestionCell isCorrect={false}>
             <AlphabetCircle choice="C" color="yellow" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
             {isNumberCountShown && (
-              <CountAnswerBox>
+              <CountAnswerBox isCorrect={false}>
                 <AnswerCount variant="body1">{post.id}</AnswerCount>
               </CountAnswerBox>
             )}
           </QuestionCell>
         </ChoiceBox>
         <ChoiceBox item xs={6}>
-          <QuestionCell>
+          <QuestionCell isCorrect={false}>
             <AlphabetCircle choice="D" color="green" />
             <ChoiceText variant="h2">{post.title}</ChoiceText>
             {isNumberCountShown && (
-              <CountAnswerBox>
+              <CountAnswerBox isCorrect={false}>
                 <AnswerCount variant="body1">{post.id}</AnswerCount>
               </CountAnswerBox>
             )}
