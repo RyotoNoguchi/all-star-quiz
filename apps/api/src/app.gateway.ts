@@ -45,16 +45,16 @@ export class AppGateway
   //   // return { event: 'mapToClient', data: message }; // client.emit('mapToClient', data)と同じだが、型定義できない
   // }
 
-  @SubscribeMessage('go_to_cue_page')
-  goToCuePage(@MessageBody() payload: string): void {
-    console.log(`受け取ったURL: http://localhost:4200${payload}`);
-    this.server.emit(GO_TO_DESIGNATED_PAGE, payload)
-  }
+  // @SubscribeMessage('go_to_cue_page')
+  // goToCuePage(@MessageBody() payload: string): void {
+  //   console.log(`受け取ったURL: http://localhost:4200${payload}`);
+  //   this.server.emit(GO_TO_DESIGNATED_PAGE, payload)
+  // }
 
   @SubscribeMessage('go_to_question_page')
-  goToAnotherPage(@MessageBody() path: string): void {
-    console.log(`受け取ったURL: http://localhost:4200${path}`);
-    this.server.emit(GO_TO_DESIGNATED_PAGE, path)
+  goToAnotherPage(@MessageBody() nextQuestionId: string): void {
+    // console.log(`受け取ったURL: http://localhost:4200${path}`);
+    this.server.emit(GO_TO_DESIGNATED_PAGE, nextQuestionId)
   }
 
   @SubscribeMessage('go_to_next_question')
@@ -63,9 +63,19 @@ export class AppGateway
     this.server.emit(GO_TO_DESIGNATED_PAGE, path)
   }
 
-  @SubscribeMessage('countdown')
-  countdown() {
+  @SubscribeMessage('display_cue_page')
+  displayCuePage() {
+    this.server.emit('display_cue_page')
+  }
+
+  @SubscribeMessage('display_top_page')
+  displayTopPage() {
+    this.server.emit('display_top_page')
+  }
+
+  @SubscribeMessage('ready_go')
+  readyGo() {
     console.log("カウントダウンのEMITがされました");
-    this.server.emit('countdown')
+    this.server.emit('ready_go')
   }
 }
