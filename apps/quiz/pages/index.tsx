@@ -65,6 +65,12 @@ const Index = () => {
     }
   }, []);
 
+  // const countdown = () => {
+  //   socket.on('countdown', ()=> {
+      
+  //   })
+  // }
+
   useEffect(() => {
     const abortCtrl = new AbortController()
     goToDesignatedPage()

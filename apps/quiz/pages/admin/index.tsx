@@ -6,7 +6,6 @@ const StyledButton = styled(Button)`
   border-radius: 3px;
   border: 0;
   color: white;
-  /* height: 48px; */
   box-shadow: 0 3px 5px 2px rgba(255, 105, 135, 0.3);
 `;
 import { io } from 'socket.io-client';
@@ -36,6 +35,10 @@ const Index = () => {
     }
     setMonitorCurrentPath(path)
     socket.emit('go_to_question_page', path);
+  }
+
+  const countdown = () => {
+    socket.emit('countdown')
   }
 
   const [questionId, setQuestionId] = useState('');
@@ -68,6 +71,13 @@ const Index = () => {
         >
           GO TO NEXT-Q
         </StyledButton>
+        <Button
+          color="secondary"
+          variant="contained"
+          onClick={() => countdown()}
+        >
+          Countdown
+        </Button>
       </div>
     </>
   );

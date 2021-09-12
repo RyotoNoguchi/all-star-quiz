@@ -61,6 +61,11 @@ export class AppGateway
   goToNextQuestion(@MessageBody() path: string): void {
     console.log(`受け取ったURL: http://localhost:4200${path}`);
     this.server.emit(GO_TO_DESIGNATED_PAGE, path)
-    
+  }
+
+  @SubscribeMessage('countdown')
+  countdown() {
+    console.log("カウントダウンのEMITがされました");
+    this.server.emit('countdown')
   }
 }
