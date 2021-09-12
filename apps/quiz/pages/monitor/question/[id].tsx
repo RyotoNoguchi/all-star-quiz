@@ -8,6 +8,7 @@ import AlphabetCircle from '../../../components/atoms/AlphabetCirce/index';
 import { io } from 'socket.io-client';
 import Cue from '../cue';
 import Index from '../../index';
+import useSound from 'use-sound';
 
 type Post = {
   userId: number;
@@ -198,8 +199,6 @@ const Question = ({ post }) => {
   const [isCorrectForC, setIsCorrectForC] = useState(false);
   const [isCorrectForD, setIsCorrectForD] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState<CorrectAnswer>('A');
-  const countdownAudioEl = useRef(null);
-  const cueAudioEl = useRef(null)
   
   const resetQuestion = () => {
     setCountdownTimeSec(countdownSec);
@@ -215,7 +214,7 @@ const Question = ({ post }) => {
     socket.on('ready_go', () => {
       setIsQuestionDisplayed(true);
       setIsTopPage(false);
-      countdownAudioEl.current.play();
+      // countdownAudioEl.current.play();
       const CD10SecTimerId = setInterval(() => {
         setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
         setCountdownTimeSec((countdownTimeSec) => {
@@ -260,7 +259,6 @@ const Question = ({ post }) => {
       router.push(newCurrentPath);
     });
     socket.on('display_cue_page', () => {
-      cueAudioEl.current.play();
       setIsTopPage(false);
     });
     socket.on('display_top_page', () => {
@@ -329,16 +327,6 @@ const Question = ({ post }) => {
             </QuestionCell>
           </ChoiceBox>
         </QuestionContainer>
-        <div>
-          <audio
-            src="https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fcountdown.mp3?alt=media&token=1f25a4b9-30b1-4eba-bacd-3dcd86b31f37"
-            ref={countdownAudioEl}
-          ></audio>
-          <audio
-            src="https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fquiz_cue.mp3?alt=media&token=d671624b-80e4-40c4-ae5d-ce147a1515f2"
-            ref={cueAudioEl}
-          ></audio>
-        </div>
       </>
     );
   }
