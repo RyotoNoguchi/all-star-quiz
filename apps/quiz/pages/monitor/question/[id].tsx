@@ -6,6 +6,7 @@ import styled, { keyframes } from 'styled-components';
 import { Colors, colors } from '../../../components/styles/colors';
 import AlphabetCircle from '../../../components/atoms/AlphabetCirce/index';
 import { io } from 'socket.io-client';
+import Cue from '../cue';
 
 type Post = {
   userId: number;
@@ -134,8 +135,8 @@ const QuestionCell = styled(({ isCorrect, ...props }) => <Card {...props} />)`
   text-shadow: 2px 2px #555;
   background-image: linear-gradient(#2d3870, #586dd4);
   color: white;
-  animation: ${(props) => (props.isCorrect ? blinkQuestionCell : '')} 600ms linear
-    0ms 4 normal forwards;
+  animation: ${(props) => (props.isCorrect ? blinkQuestionCell : '')} 600ms
+    linear 0ms 4 normal forwards;
 `;
 
 const ChoiceText = styled(Typography)``;
@@ -147,7 +148,7 @@ const blinkingCountAnswerBox = keyframes`
       color: rgb(183, 58, 58);
     }
   `;
-  
+
 const CountAnswerBox = styled(({ isCorrect, ...props }) => <Box {...props} />)`
   width: 80px;
   position: absolute;
@@ -181,6 +182,7 @@ type CorrectAnswer = 'A' | 'B' | 'C' | 'D';
 
 const Question = ({ post }) => {
   const socket = io('http://localhost:3333');
+  const [isQuestionDisplayed, setIsQuestionDisplayed] = useState(false);
   const [countdownTimeSec, setCountdownTimeSec] = useState(3);
   const [isNumberCountShown, setIsNumberCountShown] = useState(false);
   const [isCorrectForA, setIsCorrectForA] = useState(false);
@@ -190,7 +192,8 @@ const Question = ({ post }) => {
   const [correctAnswer, setCorrectAnswer] = useState<CorrectAnswer>('A');
 
   useEffect(() => {
-    socket.on('countdown', () => {
+    socket.on('ready_go', () => {
+      setIsQuestionDisplayed(true)
       const CD10SecTimerId = setInterval(() => {
         setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
         setCountdownTimeSec((countdownTimeSec) => {
@@ -228,61 +231,65 @@ const Question = ({ post }) => {
     });
   }, []);
 
-  return (
-    <>
-      <QuestionContainer container spacing={3}>
-        <QuestionBox item xs={12}>
-          <QuestionMark>Q</QuestionMark>
-          <QuestionText variant="h1">{post.title}</QuestionText>
-          <CountDownCircle>{countdownTimeSec}</CountDownCircle>
-        </QuestionBox>
-        <ChoiceBox item xs={6}>
-          <QuestionCell isCorrect={isCorrectForA}>
-            <AlphabetCircle choice="A" color="red" />
-            <ChoiceText variant="h2">{post.title}</ChoiceText>
-            {isNumberCountShown && (
-              <CountAnswerBox isCorrect={isCorrectForA}>
-                <AnswerCount variant="body1">{post.id}</AnswerCount>
-              </CountAnswerBox>
-            )}
-          </QuestionCell>
-        </ChoiceBox>
-        <ChoiceBox item xs={6}>
-          <QuestionCell isCorrect={isCorrectForB}>
-            <AlphabetCircle choice="B" color="blue" />
-            <ChoiceText variant="h2">{post.title}</ChoiceText>
-            {isNumberCountShown && (
-              <CountAnswerBox isCorrect={isCorrectForB}>
-                <AnswerCount variant="body1">{post.id}</AnswerCount>
-              </CountAnswerBox>
-            )}
-          </QuestionCell>
-        </ChoiceBox>
-        <ChoiceBox item xs={6}>
-          <QuestionCell isCorrect={isCorrectForC}>
-            <AlphabetCircle choice="C" color="yellow" />
-            <ChoiceText variant="h2">{post.title}</ChoiceText>
-            {isNumberCountShown && (
-              <CountAnswerBox isCorrect={isCorrectForC}>
-                <AnswerCount variant="body1">{post.id}</AnswerCount>
-              </CountAnswerBox>
-            )}
-          </QuestionCell>
-        </ChoiceBox>
-        <ChoiceBox item xs={6}>
-          <QuestionCell isCorrect={isCorrectForD}>
-            <AlphabetCircle choice="D" color="green" />
-            <ChoiceText variant="h2">{post.title}</ChoiceText>
-            {isNumberCountShown && (
-              <CountAnswerBox isCorrect={isCorrectForD}>
-                <AnswerCount variant="body1">{post.id}</AnswerCount>
-              </CountAnswerBox>
-            )}
-          </QuestionCell>
-        </ChoiceBox>
-      </QuestionContainer>
-    </>
-  );
+  if (!isQuestionDisplayed) { // [READY-GO]ボタンが押下される前
+    return <Cue />;
+  } else {
+    return (
+      <>
+        <QuestionContainer container spacing={3}>
+          <QuestionBox item xs={12}>
+            <QuestionMark>Q</QuestionMark>
+            <QuestionText variant="h1">{post.title}</QuestionText>
+            <CountDownCircle>{countdownTimeSec}</CountDownCircle>
+          </QuestionBox>
+          <ChoiceBox item xs={6}>
+            <QuestionCell isCorrect={isCorrectForA}>
+              <AlphabetCircle choice="A" color="red" />
+              <ChoiceText variant="h2">{post.title}</ChoiceText>
+              {isNumberCountShown && (
+                <CountAnswerBox isCorrect={isCorrectForA}>
+                  <AnswerCount variant="body1">{post.id}</AnswerCount>
+                </CountAnswerBox>
+              )}
+            </QuestionCell>
+          </ChoiceBox>
+          <ChoiceBox item xs={6}>
+            <QuestionCell isCorrect={isCorrectForB}>
+              <AlphabetCircle choice="B" color="blue" />
+              <ChoiceText variant="h2">{post.title}</ChoiceText>
+              {isNumberCountShown && (
+                <CountAnswerBox isCorrect={isCorrectForB}>
+                  <AnswerCount variant="body1">{post.id}</AnswerCount>
+                </CountAnswerBox>
+              )}
+            </QuestionCell>
+          </ChoiceBox>
+          <ChoiceBox item xs={6}>
+            <QuestionCell isCorrect={isCorrectForC}>
+              <AlphabetCircle choice="C" color="yellow" />
+              <ChoiceText variant="h2">{post.title}</ChoiceText>
+              {isNumberCountShown && (
+                <CountAnswerBox isCorrect={isCorrectForC}>
+                  <AnswerCount variant="body1">{post.id}</AnswerCount>
+                </CountAnswerBox>
+              )}
+            </QuestionCell>
+          </ChoiceBox>
+          <ChoiceBox item xs={6}>
+            <QuestionCell isCorrect={isCorrectForD}>
+              <AlphabetCircle choice="D" color="green" />
+              <ChoiceText variant="h2">{post.title}</ChoiceText>
+              {isNumberCountShown && (
+                <CountAnswerBox isCorrect={isCorrectForD}>
+                  <AnswerCount variant="body1">{post.id}</AnswerCount>
+                </CountAnswerBox>
+              )}
+            </QuestionCell>
+          </ChoiceBox>
+        </QuestionContainer>
+      </>
+    );
+  }
 };
 
 export default Question;

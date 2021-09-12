@@ -37,12 +37,14 @@ const Index = () => {
     socket.emit('go_to_question_page', path);
   }
 
-  const countdown = () => {
-    socket.emit('countdown')
+  const readyGo = () => {
+    socket.emit('ready_go')
   }
 
   const [questionId, setQuestionId] = useState('');
   const [monitorCurrentPath, setMonitorCurrentPath] = useState('');
+
+  
   return (
     <>
       <Typography variant="h1">管理者画面です</Typography>
@@ -74,9 +76,9 @@ const Index = () => {
         <Button
           color="secondary"
           variant="contained"
-          onClick={() => countdown()}
+          onClick={() => readyGo()}
         >
-          Countdown
+          READY GO !
         </Button>
       </div>
     </>

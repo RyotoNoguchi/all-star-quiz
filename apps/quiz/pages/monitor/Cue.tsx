@@ -11,7 +11,6 @@ const TopTitle = styled.h1`
 `
 const Cue = () => {
   return (
-
     <TopBackGroundImg url={'https://dummyimage.com/600x400/4aabcc/0011ff.jpg'}>
       <Typography variant="h1">問題です！</Typography >
     </TopBackGroundImg>

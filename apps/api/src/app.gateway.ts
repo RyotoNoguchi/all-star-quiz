@@ -63,9 +63,9 @@ export class AppGateway
     this.server.emit(GO_TO_DESIGNATED_PAGE, path)
   }
 
-  @SubscribeMessage('countdown')
+  @SubscribeMessage('ready_go')
   countdown() {
     console.log("カウントダウンのEMITがされました");
-    this.server.emit('countdown')
+    this.server.emit('ready_go')
   }
 }
