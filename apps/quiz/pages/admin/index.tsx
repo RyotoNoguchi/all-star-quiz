@@ -16,6 +16,7 @@ const Index = () => {
   const MONITOR_BASE_URL = '/monitor/question';
   const [questionId, setQuestionId] = useState('1');
   const [monitorCurrentPath, setMonitorCurrentPath] = useState(`${MONITOR_BASE_URL}/${questionId}`);
+  const [isReadyGoBtnDisabled, setIsReadyGoBtnDisabled] = useState(false)
   // const goToCuePage = () => {
   //   console.log('クリックされました');
   //   const path = `${MONITOR_BASE_URL}/cue`;
@@ -23,9 +24,9 @@ const Index = () => {
   //   socket.emit('go_to_cue_page', path);
   // };
 
-  const goToQuestion = (isQuestionIndex?: boolean) => {
+  const goToQuestion = () => {
     // 初期ページが"/monitor/question/1
-
+    setIsReadyGoBtnDisabled(false)
     const nextQuestionId = (parseInt(questionId) + 1).toString()
     setQuestionId(nextQuestionId);
     setMonitorCurrentPath(`${MONITOR_BASE_URL}/${nextQuestionId}`)
@@ -34,6 +35,7 @@ const Index = () => {
   };
 
   const displayCuePage = () => {
+    setIsReadyGoBtnDisabled(false)
     socket.emit('display_cue_page');    
   }
 
@@ -42,6 +44,7 @@ const Index = () => {
   }
 
   const readyGo = () => {
+    setIsReadyGoBtnDisabled(true)
     socket.emit('ready_go');
   };
 
@@ -75,18 +78,18 @@ const Index = () => {
         <StyledButton
           color="primary"
           variant="contained"
-          onClick={() => goToQuestion(true)}
+          onClick={() => goToQuestion()}
         >
           GO TO Q-INDEX
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
-          onClick={() => goToQuestion(false)}
+          onClick={() => goToQuestion()}
         >
           GO TO NEXT-Q
         </StyledButton>
-        <Button color="secondary" variant="contained" onClick={() => readyGo()}>
+        <Button disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => readyGo()}>
           READY GO !
         </Button>
       </div>
