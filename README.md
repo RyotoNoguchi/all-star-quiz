@@ -118,4 +118,4 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 20. nx run api:serve <!-- バックエンド側のサーバー立てる>
 21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
 
-<!-- TODO 解答数表示フラグTRUE時に解答数枠を表示するよう実装　-->
+<!-- TODO 正解の選択肢を4回点滅させる処理実装　-->

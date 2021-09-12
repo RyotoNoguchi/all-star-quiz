@@ -111,7 +111,10 @@ const ChoiceBox = styled(Grid)`
   border-radius: 1rem;
 `;
 
-const QuestionCell = styled(Card)<{ isCorrect: boolean }>`
+// interface CorrectType {
+//   isCorrect: boolean
+// }
+const QuestionCell = styled(({isCorrect, ...props}) => <Card {...props} />)`
   border: none;
   width: 100%;
   height: 100%;
@@ -142,7 +145,7 @@ const QuestionCell = styled(Card)<{ isCorrect: boolean }>`
 
 const ChoiceText = styled(Typography)``;
 
-const CountAnswerBox = styled(Box)<{ isCorrect: boolean }>`
+const CountAnswerBox = styled(({isCorrect, ...props}) => <Box {...props} />)`
   width: 80px;
   position: absolute;
   right: 1rem;
