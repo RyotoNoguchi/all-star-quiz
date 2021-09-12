@@ -25,28 +25,21 @@ const Index = () => {
 
   const goToQuestion = (isQuestionIndex?: boolean) => {
     // 初期ページが"/monitor/question/1
-    // if (isQuestionIndex) { // 出題画面のIndexに戻りたいとき
-    //   setQuestionId('')
-    //   path = `${MONITOR_BASE_URL}/question`
-    // } else { // 次の問題に行きたいとき
-    // }
-    // let path = '';
-    // let nextQuestionId = '';
-    // {
-    //   questionId === ''
-    //     ? (nextQuestionId = '1')
-    //     : (nextQuestionId = (parseInt(questionId) + 1).toString());
-    // }
-    // setQuestionId(nextQuestionId);
-    // path = `${MONITOR_BASE_URL}/question/${nextQuestionId}`;
-    // setMonitorCurrentPath(path);
-    // setQuestionId((parseInt(questionId) + 1).toString())
+
     const nextQuestionId = (parseInt(questionId) + 1).toString()
     setQuestionId(nextQuestionId);
     setMonitorCurrentPath(`${MONITOR_BASE_URL}/${nextQuestionId}`)
     socket.emit('go_to_question_page', nextQuestionId);
 
   };
+
+  const displayCuePage = () => {
+    socket.emit('display_cue_page');    
+  }
+
+  const displayTopPage = () => {
+    socket.emit('display_top_page')
+  }
 
   const readyGo = () => {
     socket.emit('ready_go');
@@ -65,13 +58,20 @@ const Index = () => {
       </Typography>
       {/* TODO HStackを導入して横のmargin開ける */}
       <div>
-        {/* <Button
+        <Button
           color="primary"
           variant="contained"
-          onClick={() => goToCuePage()}
+          onClick={() => displayCuePage()}
         >
-          Cue
-        </Button> */}
+          CUE
+        </Button>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() => displayTopPage()}
+        >
+          TOP
+        </Button>
         <StyledButton
           color="primary"
           variant="contained"

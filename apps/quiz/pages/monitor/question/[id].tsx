@@ -252,6 +252,12 @@ const Question = ({ post }) => {
       setCurrentPath(newCurrentPath)
       router.push(newCurrentPath)
     })
+    socket.on('display_cue_page', ()=> {
+      setIsTopPage(false)  
+    })
+    socket.on('display_top_page', ()=> {
+      setIsTopPage(true)  
+    })
   }, []);
 
 
@@ -260,7 +266,7 @@ const Question = ({ post }) => {
   }
 
   if (!isQuestionDisplayed) { // [READY-GO]ボタンが押下される前
-    return <Cue />;
+    return <Cue questionNumber={questionId}/>;
   } else {
     return (
       <>
