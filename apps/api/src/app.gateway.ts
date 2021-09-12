@@ -45,16 +45,16 @@ export class AppGateway
   //   // return { event: 'mapToClient', data: message }; // client.emit('mapToClient', data)と同じだが、型定義できない
   // }
 
-  @SubscribeMessage('go_to_cue_page')
-  goToCuePage(@MessageBody() payload: string): void {
-    console.log(`受け取ったURL: http://localhost:4200${payload}`);
-    this.server.emit(GO_TO_DESIGNATED_PAGE, payload)
-  }
+  // @SubscribeMessage('go_to_cue_page')
+  // goToCuePage(@MessageBody() payload: string): void {
+  //   console.log(`受け取ったURL: http://localhost:4200${payload}`);
+  //   this.server.emit(GO_TO_DESIGNATED_PAGE, payload)
+  // }
 
   @SubscribeMessage('go_to_question_page')
-  goToAnotherPage(@MessageBody() path: string): void {
-    console.log(`受け取ったURL: http://localhost:4200${path}`);
-    this.server.emit(GO_TO_DESIGNATED_PAGE, path)
+  goToAnotherPage(@MessageBody() nextQuestionId: string): void {
+    // console.log(`受け取ったURL: http://localhost:4200${path}`);
+    this.server.emit(GO_TO_DESIGNATED_PAGE, nextQuestionId)
   }
 
   @SubscribeMessage('go_to_next_question')

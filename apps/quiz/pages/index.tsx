@@ -46,38 +46,33 @@ const TopTitlePart = styled.span`
 `;
 
 const Index = () => {
-  const [currentPath, setCurrentPath] = useState('');
-  const router = useRouter()
-  const socket = io('http://localhost:3333');
+  // const [currentPath, setCurrentPath] = useState('');
+  // const router = useRouter()
+  // const socket = io('http://localhost:3333');
 
-  const goToDesignatedPage =  useCallback(() => {
-    try {
-      socket.on('go_to_designated_page', (data) => {
-        const newCurrentPath = data;
-        setCurrentPath(newCurrentPath);
-        // ※この時点でconsole.log(currentPath)としてもcurrentPathは変更されていない
-        router.replace(newCurrentPath)
-      });
-    } catch (error) {
-      if (error.name === "AbortError") {
-          console.log(error.message);
-      }
-    }
-  }, []);
+  // const goToDesignatedPage =  useCallback(() => {
+  //   try {
+  //     socket.on('go_to_designated_page', (data) => {
+  //       const newCurrentPath = data;
+  //       setCurrentPath(newCurrentPath);
+  //       // ※この時点でconsole.log(currentPath)としてもcurrentPathは変更されていない
+  //       router.replace(newCurrentPath)
+  //     });
+  //   } catch (error) {
+  //     if (error.name === "AbortError") {
+  //         console.log(error.message);
+  //     }
+  //   }
+  // }, []);
 
-  // const countdown = () => {
-  //   socket.on('countdown', ()=> {
-      
-  //   })
-  // }
 
-  useEffect(() => {
-    const abortCtrl = new AbortController()
-    goToDesignatedPage()
-    return () => {
-      abortCtrl.abort()
-    }
-  }, []);
+  // useEffect(() => {
+  //   const abortCtrl = new AbortController()
+  //   goToDesignatedPage()
+  //   return () => {
+  //     abortCtrl.abort()
+  //   }
+  // }, []);
 
   const title = 'アソビュー オールスター感謝祭 2021';
   const titleArray = title.split(' ');

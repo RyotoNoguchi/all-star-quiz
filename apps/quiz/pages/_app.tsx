@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { io } from 'socket.io-client';
 
+export const GO_TO_DESIGNATED_PAGE = 'go_to_designated_page'
 function CustomApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     // Remove the server-side injected CSS.

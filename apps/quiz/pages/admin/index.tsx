@@ -13,52 +13,65 @@ import { useState } from 'react';
 
 const Index = () => {
   const socket = io('http://localhost:3333');
-  const MONITOR_BASE_URL = '/monitor';
+  const MONITOR_BASE_URL = '/monitor/question';
+  const [questionId, setQuestionId] = useState('1');
+  const [monitorCurrentPath, setMonitorCurrentPath] = useState(`${MONITOR_BASE_URL}/${questionId}`);
+  // const goToCuePage = () => {
+  //   console.log('クリックされました');
+  //   const path = `${MONITOR_BASE_URL}/cue`;
+  //   setMonitorCurrentPath(path)
+  //   socket.emit('go_to_cue_page', path);
+  // };
 
-  const goToCuePage = () => {
-    console.log('クリックされました');
-    const path = `${MONITOR_BASE_URL}/cue`;
-    setMonitorCurrentPath(path)
-    socket.emit('go_to_cue_page', path);
+  const goToQuestion = (isQuestionIndex?: boolean) => {
+    // 初期ページが"/monitor/question/1
+    // if (isQuestionIndex) { // 出題画面のIndexに戻りたいとき
+    //   setQuestionId('')
+    //   path = `${MONITOR_BASE_URL}/question`
+    // } else { // 次の問題に行きたいとき
+    // }
+    // let path = '';
+    // let nextQuestionId = '';
+    // {
+    //   questionId === ''
+    //     ? (nextQuestionId = '1')
+    //     : (nextQuestionId = (parseInt(questionId) + 1).toString());
+    // }
+    // setQuestionId(nextQuestionId);
+    // path = `${MONITOR_BASE_URL}/question/${nextQuestionId}`;
+    // setMonitorCurrentPath(path);
+    // setQuestionId((parseInt(questionId) + 1).toString())
+    const nextQuestionId = (parseInt(questionId) + 1).toString()
+    setQuestionId(nextQuestionId);
+    setMonitorCurrentPath(`${MONITOR_BASE_URL}/${nextQuestionId}`)
+    socket.emit('go_to_question_page', nextQuestionId);
+
   };
 
-  const goToQuestion = (isQuestionIndex: boolean) => {
-    let path = ''
-    if (isQuestionIndex) { // 出題画面のIndexに戻りたいとき
-      setQuestionId('')
-      path = `${MONITOR_BASE_URL}/question`
-    } else { // 次の問題に行きたいとき
-      let nextQuestionId = '' 
-      {questionId === '' ? nextQuestionId = '1' : nextQuestionId = (parseInt(questionId) + 1).toString()}
-      setQuestionId(nextQuestionId)
-      path = `${MONITOR_BASE_URL}/question/${nextQuestionId}`;
-    }
-    setMonitorCurrentPath(path)
-    socket.emit('go_to_question_page', path);
-  }
-
   const readyGo = () => {
-    socket.emit('ready_go')
-  }
+    socket.emit('ready_go');
+  };
 
-  const [questionId, setQuestionId] = useState('');
-  const [monitorCurrentPath, setMonitorCurrentPath] = useState('');
 
-  
   return (
     <>
       <Typography variant="h1">管理者画面です</Typography>
-      <Typography variant="h6">現在のモニターのパス: {monitorCurrentPath === '' ? '/' : monitorCurrentPath}</Typography>
-      <Typography variant="h6">現在の問題番号: {questionId === '' ? 0 : questionId}</Typography>
+      <Typography variant="h6">
+        現在のモニターのパス:{' '}
+        {monitorCurrentPath === '' ? '/' : monitorCurrentPath}
+      </Typography>
+      <Typography variant="h6">
+        現在の問題番号: {questionId === '' ? 0 : questionId}
+      </Typography>
       {/* TODO HStackを導入して横のmargin開ける */}
       <div>
-        <Button
+        {/* <Button
           color="primary"
           variant="contained"
           onClick={() => goToCuePage()}
         >
           Cue
-        </Button>
+        </Button> */}
         <StyledButton
           color="primary"
           variant="contained"
@@ -73,11 +86,7 @@ const Index = () => {
         >
           GO TO NEXT-Q
         </StyledButton>
-        <Button
-          color="secondary"
-          variant="contained"
-          onClick={() => readyGo()}
-        >
+        <Button color="secondary" variant="contained" onClick={() => readyGo()}>
           READY GO !
         </Button>
       </div>

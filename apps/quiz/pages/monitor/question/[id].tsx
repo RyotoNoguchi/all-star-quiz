@@ -7,6 +7,7 @@ import { Colors, colors } from '../../../components/styles/colors';
 import AlphabetCircle from '../../../components/atoms/AlphabetCirce/index';
 import { io } from 'socket.io-client';
 import Cue from '../cue';
+import Index from '../../index'
 
 type Post = {
   userId: number;
@@ -39,7 +40,6 @@ export const getStaticProps = async (context) => {
     `https://jsonplaceholder.typicode.com/posts/${id}`
   );
   const data = await response.json();
-  console.log('データ');
   return {
     props: { post: data },
   };
@@ -181,8 +181,12 @@ const AnswerCount = styled(Typography)`
 type CorrectAnswer = 'A' | 'B' | 'C' | 'D';
 
 const Question = ({ post }) => {
+  const router = useRouter()
   const socket = io('http://localhost:3333');
+  const [questionId, setQuestionId] = useState('1')
+  const [currentPath, setCurrentPath] = useState(`/monitor/question/${questionId}`)
   const [isQuestionDisplayed, setIsQuestionDisplayed] = useState(false);
+  const [isTopPage, setIsTopPage] = useState(true)
   const [countdownTimeSec, setCountdownTimeSec] = useState(3);
   const [isNumberCountShown, setIsNumberCountShown] = useState(false);
   const [isCorrectForA, setIsCorrectForA] = useState(false);
@@ -191,9 +195,20 @@ const Question = ({ post }) => {
   const [isCorrectForD, setIsCorrectForD] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState<CorrectAnswer>('A');
 
+  const resetQuestion = () => {
+    setCountdownTimeSec(3)
+    setIsNumberCountShown(false)
+    setIsCorrectForA(false)
+    setIsCorrectForB(false)
+    setIsCorrectForC(false)
+    setIsCorrectForD(false)
+    setIsTopPage(false)
+    setIsQuestionDisplayed(false)
+  }
   useEffect(() => {
     socket.on('ready_go', () => {
       setIsQuestionDisplayed(true)
+      setIsTopPage(false)
       const CD10SecTimerId = setInterval(() => {
         setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
         setCountdownTimeSec((countdownTimeSec) => {
@@ -229,7 +244,20 @@ const Question = ({ post }) => {
         });
       }, 1000);
     });
+    socket.on('go_to_designated_page', (nextQuestionId) => {
+      resetQuestion();
+      const newQuestionId = nextQuestionId;
+      setQuestionId(newQuestionId)
+      const newCurrentPath = `/monitor/question/${newQuestionId}`
+      setCurrentPath(newCurrentPath)
+      router.push(newCurrentPath)
+    })
   }, []);
+
+
+  if (isTopPage) {
+  return <Index />
+  }
 
   if (!isQuestionDisplayed) { // [READY-GO]ボタンが押下される前
     return <Cue />;
