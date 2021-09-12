@@ -1,13 +1,14 @@
 import { Typography, Grid, Card, Box } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
 import { Colors, colors } from '../../../components/styles/colors';
 import AlphabetCircle from '../../../components/atoms/AlphabetCirce/index';
 import { io } from 'socket.io-client';
 import Cue from '../cue';
-import Index from '../../index'
+import Index from '../../index';
+import useSound from 'use-sound';
 
 type Post = {
   userId: number;
@@ -180,35 +181,40 @@ const AnswerCount = styled(Typography)`
 
 type CorrectAnswer = 'A' | 'B' | 'C' | 'D';
 
+const countdownSec = 10;
+
 const Question = ({ post }) => {
-  const router = useRouter()
+  const router = useRouter();
   const socket = io('http://localhost:3333');
-  const [questionId, setQuestionId] = useState('1')
-  const [currentPath, setCurrentPath] = useState(`/monitor/question/${questionId}`)
+  const [questionId, setQuestionId] = useState('1');
+  const [currentPath, setCurrentPath] = useState(
+    `/monitor/question/${questionId}`
+  );
   const [isQuestionDisplayed, setIsQuestionDisplayed] = useState(false);
-  const [isTopPage, setIsTopPage] = useState(true)
-  const [countdownTimeSec, setCountdownTimeSec] = useState(3);
+  const [isTopPage, setIsTopPage] = useState(true);
+  const [countdownTimeSec, setCountdownTimeSec] = useState(countdownSec);
   const [isNumberCountShown, setIsNumberCountShown] = useState(false);
   const [isCorrectForA, setIsCorrectForA] = useState(false);
   const [isCorrectForB, setIsCorrectForB] = useState(false);
   const [isCorrectForC, setIsCorrectForC] = useState(false);
   const [isCorrectForD, setIsCorrectForD] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState<CorrectAnswer>('A');
-
+  
   const resetQuestion = () => {
-    setCountdownTimeSec(3)
-    setIsNumberCountShown(false)
-    setIsCorrectForA(false)
-    setIsCorrectForB(false)
-    setIsCorrectForC(false)
-    setIsCorrectForD(false)
-    setIsTopPage(false)
-    setIsQuestionDisplayed(false)
-  }
+    setCountdownTimeSec(countdownSec);
+    setIsNumberCountShown(false);
+    setIsCorrectForA(false);
+    setIsCorrectForB(false);
+    setIsCorrectForC(false);
+    setIsCorrectForD(false);
+    setIsTopPage(false);
+    setIsQuestionDisplayed(false);
+  };
   useEffect(() => {
     socket.on('ready_go', () => {
-      setIsQuestionDisplayed(true)
-      setIsTopPage(false)
+      setIsQuestionDisplayed(true);
+      setIsTopPage(false);
+      // countdownAudioEl.current.play();
       const CD10SecTimerId = setInterval(() => {
         setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
         setCountdownTimeSec((countdownTimeSec) => {
@@ -247,26 +253,26 @@ const Question = ({ post }) => {
     socket.on('go_to_designated_page', (nextQuestionId) => {
       resetQuestion();
       const newQuestionId = nextQuestionId;
-      setQuestionId(newQuestionId)
-      const newCurrentPath = `/monitor/question/${newQuestionId}`
-      setCurrentPath(newCurrentPath)
-      router.push(newCurrentPath)
-    })
-    socket.on('display_cue_page', ()=> {
-      setIsTopPage(false)  
-    })
-    socket.on('display_top_page', ()=> {
-      setIsTopPage(true)  
-    })
+      setQuestionId(newQuestionId);
+      const newCurrentPath = `/monitor/question/${newQuestionId}`;
+      setCurrentPath(newCurrentPath);
+      router.push(newCurrentPath);
+    });
+    socket.on('display_cue_page', () => {
+      setIsTopPage(false);
+    });
+    socket.on('display_top_page', () => {
+      setIsTopPage(true);
+    });
   }, []);
 
-
   if (isTopPage) {
-  return <Index />
+    return <Index />;
   }
 
-  if (!isQuestionDisplayed) { // [READY-GO]ボタンが押下される前
-    return <Cue questionNumber={questionId}/>;
+  if (!isQuestionDisplayed) {
+    // [READY-GO]ボタンが押下される前
+    return <Cue questionNumber={questionId} />;
   } else {
     return (
       <>

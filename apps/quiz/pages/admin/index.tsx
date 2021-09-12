@@ -10,22 +10,22 @@ const StyledButton = styled(Button)`
 `;
 import { io } from 'socket.io-client';
 import { useState } from 'react';
+import useSound from 'use-sound';
+
 
 const Index = () => {
   const socket = io('http://localhost:3333');
   const MONITOR_BASE_URL = '/monitor/question';
   const [questionId, setQuestionId] = useState('1');
   const [monitorCurrentPath, setMonitorCurrentPath] = useState(`${MONITOR_BASE_URL}/${questionId}`);
-  // const goToCuePage = () => {
-  //   console.log('クリックされました');
-  //   const path = `${MONITOR_BASE_URL}/cue`;
-  //   setMonitorCurrentPath(path)
-  //   socket.emit('go_to_cue_page', path);
-  // };
+  const [isReadyGoBtnDisabled, setIsReadyGoBtnDisabled] = useState(false)
+  const [playActive] = useSound('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fquiz_cue.mp3?alt=media&token=d671624b-80e4-40c4-ae5d-ce147a1515f2',  { volume: 0.5 })
+  const [playCountDown] = useSound('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fcountdown.mp3?alt=media&token=1f25a4b9-30b1-4eba-bacd-3dcd86b31f37')
 
-  const goToQuestion = (isQuestionIndex?: boolean) => {
+  const goToQuestion = () => {
     // 初期ページが"/monitor/question/1
-
+    playActive()
+    setIsReadyGoBtnDisabled(false)
     const nextQuestionId = (parseInt(questionId) + 1).toString()
     setQuestionId(nextQuestionId);
     setMonitorCurrentPath(`${MONITOR_BASE_URL}/${nextQuestionId}`)
@@ -34,6 +34,8 @@ const Index = () => {
   };
 
   const displayCuePage = () => {
+    playActive()
+    setIsReadyGoBtnDisabled(false)
     socket.emit('display_cue_page');    
   }
 
@@ -42,6 +44,8 @@ const Index = () => {
   }
 
   const readyGo = () => {
+    playCountDown()
+    setIsReadyGoBtnDisabled(true)
     socket.emit('ready_go');
   };
 
@@ -75,18 +79,18 @@ const Index = () => {
         <StyledButton
           color="primary"
           variant="contained"
-          onClick={() => goToQuestion(true)}
+          onClick={() => goToQuestion()}
         >
           GO TO Q-INDEX
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
-          onClick={() => goToQuestion(false)}
+          onClick={() => goToQuestion()}
         >
           GO TO NEXT-Q
         </StyledButton>
-        <Button color="secondary" variant="contained" onClick={() => readyGo()}>
+        <Button disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => readyGo()}>
           READY GO !
         </Button>
       </div>
