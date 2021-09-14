@@ -265,6 +265,7 @@ const Question = ({ post }) => {
     socket.on('display_top_page', () => {
       setIsTopPage(true);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isTopPage) {
