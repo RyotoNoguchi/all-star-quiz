@@ -13,7 +13,6 @@ import {
 } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-// import DOMPurify from 'dompurify';
 import DOMPurify from 'dompurify';
 import ReactDOM from 'react-dom';
 import AlphabetCircle from '../../../components/atoms/AlphabetCirce';
@@ -34,36 +33,29 @@ import AlphabetCircle from '../../../components/atoms/AlphabetCirce';
 // 14. 「10.」を「1.」にappend
 // 15. 「1.」を<TableBody>にappend
 
-const FetchedAnswerPersonName = ({ answerPersonName }) => (
-  <td
-    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(answerPersonName) }}
-  ></td>
-);
+// const FetchedAnswerPersonName = ({ answerPersonName }) => (
+//   <td
+//     dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(answerPersonName) }}
+//   ></td>
+// );
 
-const FetchedRanking = ({ rank }) => (
-  <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(rank) }}></span>
-);
+// const FetchedRanking = ({ rank }) => (
+//   <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(rank) }}></span>
+// );
 
-const Rank = styled(FetchedRanking)``;
-const AnswerPersonName = styled(FetchedAnswerPersonName)``;
+// const Rank = styled(FetchedRanking)``;
+// const AnswerPersonName = styled(FetchedAnswerPersonName)``;
 
-const NameBoxEl = React.createElement(
-  'td',
-  {},
-  <Rank rank={1} />,
-  <AnswerPersonName answerPersonName="山田太郎" />
-);
+// const NameBoxEl = React.createElement(
+//   'td',
+//   {},
+//   <Rank rank={1} />,
+//   <AnswerPersonName answerPersonName="山田太郎" />
+// );
 
-const RowEl = () => React.createElement('tr', {}, NameBoxEl);
-const RowEl2 = () => React.createElement('tr', {}, <FetchedAnswerPersonName answerPersonName={"山田太郎"}/>);
-// const RowEl3 = () => React.createElement('div', {}, <AlphabetCircle color="blue" choice="A"/>)
+// const RowEl = () => React.createElement('tr', {}, NameBoxEl);
+// const RowEl2 = () => React.createElement('tr', {}, <FetchedAnswerPersonName answerPersonName={"山田太郎"}/>);
 
-// const Test = () => React.createElement('td', {}, "山田太郎");
-
-// ReactDOM.render(
-//   <RowEl/>,
-//   document.getElementById('root')
-// )
 
 const Ranking = () => {
   return (
@@ -76,15 +68,11 @@ const Ranking = () => {
                 <TableCell variant="head" rowSpan={10}>
                   早押しワースト10
                 </TableCell>
-                {/* <Test /> */}
               </TableRow>
-              {/* <RowEl/> */}
-              {/* <RowEl2/> */}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
-      {/* <RowEl3/> */}
     </>
   );
 };

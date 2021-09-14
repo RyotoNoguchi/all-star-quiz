@@ -9,6 +9,7 @@ import { io } from 'socket.io-client';
 import Cue from '../cue';
 import Index from '../../index';
 import useSound from 'use-sound';
+import { GetStaticPaths, GetStaticProps } from 'next'
 
 type Post = {
   userId: number;
@@ -17,7 +18,7 @@ type Post = {
   body: string;
 };
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const response = await axios.get(
     'https://jsonplaceholder.typicode.com/posts'
   );
@@ -35,7 +36,7 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   const id = context.params.id;
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${id}`
