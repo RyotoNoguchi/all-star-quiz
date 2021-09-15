@@ -16,6 +16,10 @@ import styled from 'styled-components';
 import DOMPurify from 'dompurify';
 import ReactDOM from 'react-dom';
 import AlphabetCircle from '../../../components/atoms/AlphabetCirce';
+import RowEl from '../../../components/atoms/RankingNameBox';
+import axios from 'axios';
+import { GetStaticProps } from 'next';
+import { InferGetStaticPropsType } from 'next';
 
 // 1. tr要素生成(列)●
 // 2. td要素生成(名前と順位BOXが入る)●
@@ -33,31 +37,56 @@ import AlphabetCircle from '../../../components/atoms/AlphabetCirce';
 // 14. 「10.」を「1.」にappend
 // 15. 「1.」を<TableBody>にappend
 
-// const FetchedAnswerPersonName = ({ answerPersonName }) => (
-//   <td
-//     dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(answerPersonName) }}
-//   ></td>
-// );
+export const getStaticProps: GetStaticProps = async () => {
+  const response = await axios.get(
+    'https://jsonplaceholder.typicode.com/users'
+  );
+  const data = response.data;
+  console.log(data);
 
-// const FetchedRanking = ({ rank }) => (
-//   <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(rank) }}></span>
-// );
+  return {
+    props: {
+      users: data,
+    },
+  };
+};
 
-// const Rank = styled(FetchedRanking)``;
-// const AnswerPersonName = styled(FetchedAnswerPersonName)``;
+type User = {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  address: {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+    geo: {
+      lat: string;
+      lng: string;
+    };
+  };
+  phone: string;
+  website: string;
+  company: {
+    name: string;
+    catchPhrase: string;
+    bs: string;
+  };
+};
 
-// const NameBoxEl = React.createElement(
-//   'td',
-//   {},
-//   <Rank rank={1} />,
-//   <AnswerPersonName answerPersonName="山田太郎" />
-// );
+const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  console.log('取得名: ' + users[0].name);
 
-// const RowEl = () => React.createElement('tr', {}, NameBoxEl);
-// const RowEl2 = () => React.createElement('tr', {}, <FetchedAnswerPersonName answerPersonName={"山田太郎"}/>);
+  const numberItemShow = 10;
+  const answerPersonTotalNumber = users.length;
+  const numberScreenTop = answerPersonTotalNumber - numberItemShow;
+  const displayAnswerPeople: User[] = [];
+  for (let i = numberScreenTop; i < answerPersonTotalNumber; i++) {
+    displayAnswerPeople.push(users[i]);
+  }
+  console.log(displayAnswerPeople);
 
-
-const Ranking = () => {
   return (
     <>
       <Box>
@@ -65,10 +94,21 @@ const Ranking = () => {
           <Table arial-label="raking table">
             <TableBody id="root">
               <TableRow>
-                <TableCell variant="head" rowSpan={10}>
+                <TableCell variant="head" rowSpan={11}>
                   早押しワースト10
                 </TableCell>
               </TableRow>
+              {displayAnswerPeople.map((answerPerson: User, idx) => {
+                return (
+                  <TableRow key={idx}>
+                    <TableCell colSpan={10}>
+                      <Typography variant="body1">
+                        {answerPerson.name}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
@@ -85,6 +125,6 @@ export default Ranking;
 //         : return()の中に何もせず入れる → ブラウザのローディングが無限に続く
 
 // 確認したこと: ↓だと問題なく描画される
-              // const Test = () => React.createElement('td', {}, "山田太郎");  
+// const Test = () => React.createElement('td', {}, "山田太郎");
 
 // 考えられる原因 React.createElement()の第三引数にReactコンポーネントを入れると
