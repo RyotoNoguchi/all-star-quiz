@@ -1,5 +1,5 @@
 import {
-  ConnectedSocket,
+  // ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -7,7 +7,7 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
+  // WsResponse,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 // import { MessageBody } from 'socket-controllers';
@@ -25,7 +25,7 @@ export class AppGateway
     this.logger.log(`Server(${server}: Initialized`);
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
+  handleConnection(client: Socket) {
     this.logger.log(`以下のクライアントが接続しました: ${client.id}`);
   }
   handleDisconnect(client: Socket) {
