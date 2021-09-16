@@ -11,7 +11,7 @@ import {
   TypographyProps,
   TableRowProps,
 } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
 import { GetStaticProps } from 'next';
@@ -158,7 +158,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
 
   return (
     <>
-      <RankingTable component={Paper}>
+      <RankingTable>
         <Table arial-label="raking table">
           <TableBody id="root">
             <TableRow>

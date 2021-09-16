@@ -75,7 +75,12 @@ export class AppGateway
 
   @SubscribeMessage('ready_go')
   readyGo() {
-    console.log("カウントダウンのEMITがされました");
     this.server.emit('ready_go')
+  }
+
+  @SubscribeMessage('show_worst_ranking')
+  showWorstRanking() {
+    console.log('ランキングボタンが押されました。');
+    this.server.emit('show_worst_ranking')
   }
 }
