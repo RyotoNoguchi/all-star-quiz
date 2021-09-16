@@ -1,4 +1,4 @@
-import { Typography, Grid, Card, Box } from '@material-ui/core';
+import { Typography, Grid, Card, Box, GridProps, TypographyProps } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import { io } from 'socket.io-client';
 import Cue from '../cue';
 import Index from '../../index';
 import useSound from 'use-sound';
+import { GetStaticPaths, GetStaticProps } from 'next'
 
 type Post = {
   userId: number;
@@ -17,7 +18,7 @@ type Post = {
   body: string;
 };
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const response = await axios.get(
     'https://jsonplaceholder.typicode.com/posts'
   );
@@ -35,7 +36,7 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   const id = context.params.id;
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${id}`
@@ -46,7 +47,7 @@ export const getStaticProps = async (context) => {
   };
 };
 
-const QuestionContainer = styled(Grid)`
+const QuestionContainer = styled(Grid)<GridProps>`
   height: 4.5rem;
   display: flex;
   justify-content: center;
@@ -61,7 +62,7 @@ const QuestionContainer = styled(Grid)`
   position: relative;
 `;
 
-const QuestionBox = styled(Grid)`
+const QuestionBox = styled(Grid)<GridProps>`
   margin-bottom: 48px;
 `;
 
@@ -75,7 +76,7 @@ const QuestionMark = styled.span`
   text-shadow: 0 0 4px skyblue, 0 -2px #fff;
 `;
 
-const QuestionText = styled(Typography)`
+const QuestionText = styled(Typography)<TypographyProps>`
   margin: 0;
   line-height: 3rem;
   font-size: 2rem;
@@ -102,7 +103,7 @@ const CountDownCircle = styled.span`
   box-shadow: 1px 1px 1px 1px black;
 `;
 
-const ChoiceBox = styled(Grid)`
+const ChoiceBox = styled(Grid)<GridProps>`
   height: 20rem;
   display: flex;
   justify-content: center;
@@ -140,7 +141,7 @@ const QuestionCell = styled(({ isCorrect, ...props }) => <Card {...props} />)`
     linear 0ms 4 normal forwards;
 `;
 
-const ChoiceText = styled(Typography)``;
+const ChoiceText = styled(Typography)<TypographyProps>``;
 
 const blinkingCountAnswerBox = keyframes`
     100% {
@@ -171,7 +172,7 @@ const CountAnswerBox = styled(({ isCorrect, ...props }) => <Box {...props} />)`
     linear 0ms 4 normal forwards;
 `;
 
-const AnswerCount = styled(Typography)`
+const AnswerCount = styled(Typography)<TypographyProps>`
   font-size: 36px;
   line-height: normal;
   padding: 0;
@@ -264,6 +265,7 @@ const Question = ({ post }) => {
     socket.on('display_top_page', () => {
       setIsTopPage(true);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isTopPage) {

@@ -1,20 +1,8 @@
 import { Typography } from "@material-ui/core"
 import Link from 'next/link'
 import axios from "axios";
-export const getStaticProps = async () => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts')
-  // const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
-  // console.log(response);
-  
-  const data = await response.json()
-  console.log(data);
-
-  return {
-    props: {
-      posts: data 
-    }
-  }
-}
+import { GetStaticProps } from 'next'
+import { InferGetStaticPropsType } from 'next'
 
 type Post = {
   userId: number
@@ -23,7 +11,18 @@ type Post = {
   body: string
 }
 
-const Question = ({posts}) => {
+export const getStaticProps: GetStaticProps = async () => {
+  const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
+  const posts: Post[] = await response.data
+
+  return {
+    props: {
+      posts, 
+    }
+  }
+}
+
+const Question = ({posts}: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <>
     <Typography variant="h4">出題画面</Typography>
