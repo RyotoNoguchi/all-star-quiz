@@ -1,14 +1,14 @@
 import { Typography, Grid, Card, Box, GridProps, TypographyProps } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
-import { Colors, colors } from '../../../components/styles/colors';
+// import { Colors, colors } from '../../../components/styles/colors';
 import AlphabetCircle from '../../../components/atoms/AlphabetCirce/index';
 import { io } from 'socket.io-client';
 import Cue from '../cue';
 import Index from '../../index';
-import useSound from 'use-sound';
+// import useSound from 'use-sound';
 import { GetStaticPaths, GetStaticProps } from 'next'
 
 type Post = {
@@ -215,7 +215,6 @@ const Question = ({ post }) => {
     socket.on('ready_go', () => {
       setIsQuestionDisplayed(true);
       setIsTopPage(false);
-      // countdownAudioEl.current.play();
       const CD10SecTimerId = setInterval(() => {
         setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
         setCountdownTimeSec((countdownTimeSec) => {

@@ -80,7 +80,6 @@ export class AppGateway
 
   @SubscribeMessage('show_worst_ranking')
   showWorstRanking() {
-    console.log('ランキングボタンが押されました。');
     this.server.emit('show_worst_ranking')
   }
 }

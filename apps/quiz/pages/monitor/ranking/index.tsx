@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Table,
   TableRow,
@@ -11,11 +12,13 @@ import {
   TypographyProps,
   TableRowProps,
 } from '@material-ui/core';
-import React from 'react';
-import styled, { css } from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled, { css, keyframes } from 'styled-components';
 import axios from 'axios';
 import { GetStaticProps } from 'next';
 import { InferGetStaticPropsType } from 'next';
+import { io } from 'socket.io-client';
+import { motion } from "framer-motion"
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
@@ -141,13 +144,28 @@ const Rank = styled.span`
   text-shadow: none;
 `;
 
-const RankRow = styled(TableRow)<TableRowProps>`
+const flipRows = keyframes`
+  0% {
+    transform: rotateX(0)
+  }
+
+  100% {
+    transform: rotateX(360deg)
+  }
+`;
+const RankRow = styled(({ isRankingRowsShow, ...props }) => (
+  <TableRow {...props} />
+))`
   display: flex;
   margin-bottom: 6px;
   height: 78px;
+  opacity: ${(props) => (props.isRankingRowsShow ? 1 : 0)};
+  animation: ${(props) => (props.isRankingRowsShow ? flipRows : '')} 1s linear;
 `;
 
 const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const socket = io('http://localhost:3333');
+  const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const numberItemShow = 10;
   const answerPersonTotalNumber = users.length;
   const numberScreenTop = answerPersonTotalNumber - numberItemShow;
@@ -155,6 +173,12 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   for (let i = numberScreenTop; i < answerPersonTotalNumber; i++) {
     displayAnswerPeople.push(users[i]);
   }
+
+  useEffect(() => {
+    socket.on('show_worst_ranking', () => {
+      setIsRankingRowsShow(true)
+    });
+  }, []);
 
   return (
     <>
@@ -173,7 +197,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
             </TableRow>
             {displayAnswerPeople.map((answerPerson: User, idx: number) => {
               return (
-                <RankRow key={idx}>
+                <RankRow isRankingRowsShow={isRankingRowsShow} key={idx}>
                   <AnswerPersonNameBox>
                     <Rank>{answerPerson.id}</Rank>
                     <AnswerPersonName variant="body1">
