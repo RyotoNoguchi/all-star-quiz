@@ -159,7 +159,7 @@ const flipRows = keyframes`
   }
 `;
 
-const RankRow = styled(motion.tr)<{ iterationCount: number }>`
+const RankRow = styled(motion.tr)<{ iterationCount: number , isLastRow: boolean}>`
   display: flex;
   margin-bottom: 6px;
   height: 78px;
@@ -168,6 +168,8 @@ const RankRow = styled(motion.tr)<{ iterationCount: number }>`
   animation-timing-function: linear;
   animation-iteration-count: ${(props) => props.iterationCount};
   animation-name: ${flipRows};
+  animation-delay: ${(props) => props.isLastRow && '4s'};
+  animation-iteration-count: ${(props) => props.isLastRow && 4}
 `;
 
 const MotionTableBody = styled(motion.tbody)``;
@@ -223,7 +225,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
     visible: (i:number) => ({
       opacity: 1,
       transition: {
-        delay: i * 0.3,
+        delay: i,
       },
     }),
   };
@@ -252,10 +254,11 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
               {displayAnswerPeople.map((answerPerson: User, idx: number) => {
                 return (
                   <RankRow
+                    isLastRow={idx + 1 === 10 ? true : false}
                     variants={rankingRowVariant}
                     iterationCount={idx + 1}
                     key={answerPerson.id}
-                    custom={idx}
+                    custom={idx === 9 ? 4.5 : idx * 0.4}
                   >
                     <AnswerPersonNameBox isLastRow={idx + 1 === 10 ? true : false} >
                       <Rank>{answerPerson.id}</Rank>
