@@ -1,4 +1,4 @@
-import { Typography, Grid, Card, Box, GridProps, TypographyProps } from '@material-ui/core';
+import { Typography, Grid, Card, Box, GridProps, TypographyProps, BoxProps } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -143,7 +143,7 @@ const QuestionCell = styled(({ isCorrect, ...props }) => <Card {...props} />)`
 
 const ChoiceText = styled(Typography)<TypographyProps>``;
 
-const blinkingCountAnswerBox = keyframes`
+const blinkCountAnswerBox = keyframes`
     100% {
       background-image: radial-gradient(#e4d039, #fcf4b4);
       text-shadow: 2px 2px black;
@@ -151,7 +151,7 @@ const blinkingCountAnswerBox = keyframes`
     }
   `;
 
-const CountAnswerBox = styled(({ isCorrect, ...props }) => <Box {...props} />)`
+const CountAnswerBox = styled(({ isCorrect, ...props }) => <Box {...props} />)<BoxProps>`
   width: 80px;
   position: absolute;
   right: 1rem;
@@ -168,7 +168,7 @@ const CountAnswerBox = styled(({ isCorrect, ...props }) => <Box {...props} />)`
     rgb(125, 138, 255),
     rgb(185, 231, 249)
   );
-  animation: ${(props) => (props.isCorrect ? blinkingCountAnswerBox : '')} 600ms
+  animation: ${(props) => (props.isCorrect ? blinkCountAnswerBox : '')} 600ms
     linear 0ms 4 normal forwards;
 `;
 

@@ -56,7 +56,6 @@ type User = {
   };
 };
 
-
 const rankRowChild = css`
   font-family: 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN';
   font-weight: 900;
@@ -74,10 +73,27 @@ const rankRowChild = css`
   box-shadow: 2px 2px 2px rgb(63, 63, 63), -2px -2px 2px rgb(63, 63, 63);
 `;
 
-const AnswerPersonNameBox = styled(TableCell)<TableCellProps>`
+const blinkAnswerPersonNameBox = keyframes`
+  0% {
+    background-image: radial-gradient(#2d3870, #586dd4);
+    box-shadow: 2px 2px 2px rgb(63, 63, 63), -2px -2px 2px rgb(63, 63, 63);
+  }
+  100% {
+    background-image: radial-gradient(rgb(250, 133, 240),rgb(254, 207, 255));
+    text-shadow: 2px 2px 2px black, -1px -1px 1px black;
+  }
+`
+
+const AnswerPersonNameBox = styled(({ isLastRow, ...props }) => (<TableCell {...props} />))<TableCellProps>`
   ${rankRowChild};
   width: 80%;
   justify-content: flex-start;
+  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox} ;
+  animation-delay: 4.8s;
+  animation-duration: 350ms;
+  animation-timing-function: linear;
+  animation-iteration-count: 6;
+  animation-fill-mode: forwards;
 `;
 
 const AnswerTimeBox = styled(TableCell)<TableCellProps>`
@@ -148,7 +164,7 @@ const RankRow = styled(motion.tr)<{ iterationCount: number }>`
   margin-bottom: 6px;
   height: 78px;
   animation-delay: 0.3s;
-  animation-duration: 0.5s;
+  animation-duration: 0.4s;
   animation-timing-function: linear;
   animation-iteration-count: ${(props) => props.iterationCount};
   animation-name: ${flipRows};
@@ -195,8 +211,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
       opacity: 1,
       transition: {
         when: 'beforeChildren',
-        delayChildren: 0.3,
-        staggerChildren: 0.5,
+        staggerChildren: 0.4,
       },
     },
   };
@@ -205,9 +220,12 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
     hidden: {
       opacity: 0,
     },
-    visible: {
+    visible: (i:number) => ({
       opacity: 1,
-    },
+      transition: {
+        delay: i * 0.3,
+      },
+    }),
   };
 
   useEffect(() => {
@@ -236,9 +254,10 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
                   <RankRow
                     variants={rankingRowVariant}
                     iterationCount={idx + 1}
-                    key={idx}
+                    key={answerPerson.id}
+                    custom={idx}
                   >
-                    <AnswerPersonNameBox>
+                    <AnswerPersonNameBox isLastRow={idx + 1 === 10 ? true : false} >
                       <Rank>{answerPerson.id}</Rank>
                       <AnswerPersonName variant="body1">
                         {answerPerson.name}
