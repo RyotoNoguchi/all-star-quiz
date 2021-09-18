@@ -19,6 +19,7 @@ import { io } from 'socket.io-client';
 import { motion } from 'framer-motion';
 import RankingTable from "../../../components/molecules/RankingTable";
 import WorstRankingTitleBox from "../../../components/molecules/WorstRankingTitleBox";
+import WorstRankingTitle from "../../../components/atoms/WorstRankingTitle";
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
@@ -189,18 +190,6 @@ const RankRow = styled(motion.tr)<{ iterationCount: number , isLastRow: boolean}
 
 const MotionTableBody = styled(motion.tbody)``;
 
-const WorstRankingTitle = styled(Typography)<TypographyProps>`
-  text-align: center;
-  font-size: 3.2rem;
-  line-height: 1.43;
-  border: none;
-  font-family: 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN';
-  font-weight: 900;
-  color: rgb(0, 21, 255);
-  text-shadow: 4px 4px 4px white, -4px -4px 4px white;
-  border-collapse: separate;
-  width: 80%;
-`;
 
 const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const socket = io('http://localhost:3333');
