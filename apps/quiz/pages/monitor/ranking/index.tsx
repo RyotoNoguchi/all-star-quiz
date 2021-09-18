@@ -17,6 +17,7 @@ import { GetStaticProps } from 'next';
 import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
 import { motion } from 'framer-motion';
+import RankingTable from "../../../components/molecules/RankingTable";
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
@@ -134,16 +135,16 @@ const HyphenRotation = styled.span`
   transform: rotate(-90deg);
 `;
 
-const RankingTable = styled(TableContainer)<TableContainerProps>`
-  background-image: radial-gradient(#11f1fd, skyblue);
-  border-radius: 2rem;
-  padding: 10px;
-  box-shadow: 2px 2px 4px rgb(0 21 255), -2px -2px 4px rgb(0 21 255);
-  height: 860px;
-  transform: translateY(-20px);
-  display: flex;
-  align-items: center;
-`;
+// const RankingTable = styled(TableContainer)<TableContainerProps>`
+//   background-image: radial-gradient(#11f1fd, skyblue);
+//   border-radius: 2rem;
+//   padding: 10px;
+//   box-shadow: 2px 2px 4px rgb(0 21 255), -2px -2px 4px rgb(0 21 255);
+//   height: 860px;
+//   transform: translateY(-20px);
+//   display: flex;
+//   align-items: center;
+// `;
 
 const blinkRank = keyframes`
   100% {
