@@ -1,16 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Table,
-  TableRow,
-  TableBody,
   TableCell,
   TableContainer,
-  Paper,
   Typography,
   TableCellProps,
   TableContainerProps,
   TypographyProps,
-  TableRowProps,
+  Box,
+  BoxProps,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
@@ -58,23 +56,12 @@ type User = {
   };
 };
 
-const WorstRankingPushingEarly = styled(TableCell)<TableCellProps>`
-  text-align: center;
-  font-size: 3.2rem;
-  line-height: 1.43;
-  border: none;
-  font-family: 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN';
-  font-weight: 900;
-  color: rgb(0, 21, 255);
-  text-shadow: 4px 4px 4px white, -4px -4px 4px white;
-  border-collapse: separate;
-`;
 
 const rankRowChild = css`
   font-family: 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN';
   font-weight: 900;
   text-shadow: 4px 4px 4px white, -4px -4px 4px white;
-  padding: 4px 4px 4px 40px;
+  padding: 4px 4px 4px 10px;
   display: flex;
   align-items: center;
   line-height: 1.25;
@@ -113,10 +100,9 @@ const AnswerTime = styled(Typography)<TypographyProps>`
   ${rankRowTdChildCSS}
 `;
 
-const HyphenRotation = styled.span<{isRankingRowsShow: boolean}>`
+const HyphenRotation = styled.span`
   display: inline-block;
-  transform: ${(props) => props.isRankingRowsShow ? 'rotate(-90deg)' : ''};
-  /* transform: rotate(-90deg); */
+  transform: rotate(-90deg);
 `;
 
 const RankingTable = styled(TableContainer)<TableContainerProps>`
@@ -126,6 +112,8 @@ const RankingTable = styled(TableContainer)<TableContainerProps>`
   box-shadow: 2px 2px 4px rgb(0 21 255), -2px -2px 4px rgb(0 21 255);
   height: 860px;
   transform: translateY(-20px);
+  display: flex;
+  align-items: center;
 `;
 
 const Rank = styled.span`
@@ -154,31 +142,39 @@ const flipRows = keyframes`
     transform: rotateX(360deg)
   }
 `;
-// const RankRow = styled(({ isRankingRowsShow, ...props }) => (
-//   <TableRow {...props} />
-// ))`
-//   display: flex;
-//   margin-bottom: 6px;
-//   height: 78px;
-//   opacity: ${(props) => (props.isRankingRowsShow ? 1 : 0)};
-//   animation: ${(props) => (props.isRankingRowsShow ? flipRows : '')} 1s linear;
-// `;
 
 const RankRow = styled(motion.tr)<{ iterationCount: number }>`
   display: flex;
   margin-bottom: 6px;
   height: 78px;
+  animation-delay: 0.3s;
   animation-duration: 0.5s;
-  animation-delay: 0ms;
   animation-timing-function: linear;
   animation-iteration-count: ${(props) => props.iterationCount};
-  animation-direction: normal;
-  animation-fill-mode: none;
-  animation-play-state: running;
   animation-name: ${flipRows};
 `;
 
 const MotionTableBody = styled(motion.tbody)``;
+
+const WorstRankingTitleBox = styled(Box)<BoxProps>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10%;
+`;
+
+const WorstRankingTitle = styled(Typography)<TypographyProps>`
+  text-align: center;
+  font-size: 3.2rem;
+  line-height: 1.43;
+  border: none;
+  font-family: 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN';
+  font-weight: 900;
+  color: rgb(0, 21, 255);
+  text-shadow: 4px 4px 4px white, -4px -4px 4px white;
+  border-collapse: separate;
+  width: 80%;
+`;
 
 const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const socket = io('http://localhost:3333');
@@ -199,6 +195,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
       opacity: 1,
       transition: {
         when: 'beforeChildren',
+        delayChildren: 0.3,
         staggerChildren: 0.5,
       },
     },
@@ -222,24 +219,18 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <>
       <RankingTable>
+        <WorstRankingTitleBox>
+          <WorstRankingTitle>
+            早押しワ<HyphenRotation>ー</HyphenRotation>スト10
+          </WorstRankingTitle>
+        </WorstRankingTitleBox>
         <Table arial-label="raking table">
-        {isRankingRowsShow &&
-          <MotionTableBody
-            variants={tbodyVariant}
-            initial="hidden"
-            animate="visible"
-          >
-            <TableRow>
-              <WorstRankingPushingEarly
-                component="th"
-                width="10%"
-                variant="head"
-                rowSpan={11}
-              >
-                早押しワ<HyphenRotation isRankingRowsShow={isRankingRowsShow}>ー</HyphenRotation>スト10
-              </WorstRankingPushingEarly>
-            </TableRow>
-
+          {isRankingRowsShow && (
+            <MotionTableBody
+              variants={tbodyVariant}
+              initial="hidden"
+              animate="visible"
+            >
               {displayAnswerPeople.map((answerPerson: User, idx: number) => {
                 return (
                   <RankRow
@@ -259,8 +250,8 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
                   </RankRow>
                 );
               })}
-          </MotionTableBody>
-              }
+            </MotionTableBody>
+          )}
         </Table>
       </RankingTable>
     </>
