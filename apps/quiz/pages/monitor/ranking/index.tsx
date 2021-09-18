@@ -18,6 +18,7 @@ import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
 import { motion } from 'framer-motion';
 import RankingTable from "../../../components/molecules/RankingTable";
+import WorstRankingTitleBox from "../../../components/molecules/WorstRankingTitleBox";
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
@@ -135,17 +136,6 @@ const HyphenRotation = styled.span`
   transform: rotate(-90deg);
 `;
 
-// const RankingTable = styled(TableContainer)<TableContainerProps>`
-//   background-image: radial-gradient(#11f1fd, skyblue);
-//   border-radius: 2rem;
-//   padding: 10px;
-//   box-shadow: 2px 2px 4px rgb(0 21 255), -2px -2px 4px rgb(0 21 255);
-//   height: 860px;
-//   transform: translateY(-20px);
-//   display: flex;
-//   align-items: center;
-// `;
-
 const blinkRank = keyframes`
   100% {
     background-image: radial-gradient(rgb(252, 61, 230),rgb(251, 214, 252));
@@ -198,13 +188,6 @@ const RankRow = styled(motion.tr)<{ iterationCount: number , isLastRow: boolean}
 `;
 
 const MotionTableBody = styled(motion.tbody)``;
-
-const WorstRankingTitleBox = styled(Box)<BoxProps>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 10%;
-`;
 
 const WorstRankingTitle = styled(Typography)<TypographyProps>`
   text-align: center;
