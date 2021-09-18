@@ -20,6 +20,7 @@ import { motion } from 'framer-motion';
 import RankingTable from "../../../components/molecules/RankingTable";
 import WorstRankingTitleBox from "../../../components/molecules/WorstRankingTitleBox";
 import WorstRankingTitle from "../../../components/atoms/WorstRankingTitle";
+import HyphenRotation from "../../../components/atoms/HyphenRotation";
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
@@ -130,11 +131,6 @@ const AnswerTime = styled(({ isLastRow, ...props }) => (<Typography {...props} /
   ${rankRowTdChildCSS}
   animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
   ${animationDefault};
-`;
-
-const HyphenRotation = styled.span`
-  display: inline-block;
-  transform: rotate(-90deg);
 `;
 
 const blinkRank = keyframes`
