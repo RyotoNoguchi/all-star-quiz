@@ -1,6 +1,10 @@
 // url="/admin" ??ファイル名が"index"だと"/admin/index"でURL叩くと無限ローディングになる
 import { Button, Typography } from '@material-ui/core';
 import styled from 'styled-components';
+import { io } from 'socket.io-client';
+import { useState } from 'react';
+import useSound from 'use-sound';
+
 const StyledButton = styled(Button)`
   background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
   border-radius: 3px;
@@ -8,10 +12,6 @@ const StyledButton = styled(Button)`
   color: white;
   box-shadow: 0 3px 5px 2px rgba(255, 105, 135, 0.3);
 `;
-import { io } from 'socket.io-client';
-import { useState } from 'react';
-import useSound from 'use-sound';
-
 
 const Index = () => {
   const socket = io('http://localhost:3333');
@@ -20,7 +20,8 @@ const Index = () => {
   const [monitorCurrentPath, setMonitorCurrentPath] = useState(`${MONITOR_BASE_URL}/${questionId}`);
   const [isReadyGoBtnDisabled, setIsReadyGoBtnDisabled] = useState(false)
   const [playActive] = useSound('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fquiz_cue.mp3?alt=media&token=d671624b-80e4-40c4-ae5d-ce147a1515f2',  { volume: 0.5 })
-  const [playCountDown] = useSound('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fcountdown.mp3?alt=media&token=1f25a4b9-30b1-4eba-bacd-3dcd86b31f37')
+  const [playCountDown] = useSound('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fcountdown.mp3?alt=media&token=1f25a4b9-30b1-4eba-bacd-3dcd86b31f37',  { volume: 0.5 })
+  const [playWorstRanking] = useSound('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Franking.mp3?alt=media&token=44655fd8-347d-4b8d-9e45-15b598b3554f',  { volume: 0.5 })
 
   const goToQuestion = () => {
     // 初期ページが"/monitor/question/1
@@ -48,6 +49,12 @@ const Index = () => {
     setIsReadyGoBtnDisabled(true)
     socket.emit('ready_go');
   };
+
+  const showWorstRanking = () => {
+    playWorstRanking()
+    setIsReadyGoBtnDisabled(true)
+    socket.emit('show_worst_ranking')
+  }
 
 
   return (
@@ -93,6 +100,13 @@ const Index = () => {
         <Button disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => readyGo()}>
           READY GO !
         </Button>
+        <StyledButton
+          color="primary"
+          variant="contained"
+          onClick={() => showWorstRanking()}
+        >
+          WorstRanking
+        </StyledButton>
       </div>
     </>
   );
