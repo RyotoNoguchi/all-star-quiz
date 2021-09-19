@@ -54,6 +54,10 @@ type User = {
   };
 };
 
+const isLastRow = (idx: number): boolean => {
+  return idx + 1 === 10 ? true : false
+}
+
 const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
@@ -110,26 +114,18 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
               {displayAnswerPeople.map((answerPerson: User, idx: number) => {
                 return (
                   <RankRow
-                    isLastRow={idx + 1 === 10 ? true : false}
+                    isLastRow={isLastRow(idx)}
                     variants={rankingRowVariant}
                     iterationCount={idx + 1}
                     custom={idx === 9 ? 4.5 : idx * 0.4}
                     key={idx}
                   >
-                    <AnswerPersonNameBox
-                      isLastRow={idx + 1 === 10 ? true : false}
-                    >
-                      <Rank isLastRow={idx + 1 === 10 ? true : false}>
-                        {answerPerson.id}
-                      </Rank>
-                      <AnswerPersonName isLastRow={idx + 1 === 10 ? true : false}>
-                        {answerPerson.name}
-                      </AnswerPersonName>
+                    <AnswerPersonNameBox isLastRow={isLastRow(idx)}>
+                      <Rank isLastRow={isLastRow(idx)}>{answerPerson.id}</Rank>
+                      <AnswerPersonName isLastRow={isLastRow(idx)}>{answerPerson.name}</AnswerPersonName>
                     </AnswerPersonNameBox>
-                    <AnswerTimeBox isLastRow={idx + 1 === 10 ? true : false}>
-                      <AnswerTime isLastRow={idx + 1 === 10 ? true : false}>
-                        {answerPerson.id}
-                      </AnswerTime>
+                    <AnswerTimeBox isLastRow={isLastRow(idx)}>
+                      <AnswerTime isLastRow={isLastRow(idx)}>{answerPerson.id}</AnswerTime>
                     </AnswerTimeBox>
                   </RankRow>
                 );
