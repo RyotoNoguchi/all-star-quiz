@@ -4,27 +4,31 @@ import {
   rankRowChild,
   blinkAnswerPersonNameBox,
   animationDefault,
+  blinkChampionRow
 } from '../../styles/animations';
 
-const StyledTableCell = styled(({ isLastRow, ...props }) => (<TableCell {...props} />))<TableCellProps>`
+const StyledTableCell = styled(({ isChangeColorRow, isChampion, ...props }) => (<TableCell {...props} />))<TableCellProps>`
   ${rankRowChild};
   width: 80%;
   justify-content: flex-start;
-  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox};
+  animation: ${(p) => p.isChangeColorRow && blinkAnswerPersonNameBox};
+  animation: ${(p) => p.isChangeColorRow && p.isChampion && blinkChampionRow};
   ${animationDefault};
 `;
 
 interface Props {
-  isLastRow: boolean;
+  isChampion?: boolean;
+  isChangeColorRow: boolean;
 }
 
 const AnswerPersonNameBox: React.FC<Props> = ({ 
-  isLastRow,
+  isChampion,
+  isChangeColorRow,
   children
   }) => {
   return (
     <>
-      <StyledTableCell isLastRow={isLastRow}>
+      <StyledTableCell isChangeColorRow={isChangeColorRow} isChampion={isChampion}>
         {children}
         </StyledTableCell>
     </>

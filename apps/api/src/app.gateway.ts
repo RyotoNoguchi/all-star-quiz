@@ -82,4 +82,9 @@ export class AppGateway
   showWorstRanking() {
     this.server.emit('show_worst_ranking')
   }
+
+  @SubscribeMessage('show_champion_ranking')
+  showChampionRanking() {
+    this.server.emit('show_champion_ranking')
+  }
 }

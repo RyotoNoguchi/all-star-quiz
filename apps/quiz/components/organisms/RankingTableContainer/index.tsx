@@ -12,6 +12,7 @@ const StyledTableContainer = styled(TableContainer)<TableContainerProps>`
   align-items: center;
 `;
 
+
 const RankingTableContainer: React.FC = ({ children }) => {
   return (
     <>

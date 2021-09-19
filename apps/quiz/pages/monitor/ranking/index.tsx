@@ -22,7 +22,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
     'https://jsonplaceholder.typicode.com/users'
   );
-  const data = response.data;
+  const data: User[] = response.data;
 
   return {
     props: {
@@ -111,24 +111,24 @@ const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticPr
             早押しワ<HyphenRotation>ー</HyphenRotation>スト10
           </RankingTitle>
         </RankingTitleBox>
-        <Table arial-label="ranking table">
+        <Table arial-label="worst ranking table">
           {isRankingRowsShow && (
             <MotionTableBody variants={tbodyVariant}>
               {displayAnswerPeople.map((answerPerson: User, idx: number) => {
                 return (
                   <RankRow
-                    isLastRow={isLastRow(idx)}
+                    isChangeColorRow={isLastRow(idx)}
                     variants={rankingRowVariant}
                     iterationCount={idx + 1}
                     custom={idx === 9 ? 4.5 : idx * 0.4}
                     key={idx}
                   >
-                    <AnswerPersonNameBox isLastRow={isLastRow(idx)}>
-                      <Rank isLastRow={isLastRow(idx)}>{answerPerson.id}</Rank>
-                      <AnswerPersonName isLastRow={isLastRow(idx)}>{answerPerson.name}</AnswerPersonName>
+                    <AnswerPersonNameBox isChangeColorRow={isLastRow(idx)}>
+                      <Rank isChangeColorRow={isLastRow(idx)}>{answerPerson.id}</Rank>
+                      <AnswerPersonName isChangeColorRow={isLastRow(idx)}>{answerPerson.name}</AnswerPersonName>
                     </AnswerPersonNameBox>
-                    <AnswerTimeBox isLastRow={isLastRow(idx)}>
-                      <AnswerTime isLastRow={isLastRow(idx)}>{answerPerson.id}</AnswerTime>
+                    <AnswerTimeBox isChangeColorRow={isLastRow(idx)}>
+                      <AnswerTime isChangeColorRow={isLastRow(idx)}>{answerPerson.id}</AnswerTime>
                     </AnswerTimeBox>
                   </RankRow>
                 );

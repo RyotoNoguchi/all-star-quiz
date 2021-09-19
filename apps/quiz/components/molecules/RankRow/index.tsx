@@ -4,7 +4,7 @@ import { motion, Variants } from 'framer-motion';
 
 interface Props {
   iterationCount: number;
-  isLastRow: boolean;
+  isChangeColorRow: boolean;
   variants: Variants;
   custom: number;
 }
@@ -18,13 +18,14 @@ const StyledTr = styled(motion.tr)<Props>`
   animation-timing-function: linear;
   animation-iteration-count: ${(props) => props.iterationCount};
   animation-name: ${flipRow};
-  animation-delay: ${(props) => props.isLastRow && '4s'};
-  animation-iteration-count: ${(props) => props.isLastRow && 4};
+  animation-delay: ${(props) => props.isChangeColorRow && '4s'};
+  animation-iteration-count: ${(props) => props.isChangeColorRow && 4};
+  animation-direction: reverse;
 `;
 
 const RankRow: React.FC<Props> = ({
   iterationCount,
-  isLastRow,
+  isChangeColorRow,
   variants,
   custom,
   children,
@@ -32,7 +33,7 @@ const RankRow: React.FC<Props> = ({
   return (
     <StyledTr
       iterationCount={iterationCount}
-      isLastRow={isLastRow}
+      isChangeColorRow={isChangeColorRow}
       variants={variants}
       custom={custom}
     >

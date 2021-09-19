@@ -10,7 +10,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
     'https://jsonplaceholder.typicode.com/users'
   );
-  const data = response.data;
+  const data: User[] = response.data;
 
   return {
     props: {
@@ -62,7 +62,7 @@ const ChampionRanking: React.FC = ({ users }: InferGetStaticPropsType<typeof get
   
   return (
     <>
-      <ChampionRankingTableContainer/>
+      <ChampionRankingTableContainer users={displayAnswerPeople} isRankingRowsShow={isRankingRowsShow} />
     </>
   )
 }

@@ -1,26 +1,29 @@
 import styled from 'styled-components';
-import { rankRowChild, animationDefault, blinkAnswerPersonNameBox } from '../../styles/animations';
+import { rankRowChild, animationDefault, blinkAnswerPersonNameBox, blinkChampionRow } from '../../styles/animations';
 import { TableCell, TableCellProps } from '@material-ui/core';
 
-const StyledTableCell = styled(({ isLastRow, ...props }) => (<TableCell {...props} />))<TableCellProps>`
+const StyledTableCell = styled(({ isChangeColorRow, isChampion, ...props }) => (<TableCell {...props} />))<TableCellProps>`
   ${rankRowChild};
   width: 15%;
   justify-content: flex-end;
-  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox};
+  animation-name: ${(p) => p.isChangeColorRow && blinkAnswerPersonNameBox};
+  animation-name: ${(p) => p.isChangeColorRow && p.isChampion && blinkChampionRow};
   ${animationDefault};
 `;
 
 interface Props {
-  isLastRow: boolean;
+  isChampion?: boolean;
+  isChangeColorRow: boolean;
 }
 
 const AnswerTimeBox:React.FC<Props> = ({
-  isLastRow,
+  isChampion = false,
+  isChangeColorRow,
   children
 }) => {
   return (
     <>
-      <StyledTableCell isLastRow={isLastRow}>
+      <StyledTableCell isChangeColorRow={isChangeColorRow} isChampion={isChampion}>
         {children}
       </StyledTableCell>
     </>

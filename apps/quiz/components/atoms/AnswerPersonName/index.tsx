@@ -1,24 +1,27 @@
 import styled from 'styled-components';
 import { Typography, TypographyProps } from '@material-ui/core';
-import { rankRowTdChildCSS, blinkAnswerPersonName, animationDefault } from '../../styles/animations';
+import { rankRowTdChildCSS, blinkAnswerPersonName, animationDefault, blinkChampionTypography} from '../../styles/animations';
 
 interface Props {
-  isLastRow: boolean
+  isChampion?: boolean
+  isChangeColorRow: boolean
 }
 
-const StyledTypography = styled(({ isLastRow, ...props }) => (<Typography {...props} />))<TypographyProps>`
+const StyledTypography = styled(({ isChangeColorRow, isChampion, ...props }) => (<Typography {...props} />))<TypographyProps>`
   ${rankRowTdChildCSS};
-  animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
+  animation: ${(p) => p.isChangeColorRow && blinkAnswerPersonName};
+  animation: ${(p) => p.isChangeColorRow && p.isChampion && blinkChampionTypography};
   ${animationDefault};
 `;
 
 const AnswerPersonName: React.FC<Props> = ({ 
-  isLastRow,
+  isChampion = false,
+  isChangeColorRow,
   children
   }) => {
     return (
       <>
-        <StyledTypography variants="body1" isLastRow={isLastRow}>
+        <StyledTypography variants="body1" isChangeColorRow={isChangeColorRow} isChampion={isChampion}>
           {children}
         </StyledTypography>
       </>
