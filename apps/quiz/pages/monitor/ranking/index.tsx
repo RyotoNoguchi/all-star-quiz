@@ -1,13 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  Table,
-  TableCell,
-  Typography,
-  TableCellProps,
-  TypographyProps,
-} from '@material-ui/core';
+import { Table } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import styled, { css, keyframes } from 'styled-components';
 import axios from 'axios';
 import { GetStaticProps } from 'next';
 import { InferGetStaticPropsType } from 'next';
@@ -22,7 +15,7 @@ import WorstRankingTitle from '../../../components/atoms/WorstRankingTitle';
 import HyphenRotation from '../../../components/atoms/HyphenRotation';
 import Rank from '../../../components/atoms/Rank';
 import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
-// import {  } from "../../../components/styles/animations";
+import AnswerTime from '../../../components/atoms/AnswerTime';
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
@@ -60,33 +53,6 @@ type User = {
     bs: string;
   };
 };
-
-const animationDefault = css`
-  animation-delay: 4.8s;
-  animation-duration: 500ms;
-  animation-timing-function: linear;
-  animation-iteration-count: 6;
-  animation-fill-mode: forwards;
-`;
-
-const blinkAnswerPersonName = keyframes`
-  100% {
-    text-shadow: 2px 2px 2px black, -1px -1px 1px black;
-    color: rgb(254, 0, 0);
-  }
-`;
-
-const rankRowTdChildCSS = css`
-  font-size: 45px;
-  color: rgb(243, 249, 132);
-  text-shadow: 2px 2px 2px lightslategray, -2px -2px 2px lightslategray;
-`;
-
-const AnswerTime = styled(({ isLastRow, ...props }) => (<Typography {...props} />))<TypographyProps>`
-  ${rankRowTdChildCSS}
-  animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
-  ${animationDefault};
-`;
 
 const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const socket = io('http://localhost:3333');
