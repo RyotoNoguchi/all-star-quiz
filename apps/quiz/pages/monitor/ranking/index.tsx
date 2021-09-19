@@ -22,6 +22,7 @@ import AnswerPersonNameBox from '../../../components/molecules/AnswerPersonNameB
 import WorstRankingTitle from '../../../components/atoms/WorstRankingTitle';
 import HyphenRotation from '../../../components/atoms/HyphenRotation';
 import Rank from '../../../components/atoms/Rank';
+import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
 // import {  } from "../../../components/styles/animations";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -113,18 +114,11 @@ const rankRowTdChildCSS = css`
   text-shadow: 2px 2px 2px lightslategray, -2px -2px 2px lightslategray;
 `;
 
-const AnswerPersonName = styled(({ isLastRow, ...props }) => (<Typography {...props} />))<TypographyProps>`
-  ${rankRowTdChildCSS};
-  animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
-  ${animationDefault};
-`;
-
 const AnswerTime = styled(({ isLastRow, ...props }) => (<Typography {...props} />))<TypographyProps>`
   ${rankRowTdChildCSS}
   animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
   ${animationDefault};
 `;
-
 
 const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const socket = io('http://localhost:3333');
@@ -194,10 +188,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
                       <Rank isLastRow={idx + 1 === 10 ? true : false}>
                         {answerPerson.id}
                       </Rank>
-                      <AnswerPersonName
-                        variant="body1"
-                        isLastRow={idx + 1 === 10 ? true : false}
-                      >
+                      <AnswerPersonName isLastRow={idx + 1 === 10 ? true : false}>
                         {answerPerson.name}
                       </AnswerPersonName>
                     </AnswerPersonNameBox>
