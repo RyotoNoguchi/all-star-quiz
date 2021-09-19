@@ -5,7 +5,7 @@ import axios from 'axios';
 import { GetStaticProps } from 'next';
 import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
-import RankingTable from '../../../components/molecules/RankingTable';
+import RankingTableContainer from '../../../components/organisms/RankingTableContainer';
 import WorstRankingTitleBox from '../../../components/molecules/WorstRankingTitleBox';
 import MotionTableBody from '../../../components/molecules/MotionTableBody';
 import RankRow from '../../../components/molecules/RankRow';
@@ -58,7 +58,7 @@ const isLastRow = (idx: number): boolean => {
   return idx + 1 === 10 ? true : false
 }
 
-const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const numberItemShow = 10;
@@ -102,13 +102,13 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
 
   return (
     <>
-      <RankingTable>
+      <RankingTableContainer>
         <WorstRankingTitleBox>
           <WorstRankingTitle>
             早押しワ<HyphenRotation>ー</HyphenRotation>スト10
           </WorstRankingTitle>
         </WorstRankingTitleBox>
-        <Table arial-label="raking table">
+        <Table arial-label="ranking table">
           {isRankingRowsShow && (
             <MotionTableBody variants={tbodyVariant}>
               {displayAnswerPeople.map((answerPerson: User, idx: number) => {
@@ -133,7 +133,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
             </MotionTableBody>
           )}
         </Table>
-      </RankingTable>
+      </RankingTableContainer>
     </>
   );
 };

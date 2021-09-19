@@ -1,8 +1,5 @@
-import styled from "styled-components";
-import {
-  TableContainer,
-  TableContainerProps,
-} from '@material-ui/core';
+import styled from 'styled-components';
+import { TableContainer, TableContainerProps } from '@material-ui/core';
 
 const StyledTableContainer = styled(TableContainer)<TableContainerProps>`
   background-image: radial-gradient(#11f1fd, skyblue);
@@ -15,16 +12,12 @@ const StyledTableContainer = styled(TableContainer)<TableContainerProps>`
   align-items: center;
 `;
 
-const RankingTable:React.FC = ({
-  children
-}) => {
+const RankingTableContainer: React.FC = ({ children }) => {
   return (
     <>
-      <StyledTableContainer>
-        {children}
-      </StyledTableContainer>
+      <StyledTableContainer>{children}</StyledTableContainer>
     </>
-  )
+  );
 };
 
-export default RankingTable
+export default RankingTableContainer;
