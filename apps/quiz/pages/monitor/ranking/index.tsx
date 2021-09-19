@@ -21,6 +21,7 @@ import RankRow from '../../../components/molecules/RankRow';
 import AnswerPersonNameBox from '../../../components/molecules/AnswerPersonNameBox';
 import WorstRankingTitle from '../../../components/atoms/WorstRankingTitle';
 import HyphenRotation from '../../../components/atoms/HyphenRotation';
+import Rank from '../../../components/atoms/Rank';
 // import {  } from "../../../components/styles/animations";
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -98,9 +99,7 @@ const blinkAnswerPersonName = keyframes`
   }
 `;
 
-const AnswerTimeBox = styled(({ isLastRow, ...props }) => (
-  <TableCell {...props} />
-))<TableCellProps>`
+const AnswerTimeBox = styled(({ isLastRow, ...props }) => (<TableCell {...props} />))<TableCellProps>`
   ${rankRowChild};
   width: 15%;
   justify-content: flex-end;
@@ -114,49 +113,18 @@ const rankRowTdChildCSS = css`
   text-shadow: 2px 2px 2px lightslategray, -2px -2px 2px lightslategray;
 `;
 
-const AnswerPersonName = styled(({ isLastRow, ...props }) => (
-  <Typography {...props} />
-))<TypographyProps>`
+const AnswerPersonName = styled(({ isLastRow, ...props }) => (<Typography {...props} />))<TypographyProps>`
   ${rankRowTdChildCSS};
   animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
   ${animationDefault};
 `;
 
-const AnswerTime = styled(({ isLastRow, ...props }) => (
-  <Typography {...props} />
-))<TypographyProps>`
+const AnswerTime = styled(({ isLastRow, ...props }) => (<Typography {...props} />))<TypographyProps>`
   ${rankRowTdChildCSS}
   animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
   ${animationDefault};
 `;
 
-const blinkRank = keyframes`
-  100% {
-    background-image: radial-gradient(rgb(252, 61, 230),rgb(251, 214, 252));
-    box-shadow: 2px 2px 2px rgb(232, 117, 255), -1px -1px 1px rgb(232, 117, 255);
-    text-shadow: 2px 2px 2px black, -1px -1px 1px black;
-    color: rgb(254, 0, 0);
-  }
-`;
-
-const Rank = styled(({ isLastRow, ...props }) => <Box {...props} />)<BoxProps>`
-  width: 6.25rem;
-  background-image: radial-gradient(#2d3870, #2945d0);
-  box-shadow: 2px 2px 2px rgb(94 94 94), -2px -2px 2px rgb(94 94 94);
-  left: 1.5rem;
-  border: 0.2rem solid rgb(2, 2, 169);
-  border-radius: 0.6rem;
-  text-align: center;
-  color: white;
-  display: inline-block;
-  margin: 10px 40px 10px 10px;
-  padding: 8px 0px;
-  font-size: 36px;
-  padding: 0;
-  text-shadow: none;
-  animation: ${(props) => props.isLastRow && blinkRank};
-  ${animationDefault};
-`;
 
 const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const socket = io('http://localhost:3333');
@@ -223,10 +191,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
                     <AnswerPersonNameBox
                       isLastRow={idx + 1 === 10 ? true : false}
                     >
-                      <Rank
-                        component="span"
-                        isLastRow={idx + 1 === 10 ? true : false}
-                      >
+                      <Rank isLastRow={idx + 1 === 10 ? true : false}>
                         {answerPerson.id}
                       </Rank>
                       <AnswerPersonName

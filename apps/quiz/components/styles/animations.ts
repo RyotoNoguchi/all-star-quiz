@@ -56,3 +56,9 @@ align-items: center;
 background-image: radial-gradient(#2d3870, #586dd4);
 box-shadow: 2px 2px 2px rgb(63, 63, 63), -2px -2px 2px rgb(63, 63, 63);
 `;
+
+export const rankRowTdChildCSS = css`
+font-size: 45px;
+color: rgb(243, 249, 132);
+text-shadow: 2px 2px 2px lightslategray, -2px -2px 2px lightslategray;
+`;
