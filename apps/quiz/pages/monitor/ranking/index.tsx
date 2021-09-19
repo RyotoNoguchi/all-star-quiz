@@ -18,8 +18,10 @@ import RankingTable from '../../../components/molecules/RankingTable';
 import WorstRankingTitleBox from '../../../components/molecules/WorstRankingTitleBox';
 import MotionTableBody from '../../../components/molecules/MotionTableBody';
 import RankRow from '../../../components/molecules/RankRow';
+import AnswerPersonNameBox from '../../../components/molecules/AnswerPersonNameBox';
 import WorstRankingTitle from '../../../components/atoms/WorstRankingTitle';
 import HyphenRotation from '../../../components/atoms/HyphenRotation';
+// import {  } from "../../../components/styles/animations";
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
@@ -94,16 +96,6 @@ const blinkAnswerPersonName = keyframes`
     text-shadow: 2px 2px 2px black, -1px -1px 1px black;
     color: rgb(254, 0, 0);
   }
-`;
-
-const AnswerPersonNameBox = styled(({ isLastRow, ...props }) => (
-  <TableCell {...props} />
-))<TableCellProps>`
-  ${rankRowChild};
-  width: 80%;
-  justify-content: flex-start;
-  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox};
-  ${animationDefault};
 `;
 
 const AnswerTimeBox = styled(({ isLastRow, ...props }) => (
