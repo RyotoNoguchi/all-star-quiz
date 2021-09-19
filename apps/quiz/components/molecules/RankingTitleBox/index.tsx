@@ -8,7 +8,7 @@ const StyledBox = styled(Box)<BoxProps>`
   width: 10%;
 `;
 
-const WorstRankingTitleBox: React.FC = ({ children }) => {
+const RankingTitleBox: React.FC = ({ children }) => {
   return (
     <>
       <StyledBox>{children}</StyledBox>
@@ -16,4 +16,4 @@ const WorstRankingTitleBox: React.FC = ({ children }) => {
   );
 };
 
-export default WorstRankingTitleBox;
+export default RankingTitleBox;

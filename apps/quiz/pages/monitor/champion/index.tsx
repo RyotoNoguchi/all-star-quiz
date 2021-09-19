@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
 import axios from 'axios';
-import ChampionRankingTableContainer from "../../../components/organisms/ChanpingRankingTableContainer";
+import ChampionRankingTableContainer from "../../../components/organisms/ChampingRankingTableContainer";
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(

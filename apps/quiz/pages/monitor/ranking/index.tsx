@@ -6,16 +6,17 @@ import { GetStaticProps } from 'next';
 import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
 import RankingTableContainer from '../../../components/organisms/RankingTableContainer';
-import WorstRankingTitleBox from '../../../components/molecules/WorstRankingTitleBox';
+import RankingTitleBox from '../../../components/molecules/RankingTitleBox';
 import MotionTableBody from '../../../components/molecules/MotionTableBody';
 import RankRow from '../../../components/molecules/RankRow';
 import AnswerPersonNameBox from '../../../components/molecules/AnswerPersonNameBox';
 import AnswerTimeBox from '../../../components/molecules/AnswerTimeBox';
-import WorstRankingTitle from '../../../components/atoms/WorstRankingTitle';
+import RankingTitle from '../../../components/atoms/RankingTitle';
 import HyphenRotation from '../../../components/atoms/HyphenRotation';
 import Rank from '../../../components/atoms/Rank';
 import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
 import AnswerTime from '../../../components/atoms/AnswerTime';
+import { colors, textShadows } from '../../../components/styles/colors';
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
@@ -103,11 +104,13 @@ const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticPr
   return (
     <>
       <RankingTableContainer>
-        <WorstRankingTitleBox>
-          <WorstRankingTitle>
+        <RankingTitleBox>
+          <RankingTitle 
+            color={colors.rankingTitleBlue} 
+            textShadow={textShadows.rankingTitleBlue}>
             早押しワ<HyphenRotation>ー</HyphenRotation>スト10
-          </WorstRankingTitle>
-        </WorstRankingTitleBox>
+          </RankingTitle>
+        </RankingTitleBox>
         <Table arial-label="ranking table">
           {isRankingRowsShow && (
             <MotionTableBody variants={tbodyVariant}>
