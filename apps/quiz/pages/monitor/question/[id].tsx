@@ -3,12 +3,10 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
-// import { Colors, colors } from '../../../components/styles/colors';
 import AlphabetCircle from '../../../components/atoms/AlphabetCircle/index';
 import { io } from 'socket.io-client';
 import Cue from '../cue';
 import Index from '../../index';
-// import useSound from 'use-sound';
 import { GetStaticPaths, GetStaticProps } from 'next'
 
 type Post = {

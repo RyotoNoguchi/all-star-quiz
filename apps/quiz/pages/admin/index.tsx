@@ -22,6 +22,7 @@ const Index = () => {
   const [playActive] = useSound('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fquiz_cue.mp3?alt=media&token=d671624b-80e4-40c4-ae5d-ce147a1515f2',  { volume: 0.5 })
   const [playCountDown] = useSound('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fcountdown.mp3?alt=media&token=1f25a4b9-30b1-4eba-bacd-3dcd86b31f37',  { volume: 0.5 })
   const [playWorstRanking] = useSound('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Franking.mp3?alt=media&token=44655fd8-347d-4b8d-9e45-15b598b3554f',  { volume: 0.5 })
+  const [playChampionRanking] = useSound('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fchampion.mp3?alt=media&token=8353cda2-ccc7-4efb-b142-68268437c9c7')
 
   const goToQuestion = () => {
     // 初期ページが"/monitor/question/1
@@ -54,6 +55,12 @@ const Index = () => {
     playWorstRanking()
     setIsReadyGoBtnDisabled(true)
     socket.emit('show_worst_ranking')
+  }
+
+  const showChampionRanking = () => {
+    playChampionRanking()
+    setIsReadyGoBtnDisabled(true)
+    socket.emit('show_champion_ranking')
   }
 
 
@@ -106,6 +113,13 @@ const Index = () => {
           onClick={() => showWorstRanking()}
         >
           WorstRanking
+        </StyledButton>
+        <StyledButton
+          color="primary"
+          variant="contained"
+          onClick={() => showChampionRanking()}
+        >
+          ChampionRanking
         </StyledButton>
       </div>
     </>

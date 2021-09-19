@@ -1,29 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  Table,
-  TableCell,
-  TableContainer,
-  Typography,
-  TableCellProps,
-  TableContainerProps,
-  TypographyProps,
-  Box,
-  BoxProps,
-} from '@material-ui/core';
+import { Table } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import styled, { css, keyframes } from 'styled-components';
 import axios from 'axios';
 import { GetStaticProps } from 'next';
 import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
-import { motion } from 'framer-motion';
+import RankingTableContainer from '../../../components/organisms/RankingTableContainer';
+import RankingTitleBox from '../../../components/molecules/RankingTitleBox';
+import MotionTableBody from '../../../components/molecules/MotionTableBody';
+import RankRow from '../../../components/molecules/RankRow';
+import AnswerPersonNameBox from '../../../components/molecules/AnswerPersonNameBox';
+import AnswerTimeBox from '../../../components/molecules/AnswerTimeBox';
+import RankingTitle from '../../../components/atoms/RankingTitle';
+import HyphenRotation from '../../../components/atoms/HyphenRotation';
+import Rank from '../../../components/atoms/Rank';
+import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
+import AnswerTime from '../../../components/atoms/AnswerTime';
+import { colors, textShadows } from '../../../components/styles/colors';
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
     'https://jsonplaceholder.typicode.com/users'
   );
-  const data = response.data;
-  console.log(data);
+  const data: User[] = response.data;
 
   return {
     props: {
@@ -56,169 +55,11 @@ type User = {
   };
 };
 
-const animationDefault = css`
-  animation-delay: 4.8s;
-  animation-duration: 500ms;
-  animation-timing-function: linear;
-  animation-iteration-count: 6;
-  animation-fill-mode: forwards;
-`
+const isLastRow = (idx: number): boolean => {
+  return idx + 1 === 10 ? true : false
+}
 
-const rankRowChild = css`
-  font-family: 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN';
-  font-weight: 900;
-  text-shadow: 4px 4px 4px white, -4px -4px 4px white;
-  padding: 4px 4px 4px 10px;
-  display: flex;
-  align-items: center;
-  line-height: 1.25;
-  border: 2px solid blue;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-image: radial-gradient(#2d3870, #586dd4);
-  box-shadow: 2px 2px 2px rgb(63, 63, 63), -2px -2px 2px rgb(63, 63, 63);
-`;
-
-const blinkAnswerPersonNameBox = keyframes`
-  100% {
-    background-image: radial-gradient(rgb(250, 133, 240),rgb(254, 207, 255));
-  }
-`
-
-const blinkAnswerPersonName = keyframes`
-  100% {
-    text-shadow: 2px 2px 2px black, -1px -1px 1px black;
-    color: rgb(254, 0, 0);
-  }
-`
-
-const AnswerPersonNameBox = styled(({ isLastRow, ...props }) => (<TableCell {...props} />))<TableCellProps>`
-  ${rankRowChild};
-  width: 80%;
-  justify-content: flex-start;
-  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox} ;
-  ${animationDefault};
-`;
-
-const AnswerTimeBox = styled(({ isLastRow, ...props }) => (<TableCell {...props} />))<TableCellProps>`
-  ${rankRowChild};
-  width: 15%;
-  justify-content: flex-end;
-  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox} ;
-  ${animationDefault};
-`;
-
-const rankRowTdChildCSS = css`
-  font-size: 45px;
-  color: rgb(243, 249, 132);
-  text-shadow: 2px 2px 2px lightslategray, -2px -2px 2px lightslategray;
-`;
-
-
-const AnswerPersonName = styled(({ isLastRow, ...props }) => (<Typography {...props} />))<TypographyProps>`
-  ${rankRowTdChildCSS};
-  animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
-  ${animationDefault};
-`;
-
-const AnswerTime = styled(({ isLastRow, ...props }) => (<Typography {...props} />))<TypographyProps>`
-  ${rankRowTdChildCSS}
-  animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
-  ${animationDefault};
-`;
-
-const HyphenRotation = styled.span`
-  display: inline-block;
-  transform: rotate(-90deg);
-`;
-
-const RankingTable = styled(TableContainer)<TableContainerProps>`
-  background-image: radial-gradient(#11f1fd, skyblue);
-  border-radius: 2rem;
-  padding: 10px;
-  box-shadow: 2px 2px 4px rgb(0 21 255), -2px -2px 4px rgb(0 21 255);
-  height: 860px;
-  transform: translateY(-20px);
-  display: flex;
-  align-items: center;
-`;
-
-const blinkRank = keyframes`
-  100% {
-    background-image: radial-gradient(rgb(252, 61, 230),rgb(251, 214, 252));
-    box-shadow: 2px 2px 2px rgb(232, 117, 255), -1px -1px 1px rgb(232, 117, 255);
-    text-shadow: 2px 2px 2px black, -1px -1px 1px black;
-    color: rgb(254, 0, 0);
-  }
-`
-
-const Rank = styled(({ isLastRow, ...props }) => (<Box {...props} />))<BoxProps>`
-  width: 6.25rem;
-  background-image: radial-gradient(#2d3870, #2945d0);
-  box-shadow: 2px 2px 2px rgb(94 94 94), -2px -2px 2px rgb(94 94 94);
-  left: 1.5rem;
-  border: 0.2rem solid rgb(2, 2, 169);
-  border-radius: 0.6rem;
-  text-align: center;
-  color: white;
-  display: inline-block;
-  margin: 10px 40px 10px 10px;
-  padding: 8px 0px;
-  font-size: 36px;
-  padding: 0;
-  text-shadow: none;
-  animation: ${(props) => props.isLastRow && blinkRank};
-  ${animationDefault};
-`;
-
-const flipRows = keyframes`
-  0% {
-    transform: rotateX(0)
-  }
-
-  100% {
-    transform: rotateX(360deg)
-  }
-`;
-
-const RankRow = styled(motion.tr)<{ iterationCount: number , isLastRow: boolean}>`
-  display: flex;
-  margin-bottom: 6px;
-  height: 78px;
-  animation-delay: 0.3s;
-  animation-duration: 0.4s;
-  animation-timing-function: linear;
-  animation-iteration-count: ${(props) => props.iterationCount};
-  animation-name: ${flipRows};
-  animation-delay: ${(props) => props.isLastRow && '4s'};
-  animation-iteration-count: ${(props) => props.isLastRow && 4};
-`;
-
-const MotionTableBody = styled(motion.tbody)``;
-
-const WorstRankingTitleBox = styled(Box)<BoxProps>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 10%;
-`;
-
-const WorstRankingTitle = styled(Typography)<TypographyProps>`
-  text-align: center;
-  font-size: 3.2rem;
-  line-height: 1.43;
-  border: none;
-  font-family: 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN';
-  font-weight: 900;
-  color: rgb(0, 21, 255);
-  text-shadow: 4px 4px 4px white, -4px -4px 4px white;
-  border-collapse: separate;
-  width: 80%;
-`;
-
-const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const numberItemShow = 10;
@@ -246,7 +87,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
     hidden: {
       opacity: 0,
     },
-    visible: (i:number) => ({
+    visible: (i: number) => ({
       opacity: 1,
       transition: {
         delay: i,
@@ -262,36 +103,32 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
 
   return (
     <>
-      <RankingTable>
-        <WorstRankingTitleBox>
-          <WorstRankingTitle>
+      <RankingTableContainer>
+        <RankingTitleBox>
+          <RankingTitle 
+            color={colors.rankingTitleBlue} 
+            textShadow={textShadows.rankingTitleBlue}>
             早押しワ<HyphenRotation>ー</HyphenRotation>スト10
-          </WorstRankingTitle>
-        </WorstRankingTitleBox>
-        <Table arial-label="raking table">
+          </RankingTitle>
+        </RankingTitleBox>
+        <Table arial-label="worst ranking table">
           {isRankingRowsShow && (
-            <MotionTableBody
-              variants={tbodyVariant}
-              initial="hidden"
-              animate="visible"
-            >
+            <MotionTableBody variants={tbodyVariant}>
               {displayAnswerPeople.map((answerPerson: User, idx: number) => {
                 return (
                   <RankRow
-                    isLastRow={idx + 1 === 10 ? true : false}
+                    isChangeColorRow={isLastRow(idx)}
                     variants={rankingRowVariant}
                     iterationCount={idx + 1}
-                    key={answerPerson.id}
                     custom={idx === 9 ? 4.5 : idx * 0.4}
+                    key={idx}
                   >
-                    <AnswerPersonNameBox isLastRow={idx + 1 === 10 ? true : false} >
-                      <Rank component="span" isLastRow={idx + 1 === 10 ? true : false}>{answerPerson.id}</Rank>
-                      <AnswerPersonName variant="body1" isLastRow={idx + 1 === 10 ? true : false}>
-                        {answerPerson.name}
-                      </AnswerPersonName>
+                    <AnswerPersonNameBox isChangeColorRow={isLastRow(idx)}>
+                      <Rank isChangeColorRow={isLastRow(idx)}>{answerPerson.id}</Rank>
+                      <AnswerPersonName isChangeColorRow={isLastRow(idx)}>{answerPerson.name}</AnswerPersonName>
                     </AnswerPersonNameBox>
-                    <AnswerTimeBox isLastRow={idx + 1 === 10 ? true : false}>
-                      <AnswerTime isLastRow={idx + 1 === 10 ? true : false}>{answerPerson.id}</AnswerTime>
+                    <AnswerTimeBox isChangeColorRow={isLastRow(idx)}>
+                      <AnswerTime isChangeColorRow={isLastRow(idx)}>{answerPerson.id}</AnswerTime>
                     </AnswerTimeBox>
                   </RankRow>
                 );
@@ -299,7 +136,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
             </MotionTableBody>
           )}
         </Table>
-      </RankingTable>
+      </RankingTableContainer>
     </>
   );
 };

@@ -95,13 +95,12 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 
 ## Next.js + Nest.js + Axios + React + TypeScript　+ firebase Monorepo環境構築
 
-1. npx create-nx-workspace 
+1. npx create-nx-workspace
 2. yarn add @nrwl/nest @nrwl/react -D
 3. nx g @nrwl/nest:app api <!-- :appはアプリケーションを作るという意味。apiはディレクトリの名前を決める -->
 4. nx serve api
 5. yarn add axios
 6. sudo yarn add firebase react-firebase-hooks react-firebaseui
-<!-- firebaseのインストールまで完了。Youtube（nextjs + firebase）の続きを見る -->
 7. yarn add g firebase-tools
 8. yarn add firebase-functions
 9. firebase login
@@ -117,7 +116,3 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 19. yarn add @material-ui/core @material-ui/icons <!-- https://www.youtube.com/watch?v=0rnVfshKqDI -->
 20. nx run api:serve <!-- バックエンド側のサーバー立てる>
 21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
-
-<!-- TODO Framer Motionを使ってランキングのStaggerFlip実装　-->
-<!-- https://www.framer.com/docs/animation/ -->
-<!-- https://www.framer.com/docs/transition/ -->
