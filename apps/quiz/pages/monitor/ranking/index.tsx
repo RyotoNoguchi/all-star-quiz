@@ -2,10 +2,8 @@
 import {
   Table,
   TableCell,
-  TableContainer,
   Typography,
   TableCellProps,
-  TableContainerProps,
   TypographyProps,
   Box,
   BoxProps,
@@ -16,10 +14,10 @@ import axios from 'axios';
 import { GetStaticProps } from 'next';
 import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
-import { motion } from 'framer-motion';
 import RankingTable from '../../../components/molecules/RankingTable';
 import WorstRankingTitleBox from '../../../components/molecules/WorstRankingTitleBox';
 import MotionTableBody from '../../../components/molecules/MotionTableBody';
+import RankRow from '../../../components/molecules/RankRow';
 import WorstRankingTitle from '../../../components/atoms/WorstRankingTitle';
 import HyphenRotation from '../../../components/atoms/HyphenRotation';
 
@@ -28,7 +26,6 @@ export const getStaticProps: GetStaticProps = async () => {
     'https://jsonplaceholder.typicode.com/users'
   );
   const data = response.data;
-  console.log(data);
 
   return {
     props: {
@@ -169,32 +166,6 @@ const Rank = styled(({ isLastRow, ...props }) => <Box {...props} />)<BoxProps>`
   ${animationDefault};
 `;
 
-const flipRows = keyframes`
-  0% {
-    transform: rotateX(0)
-  }
-
-  100% {
-    transform: rotateX(360deg)
-  }
-`;
-
-const RankRow = styled(motion.tr)<{
-  iterationCount: number;
-  isLastRow: boolean;
-}>`
-  display: flex;
-  margin-bottom: 6px;
-  height: 78px;
-  animation-delay: 0.3s;
-  animation-duration: 0.4s;
-  animation-timing-function: linear;
-  animation-iteration-count: ${(props) => props.iterationCount};
-  animation-name: ${flipRows};
-  animation-delay: ${(props) => props.isLastRow && '4s'};
-  animation-iteration-count: ${(props) => props.isLastRow && 4};
-`;
-
 const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
@@ -254,8 +225,8 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
                     isLastRow={idx + 1 === 10 ? true : false}
                     variants={rankingRowVariant}
                     iterationCount={idx + 1}
-                    key={answerPerson.id}
                     custom={idx === 9 ? 4.5 : idx * 0.4}
+                    key={idx}
                   >
                     <AnswerPersonNameBox
                       isLastRow={idx + 1 === 10 ? true : false}
