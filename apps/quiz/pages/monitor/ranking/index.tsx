@@ -17,10 +17,11 @@ import { GetStaticProps } from 'next';
 import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
 import { motion } from 'framer-motion';
-import RankingTable from "../../../components/molecules/RankingTable";
-import WorstRankingTitleBox from "../../../components/molecules/WorstRankingTitleBox";
-import WorstRankingTitle from "../../../components/atoms/WorstRankingTitle";
-import HyphenRotation from "../../../components/atoms/HyphenRotation";
+import RankingTable from '../../../components/molecules/RankingTable';
+import WorstRankingTitleBox from '../../../components/molecules/WorstRankingTitleBox';
+import MotionTableBody from '../../../components/molecules/MotionTableBody';
+import WorstRankingTitle from '../../../components/atoms/WorstRankingTitle';
+import HyphenRotation from '../../../components/atoms/HyphenRotation';
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
@@ -66,7 +67,7 @@ const animationDefault = css`
   animation-timing-function: linear;
   animation-iteration-count: 6;
   animation-fill-mode: forwards;
-`
+`;
 
 const rankRowChild = css`
   font-family: 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN';
@@ -89,28 +90,32 @@ const blinkAnswerPersonNameBox = keyframes`
   100% {
     background-image: radial-gradient(rgb(250, 133, 240),rgb(254, 207, 255));
   }
-`
+`;
 
 const blinkAnswerPersonName = keyframes`
   100% {
     text-shadow: 2px 2px 2px black, -1px -1px 1px black;
     color: rgb(254, 0, 0);
   }
-`
+`;
 
-const AnswerPersonNameBox = styled(({ isLastRow, ...props }) => (<TableCell {...props} />))<TableCellProps>`
+const AnswerPersonNameBox = styled(({ isLastRow, ...props }) => (
+  <TableCell {...props} />
+))<TableCellProps>`
   ${rankRowChild};
   width: 80%;
   justify-content: flex-start;
-  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox} ;
+  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox};
   ${animationDefault};
 `;
 
-const AnswerTimeBox = styled(({ isLastRow, ...props }) => (<TableCell {...props} />))<TableCellProps>`
+const AnswerTimeBox = styled(({ isLastRow, ...props }) => (
+  <TableCell {...props} />
+))<TableCellProps>`
   ${rankRowChild};
   width: 15%;
   justify-content: flex-end;
-  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox} ;
+  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox};
   ${animationDefault};
 `;
 
@@ -120,14 +125,17 @@ const rankRowTdChildCSS = css`
   text-shadow: 2px 2px 2px lightslategray, -2px -2px 2px lightslategray;
 `;
 
-
-const AnswerPersonName = styled(({ isLastRow, ...props }) => (<Typography {...props} />))<TypographyProps>`
+const AnswerPersonName = styled(({ isLastRow, ...props }) => (
+  <Typography {...props} />
+))<TypographyProps>`
   ${rankRowTdChildCSS};
   animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
   ${animationDefault};
 `;
 
-const AnswerTime = styled(({ isLastRow, ...props }) => (<Typography {...props} />))<TypographyProps>`
+const AnswerTime = styled(({ isLastRow, ...props }) => (
+  <Typography {...props} />
+))<TypographyProps>`
   ${rankRowTdChildCSS}
   animation: ${(props) => props.isLastRow && blinkAnswerPersonName};
   ${animationDefault};
@@ -140,9 +148,9 @@ const blinkRank = keyframes`
     text-shadow: 2px 2px 2px black, -1px -1px 1px black;
     color: rgb(254, 0, 0);
   }
-`
+`;
 
-const Rank = styled(({ isLastRow, ...props }) => (<Box {...props} />))<BoxProps>`
+const Rank = styled(({ isLastRow, ...props }) => <Box {...props} />)<BoxProps>`
   width: 6.25rem;
   background-image: radial-gradient(#2d3870, #2945d0);
   box-shadow: 2px 2px 2px rgb(94 94 94), -2px -2px 2px rgb(94 94 94);
@@ -171,7 +179,10 @@ const flipRows = keyframes`
   }
 `;
 
-const RankRow = styled(motion.tr)<{ iterationCount: number , isLastRow: boolean}>`
+const RankRow = styled(motion.tr)<{
+  iterationCount: number;
+  isLastRow: boolean;
+}>`
   display: flex;
   margin-bottom: 6px;
   height: 78px;
@@ -183,9 +194,6 @@ const RankRow = styled(motion.tr)<{ iterationCount: number , isLastRow: boolean}
   animation-delay: ${(props) => props.isLastRow && '4s'};
   animation-iteration-count: ${(props) => props.isLastRow && 4};
 `;
-
-const MotionTableBody = styled(motion.tbody)``;
-
 
 const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const socket = io('http://localhost:3333');
@@ -215,7 +223,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
     hidden: {
       opacity: 0,
     },
-    visible: (i:number) => ({
+    visible: (i: number) => ({
       opacity: 1,
       transition: {
         delay: i,
@@ -239,11 +247,7 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
         </WorstRankingTitleBox>
         <Table arial-label="raking table">
           {isRankingRowsShow && (
-            <MotionTableBody
-              variants={tbodyVariant}
-              initial="hidden"
-              animate="visible"
-            >
+            <MotionTableBody variants={tbodyVariant}>
               {displayAnswerPeople.map((answerPerson: User, idx: number) => {
                 return (
                   <RankRow
@@ -253,14 +257,26 @@ const Ranking = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
                     key={answerPerson.id}
                     custom={idx === 9 ? 4.5 : idx * 0.4}
                   >
-                    <AnswerPersonNameBox isLastRow={idx + 1 === 10 ? true : false} >
-                      <Rank component="span" isLastRow={idx + 1 === 10 ? true : false}>{answerPerson.id}</Rank>
-                      <AnswerPersonName variant="body1" isLastRow={idx + 1 === 10 ? true : false}>
+                    <AnswerPersonNameBox
+                      isLastRow={idx + 1 === 10 ? true : false}
+                    >
+                      <Rank
+                        component="span"
+                        isLastRow={idx + 1 === 10 ? true : false}
+                      >
+                        {answerPerson.id}
+                      </Rank>
+                      <AnswerPersonName
+                        variant="body1"
+                        isLastRow={idx + 1 === 10 ? true : false}
+                      >
                         {answerPerson.name}
                       </AnswerPersonName>
                     </AnswerPersonNameBox>
                     <AnswerTimeBox isLastRow={idx + 1 === 10 ? true : false}>
-                      <AnswerTime isLastRow={idx + 1 === 10 ? true : false}>{answerPerson.id}</AnswerTime>
+                      <AnswerTime isLastRow={idx + 1 === 10 ? true : false}>
+                        {answerPerson.id}
+                      </AnswerTime>
                     </AnswerTimeBox>
                   </RankRow>
                 );
