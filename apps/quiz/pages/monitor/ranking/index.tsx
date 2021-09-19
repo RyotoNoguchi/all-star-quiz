@@ -5,8 +5,6 @@ import {
   Typography,
   TableCellProps,
   TypographyProps,
-  Box,
-  BoxProps,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
@@ -19,6 +17,7 @@ import WorstRankingTitleBox from '../../../components/molecules/WorstRankingTitl
 import MotionTableBody from '../../../components/molecules/MotionTableBody';
 import RankRow from '../../../components/molecules/RankRow';
 import AnswerPersonNameBox from '../../../components/molecules/AnswerPersonNameBox';
+import AnswerTimeBox from '../../../components/molecules/AnswerTimeBox';
 import WorstRankingTitle from '../../../components/atoms/WorstRankingTitle';
 import HyphenRotation from '../../../components/atoms/HyphenRotation';
 import Rank from '../../../components/atoms/Rank';
@@ -70,42 +69,11 @@ const animationDefault = css`
   animation-fill-mode: forwards;
 `;
 
-const rankRowChild = css`
-  font-family: 'ヒラギノ丸ゴ ProN', 'Hiragino Maru Gothic ProN';
-  font-weight: 900;
-  text-shadow: 4px 4px 4px white, -4px -4px 4px white;
-  padding: 4px 4px 4px 10px;
-  display: flex;
-  align-items: center;
-  line-height: 1.25;
-  border: 2px solid blue;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-image: radial-gradient(#2d3870, #586dd4);
-  box-shadow: 2px 2px 2px rgb(63, 63, 63), -2px -2px 2px rgb(63, 63, 63);
-`;
-
-const blinkAnswerPersonNameBox = keyframes`
-  100% {
-    background-image: radial-gradient(rgb(250, 133, 240),rgb(254, 207, 255));
-  }
-`;
-
 const blinkAnswerPersonName = keyframes`
   100% {
     text-shadow: 2px 2px 2px black, -1px -1px 1px black;
     color: rgb(254, 0, 0);
   }
-`;
-
-const AnswerTimeBox = styled(({ isLastRow, ...props }) => (<TableCell {...props} />))<TableCellProps>`
-  ${rankRowChild};
-  width: 15%;
-  justify-content: flex-end;
-  animation-name: ${(props) => props.isLastRow && blinkAnswerPersonNameBox};
-  ${animationDefault};
 `;
 
 const rankRowTdChildCSS = css`
