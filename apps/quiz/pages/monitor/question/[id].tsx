@@ -132,8 +132,8 @@ const QuestionCell = styled(({ isCorrect, ...props }) => <Card {...props} />)`
   position: relative;
   box-shadow: 2px 2px 2px 2px #5f72d1;
   font-size: 4rem;
-  text-shadow: 2px 2px #555;
   background-image: linear-gradient(#2d3870, #586dd4);
+  text-shadow: 2px 2px #555;
   color: white;
   animation: ${(props) => (props.isCorrect ? blinkQuestionCell : '')} 600ms
     linear 0ms 4 normal forwards;

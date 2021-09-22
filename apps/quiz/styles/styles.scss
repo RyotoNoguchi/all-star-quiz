@@ -1,6 +1,9 @@
 body {
   margin: 0;
   background-image: url('https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/img%2Fbackground-image.png?alt=media&token=5f79ec55-4a49-4d6b-af0d-746a92193bbf');
+  @media screen and (max-width: 768px) {
+    height: 100%;
+  }
   height: 800px;
 }
 
@@ -35,13 +38,13 @@ body {
   border-radius: 3px;
 }
 
-.app main {
-  padding: 0 36px;
-}
+// .app main {
+//   padding: 0 36px;
+// }
 
-.app p {
-  // text-align: center;
-}
+// .app p {
+//   // text-align: center;
+// }
 
 // .app h1 {
 

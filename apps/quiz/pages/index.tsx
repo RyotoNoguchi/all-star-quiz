@@ -5,16 +5,17 @@ import firebase from '../../../firebase/clientApp';
 import styled from 'styled-components';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollection } from 'react-firebase-hooks/firestore'; // firebaseに作ったDBを接続する
-import Auth from '../components/Auth';
+import Auth from './auth';
 import VoterList from '../components/VoterList';
 import Link from 'next/link';
 import { colors } from '../components/styles/colors';
 import { io } from 'socket.io-client';
 import { useRouter } from 'next/router'
+import { Box } from '@material-ui/core';
 
 const db = firebase.firestore();
 
-const TopBackGroundImg = styled.section``;
+const TopBackGroundImg = styled(Box)``;
 
 const TopTitle = styled.h1`
   font-family: 'Dela Gothic One', cursive;
@@ -46,7 +47,13 @@ const TopTitlePart = styled.span`
 `;
 
 const Index = () => {
+  const [user, loading, error] = useAuthState(firebase.auth())
+  const [answers, answersLoading, answersError] = useCollection(firebase.firestore().collection('answers'), {})
 
+  if (!answersLoading && answers) {
+    answers.docs.map((doc) => console.log(doc.data()));
+  }  
+  
   const title = 'アソビュー オールスター感謝祭 2021';
   const titleArray = title.split(' ');
   const title1stRow = titleArray[0];
@@ -54,7 +61,7 @@ const Index = () => {
   const title3rdRow = titleArray[2];
   return (
     <>
-      <TopBackGroundImg>
+      <TopBackGroundImg component="section">
         <TopTitle>
           <TopTitlePart data-text={title1stRow}>{title1stRow}</TopTitlePart>
           <TopTitlePart data-text={title2ndRow}>{title2ndRow}</TopTitlePart>

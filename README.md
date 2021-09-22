@@ -116,3 +116,6 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 19. yarn add @material-ui/core @material-ui/icons <!-- https://www.youtube.com/watch?v=0rnVfshKqDI -->
 20. nx run api:serve <!-- バックエンド側のサーバー立てる>
 21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
+
+<!-- TODO 解答者画面のUI整える -->
+<!-- TODO 選択肢ボタンクリックでfirebaseのDBにデータが行くようにする -->

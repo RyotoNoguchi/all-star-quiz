@@ -20,7 +20,7 @@ const AlphabetCircle: React.FC<AvatarProps> = ({
   color: colorProp = 'red',
   choice
 }) => {
-  const circleColor =   useMemo(() => ({
+  const circleColor =  useMemo(() => ({
     red: colors.circleRed,
     blue: colors.circleBlue,
     yellow: colors.circleYellow,
