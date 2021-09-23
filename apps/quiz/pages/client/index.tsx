@@ -50,29 +50,33 @@ const StyledBox = styled(Box)`
   text-align: center;
   margin-top: 50px;
 `
+const title = 'アソビュー オールスター感謝祭 2021';
+const titleArray = title.split(' ');
+const title1stRow = titleArray[0];
+const title2ndRow = titleArray[1];
+const title3rdRow = titleArray[2];
+
+type ChoiceType = 'A' | 'B' | 'C' | 'D'
 
 const Home: React.FC = () => {
-  // Firestore
   const db = firebase.firestore();
   const [user, loading, error] = useAuthState(firebase.auth());
+  console.log("Loading: ", loading, "|", "Current user: ", user );
+
   const [answers, answersLoading, answersError] = useCollection(
     firebase.firestore().collection('answers'),
     {}
   );
-
-  const title = 'アソビュー オールスター感謝祭 2021';
-  const titleArray = title.split(' ');
-  const title1stRow = titleArray[0];
-  const title2ndRow = titleArray[1];
-  const title3rdRow = titleArray[2];
-
-  const addAnswerDocument = async (answer: string) => {
+  const addAnswerDocument = async (answer: ChoiceType) => {
     await db.collection('answers').doc(user.uid).set({
       // "answers"テーブルに現在サインインしているユーザーのUIDで新しいレコードを作成する
       answer,
     });
-  };
+  }
 
+  if (!answersLoading && answers) {
+    answers.docs.map((doc) => console.log(doc.data()));
+  }
   return (
     <>
       <ClientContainer disableGutters>
@@ -82,10 +86,10 @@ const Home: React.FC = () => {
           <TopTitlePart data-text={title3rdRow}>{title3rdRow}</TopTitlePart>
         </TopTitle>
         <StyledBox>
-          <ChoiceButton choice="A" buttonColor="red"/>
-          <ChoiceButton choice="B" buttonColor="blue"/>
-          <ChoiceButton choice="C" buttonColor="yellow"/>
-          <ChoiceButton choice="D" buttonColor="green"/>
+          <ChoiceButton addAnswerDocument={addAnswerDocument} choice="A" buttonColor="red"/>
+          <ChoiceButton addAnswerDocument={addAnswerDocument} choice="B" buttonColor="blue"/>
+          <ChoiceButton addAnswerDocument={addAnswerDocument} choice="C" buttonColor="yellow"/>
+          <ChoiceButton addAnswerDocument={addAnswerDocument} choice="D" buttonColor="green"/>
         </StyledBox>
       </ClientContainer>
     </>

@@ -2,13 +2,20 @@ import { useMemo } from 'react';
 import { colors } from '../../styles/colors';
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
+import firebase from '../../../../../firebase/clientApp';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useCollection } from 'react-firebase-hooks/firestore'; // firebaseに作ったDBを接続する
+const db = firebase.firestore();
 
+
+type ChoiceType = 'A' | 'B' | 'C' | 'D'
 interface ButtonProps {
   buttonColor: 'red' | 'blue' | 'green' | 'yellow'
-  choice: 'A' | 'B' | 'C' | 'D'
+  choice: ChoiceType,
+  addAnswerDocument: (choice: ChoiceType) => void
 }
 
-const StyledButton = styled(Button)<{buttonColor: string}>`
+const StyledButton = styled(({buttonColor, ...props}) => <Button {...props}/>)`
   border-radius: 10%;
   display: inline-block;
   width: 150px;
@@ -21,26 +28,33 @@ const StyledButton = styled(Button)<{buttonColor: string}>`
   color: white;
 `
 
-const handleSubmit = () => {
-  console.log("ボタンが押されました");
-}
-
 const ChoiceButton: React.FC<ButtonProps> = ({
   buttonColor: colorProp = "red",
-  choice
+  choice, 
+  addAnswerDocument
 }) => {
+
   const buttonColor = useMemo(() => ({
     red: colors.circleRed,
     blue: colors.circleBlue,
     yellow: colors.circleYellow,
     green: colors.circleGreen
   }[colorProp]), [colorProp])
+
+  // const addAnswerDocument = async (answer: ChoiceType) => {
+  //   await db.collection('answers').doc(user.uid).set({
+  //     // "answers"テーブルに現在サインインしているユーザーのUIDで新しいレコードを作成する
+  //     answer,
+  //   });
+  //   console.log("ボタンが押されました");
+  // }
+
   return (
     <>
       <StyledButton 
         variant="contained" 
         buttonColor={buttonColor} 
-        onClick={()=> handleSubmit()}>
+        onClick={()=> addAnswerDocument(choice)}>
         {choice}
       </StyledButton>
     </>
