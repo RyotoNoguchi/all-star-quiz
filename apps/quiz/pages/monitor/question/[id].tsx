@@ -1,3 +1,4 @@
+import firebase from '../../../../../firebase/clientApp';
 import { Typography, Grid, Card, Box, GridProps, TypographyProps, BoxProps } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -8,6 +9,7 @@ import { io } from 'socket.io-client';
 import Cue from '../cue';
 import Index from '../../index';
 import { GetStaticPaths, GetStaticProps } from 'next'
+import { useCollection } from 'react-firebase-hooks/firestore';
 
 type Post = {
   userId: number;
@@ -265,6 +267,11 @@ const Question = ({ post }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [answers, answersLoading, answersError] = useCollection(
+    firebase.firestore().collection('answers'),
+    {}
+  );
+
   if (isTopPage) {
     return <Index />;
   }
@@ -272,63 +279,62 @@ const Question = ({ post }) => {
   if (!isQuestionDisplayed) {
     // [READY-GO]ボタンが押下される前
     return <Cue questionNumber={questionId} />;
-  } else {
-    return (
-      <>
-        <QuestionContainer container spacing={3}>
-          <QuestionBox item xs={12}>
-            <QuestionMark>Q</QuestionMark>
-            <QuestionText variant="h1">{post.title}</QuestionText>
-            <CountDownCircle>{countdownTimeSec}</CountDownCircle>
-          </QuestionBox>
-          <ChoiceBox item xs={6}>
-            <QuestionCell isCorrect={isCorrectForA}>
-              <AlphabetCircle choice="A" color="red" />
-              <ChoiceText variant="h2">{post.title}</ChoiceText>
-              {isNumberCountShown && (
-                <CountAnswerBox isCorrect={isCorrectForA}>
-                  <AnswerCount variant="body1">{post.id}</AnswerCount>
-                </CountAnswerBox>
-              )}
-            </QuestionCell>
-          </ChoiceBox>
-          <ChoiceBox item xs={6}>
-            <QuestionCell isCorrect={isCorrectForB}>
-              <AlphabetCircle choice="B" color="blue" />
-              <ChoiceText variant="h2">{post.title}</ChoiceText>
-              {isNumberCountShown && (
-                <CountAnswerBox isCorrect={isCorrectForB}>
-                  <AnswerCount variant="body1">{post.id}</AnswerCount>
-                </CountAnswerBox>
-              )}
-            </QuestionCell>
-          </ChoiceBox>
-          <ChoiceBox item xs={6}>
-            <QuestionCell isCorrect={isCorrectForC}>
-              <AlphabetCircle choice="C" color="yellow" />
-              <ChoiceText variant="h2">{post.title}</ChoiceText>
-              {isNumberCountShown && (
-                <CountAnswerBox isCorrect={isCorrectForC}>
-                  <AnswerCount variant="body1">{post.id}</AnswerCount>
-                </CountAnswerBox>
-              )}
-            </QuestionCell>
-          </ChoiceBox>
-          <ChoiceBox item xs={6}>
-            <QuestionCell isCorrect={isCorrectForD}>
-              <AlphabetCircle choice="D" color="green" />
-              <ChoiceText variant="h2">{post.title}</ChoiceText>
-              {isNumberCountShown && (
-                <CountAnswerBox isCorrect={isCorrectForD}>
-                  <AnswerCount variant="body1">{post.id}</AnswerCount>
-                </CountAnswerBox>
-              )}
-            </QuestionCell>
-          </ChoiceBox>
-        </QuestionContainer>
-      </>
-    );
-  }
+  } 
+  return (
+    <>
+      <QuestionContainer container spacing={3}>
+        <QuestionBox item xs={12}>
+          <QuestionMark>Q</QuestionMark>
+          <QuestionText variant="h1">{post.title}</QuestionText>
+          <CountDownCircle>{countdownTimeSec}</CountDownCircle>
+        </QuestionBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell isCorrect={isCorrectForA}>
+            <AlphabetCircle choice="A" color="red" />
+            <ChoiceText variant="h2">{post.title}</ChoiceText>
+            {isNumberCountShown && (
+              <CountAnswerBox isCorrect={isCorrectForA}>
+                <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'A').length}</AnswerCount>
+              </CountAnswerBox>
+            )}
+          </QuestionCell>
+        </ChoiceBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell isCorrect={isCorrectForB}>
+            <AlphabetCircle choice="B" color="blue" />
+            <ChoiceText variant="h2">{post.title}</ChoiceText>
+            {isNumberCountShown && (
+              <CountAnswerBox isCorrect={isCorrectForB}>
+                <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'B').length}</AnswerCount>
+              </CountAnswerBox>
+            )}
+          </QuestionCell>
+        </ChoiceBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell isCorrect={isCorrectForC}>
+            <AlphabetCircle choice="C" color="yellow" />
+            <ChoiceText variant="h2">{post.title}</ChoiceText>
+            {isNumberCountShown && (
+              <CountAnswerBox isCorrect={isCorrectForC}>
+                <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'C').length}</AnswerCount>
+              </CountAnswerBox>
+            )}
+          </QuestionCell>
+        </ChoiceBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell isCorrect={isCorrectForD}>
+            <AlphabetCircle choice="D" color="green" />
+            <ChoiceText variant="h2">{post.title}</ChoiceText>
+            {isNumberCountShown && (
+              <CountAnswerBox isCorrect={isCorrectForD}>
+                <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'D').length}</AnswerCount>
+              </CountAnswerBox>
+            )}
+          </QuestionCell>
+        </ChoiceBox>
+      </QuestionContainer>
+    </>
+  );
 };
 
 export default Question;
