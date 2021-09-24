@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import firebase from '../../../../../firebase/clientApp';
 import { Table } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -17,6 +18,7 @@ import Rank from '../../../components/atoms/Rank';
 import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
 import AnswerTime from '../../../components/atoms/AnswerTime';
 import { colors, textShadows } from '../../../components/styles/colors';
+import { useCollection } from 'react-firebase-hooks/firestore';
 
 export const getStaticProps: GetStaticProps = async () => {
   const response = await axios.get(
@@ -100,6 +102,11 @@ const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticPr
       setIsRankingRowsShow(true);
     });
   }, []);
+
+  // const [users, usersLoading, usersError] = useCollection(
+  //   firebase.firestore().collection('users'),
+  //   {}
+  // );
 
   return (
     <>

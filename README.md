@@ -1,5 +1,3 @@
-
-
 # Allstar
 
 This project was generated using [Nx](https://nx.dev).
@@ -118,4 +116,17 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
 
 <!-- TODO 解答者画面のUI整える -->
-<!-- TODO 選択肢ボタンクリックでfirebaseのDBにデータが行くようにする -->
+
+### テスト用Googleアカウント一覧
+
+|  No.  |  E-mail  |  Password  |
+| ---- | ---- | ---- |
+| 1 | test.ichiro100 | ichirotest100 |
+| 2 | test.jiro76 | jirotest200 |
+| 3 | test.saburo300 | saburotest300 |
+| 4 | test.shiro400 | shirotest400 |
+| 5 | test.goro500 | gorotest500 |
+| 6 | test.rokuro600 | rokurotest600 |
+| 7 | test.nanaro700 | nanarotest700 |
+| 8 | test.hachiro800 | hachirotest800 |
+| 9 | test.kuro900 | kurotest900 |
