@@ -14,7 +14,7 @@ import {
   TypographyProps,
 } from '@material-ui/core';
 import { settings } from 'cluster';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const ClientContainer = styled(Container)<ContainerProps>`
   /* transform: translateY(-30px); */
@@ -66,12 +66,15 @@ const Home: React.FC = () => {
   const db = firebase.firestore();
   const [user, loading, error] = useAuthState(firebase.auth());
   const [isDisabled, setIsDisabled] = useState(true)
-  console.log("Current user: ", user );
+  const startTime = useRef<Date>(null)
+  const finishTime = useRef<Date>(null)
+  const answerTime = useRef<Date>(null)
 
   useEffect(() => {
-    socket.on('ready_go', ()=> {
-      setIsDisabled(false)
-    })
+  socket.on('ready_go', ()=> {
+    setIsDisabled(false)
+    startTime.current = new Date()
+        })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -81,11 +84,17 @@ const Home: React.FC = () => {
   );
   
   const addAnswerDocument = async (answer: ChoiceType) => {
+    
+    finishTime.current = new Date()
+    console.log(finishTime.current.getTime() - startTime.current.getTime());
+    const answerTime = Math.round((finishTime.current.getTime() - startTime.current.getTime()) / 10) / 100
+    
     setIsDisabled(true)
     await db.collection('answers').doc(user.uid).set({
       // "answers"テーブルに現在サインインしているユーザーのUIDで新しいレコードを作成する
       answer,
-      user: user.displayName
+      user: user.displayName,
+      time: answerTime,
     });
   }
 
