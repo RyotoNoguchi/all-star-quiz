@@ -10,6 +10,7 @@ import Cue from '../cue';
 import Index from '../../index';
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useCollection } from 'react-firebase-hooks/firestore';
+import React from 'react';
 
 type Post = {
   userId: number;
@@ -340,4 +341,4 @@ const Question = ({ post }) => {
   );
 };
 
-export default Question;
+export default React.memo(Question);

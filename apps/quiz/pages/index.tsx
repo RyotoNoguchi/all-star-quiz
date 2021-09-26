@@ -1,19 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
-import Head from 'next/head';
-import Image from 'next/image';
-import firebase from '../../../firebase/clientApp';
 import styled from 'styled-components';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollection } from 'react-firebase-hooks/firestore'; // firebaseに作ったDBを接続する
-import Auth from './auth';
-import VoterList from '../components/VoterList';
-import Link from 'next/link';
 import { colors } from '../components/styles/colors';
-import { io } from 'socket.io-client';
-import { useRouter } from 'next/router'
 import { Box } from '@material-ui/core';
+import React from 'react';
 
-const db = firebase.firestore();
 
 const TopBackGroundImg = styled(Box)``;
 
@@ -46,14 +35,7 @@ const TopTitlePart = styled.span`
   }
 `;
 
-const Index = () => {
-  const [user, loading, error] = useAuthState(firebase.auth())
-  const [answers, answersLoading, answersError] = useCollection(firebase.firestore().collection('answers'), {})
-
-  if (!answersLoading && answers) {
-    answers.docs.map((doc) => console.log(doc.data()));
-  }  
-  
+const Index = () => {  
   const title = 'アソビュー オールスター感謝祭 2021';
   const titleArray = title.split(' ');
   const title1stRow = titleArray[0];
@@ -72,7 +54,7 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default React.memo(Index);
 
 // type VoteDocument = {
 //   vote: string;

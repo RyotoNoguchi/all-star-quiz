@@ -2,9 +2,7 @@ import { useMemo } from 'react';
 import { colors } from '../../styles/colors';
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
-import firebase from '../../../../../firebase/clientApp';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollection } from 'react-firebase-hooks/firestore'; // firebaseに作ったDBを接続する
+import React from 'react';
 
 
 type ChoiceType = 'A' | 'B' | 'C' | 'D'
@@ -52,4 +50,4 @@ const ChoiceButton: React.FC<ButtonProps> = ({
   )
 }
 
-export default ChoiceButton
+export default React.memo(ChoiceButton)

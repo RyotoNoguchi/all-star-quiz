@@ -13,6 +13,7 @@ import {
   TypographyProps,
 } from '@material-ui/core';
 import { settings } from 'cluster';
+import React from 'react';
 
 const ClientContainer = styled(Container)<ContainerProps>`
   /* transform: translateY(-30px); */
@@ -97,4 +98,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default React.memo(Home);
