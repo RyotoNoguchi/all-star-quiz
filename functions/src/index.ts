@@ -10,6 +10,6 @@ const db = admin.firestore();
 
 export const createUserDocument = functions.auth.user().onCreate((user) => {
   db.collection('users') // 「users」コレクション（テーブル）に
-    .doc(user.uid) // 「user.id」を使用して取得されるユニークな「user」を
-    .set(JSON.parse(JSON.stringify(user))); // ドキュメント（レコード）として追加する
+    .doc(user.uid) // 「user.uid」をレコード名？に指定してして
+    .set(JSON.parse(JSON.stringify(user))); // 「user」をレコードの各カラムとして追加する
 });

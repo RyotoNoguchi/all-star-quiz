@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import firebase from '../../../../../firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollection } from 'react-firebase-hooks/firestore'; // firebaseに作ったDBを接続する
-const db = firebase.firestore();
 
 
 type ChoiceType = 'A' | 'B' | 'C' | 'D'
@@ -40,14 +39,6 @@ const ChoiceButton: React.FC<ButtonProps> = ({
     yellow: colors.circleYellow,
     green: colors.circleGreen
   }[colorProp]), [colorProp])
-
-  // const addAnswerDocument = async (answer: ChoiceType) => {
-  //   await db.collection('answers').doc(user.uid).set({
-  //     // "answers"テーブルに現在サインインしているユーザーのUIDで新しいレコードを作成する
-  //     answer,
-  //   });
-  //   console.log("ボタンが押されました");
-  // }
 
   return (
     <>

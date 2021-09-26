@@ -2,9 +2,6 @@
 import firebase from '../../../../../firebase/clientApp';
 import { Table } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { GetStaticProps } from 'next';
-import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
 import RankingTableContainer from '../../../components/organisms/RankingTableContainer';
 import RankingTitleBox from '../../../components/molecules/RankingTitleBox';
@@ -18,59 +15,19 @@ import Rank from '../../../components/atoms/Rank';
 import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
 import AnswerTime from '../../../components/atoms/AnswerTime';
 import { colors, textShadows } from '../../../components/styles/colors';
-import { useCollection } from 'react-firebase-hooks/firestore';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-export const getStaticProps: GetStaticProps = async () => {
-  const response = await axios.get(
-    'https://jsonplaceholder.typicode.com/users'
-  );
-  const data: User[] = response.data;
 
-  return {
-    props: {
-      users: data,
-    },
-  };
-};
-
-type User = {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
-  };
-  phone: string;
-  website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
-};
-
-const isLastRow = (idx: number): boolean => {
-  return idx + 1 === 10 ? true : false
+type AnswerPersonInfo = {
+  uid: string
+  displayName: string
 }
 
-const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const isLastRow = (idx: number): boolean => {  return idx + 1 === 10 ? true : false }
+
+const Ranking: React.FC = () => {
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
-  const numberItemShow = 10;
-  const answerPersonTotalNumber = users.length;
-  const numberScreenTop = answerPersonTotalNumber - numberItemShow;
-  const displayAnswerPeople: User[] = [];
-  for (let i = numberScreenTop; i < answerPersonTotalNumber; i++) {
-    displayAnswerPeople.push(users[i]);
-  }
 
   const tbodyVariant = {
     hidden: {
@@ -103,11 +60,24 @@ const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticPr
     });
   }, []);
 
-  // const [users, usersLoading, usersError] = useCollection(
-  //   firebase.firestore().collection('users'),
-  //   {}
-  // );
+  const [users, usersLoading, usersError] = useCollectionData(
+    firebase.firestore().collection("users")
+    .orderBy("displayName", "asc"),
+    { snapshotListenOptions: { includeMetadataChanges: true },}
+  );
 
+  const itemNumber = 10;
+  const totalNumber = users?.length
+  const screenTop = totalNumber - itemNumber
+  const answerPeopleNames: AnswerPersonInfo[] = []
+  
+  for (let i = screenTop; i < totalNumber; i++) {
+      answerPeopleNames.push({
+        uid: users[i].uid,
+        displayName: users[i].displayName
+    });
+  }
+  
   return (
     <>
       <RankingTableContainer>
@@ -121,7 +91,7 @@ const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticPr
         <Table arial-label="worst ranking table">
           {isRankingRowsShow && (
             <MotionTableBody variants={tbodyVariant}>
-              {displayAnswerPeople.map((answerPerson: User, idx: number) => {
+              {answerPeopleNames.map((answerPerson: AnswerPersonInfo, idx: number) => {
                 return (
                   <RankRow
                     isChangeColorRow={isLastRow(idx)}
@@ -131,11 +101,11 @@ const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticPr
                     key={idx}
                   >
                     <AnswerPersonNameBox isChangeColorRow={isLastRow(idx)}>
-                      <Rank isChangeColorRow={isLastRow(idx)}>{answerPerson.id}</Rank>
-                      <AnswerPersonName isChangeColorRow={isLastRow(idx)}>{answerPerson.name}</AnswerPersonName>
+                      <Rank isChangeColorRow={isLastRow(idx)}>{idx + 1}</Rank>
+                      <AnswerPersonName isChangeColorRow={isLastRow(idx)}>{answerPerson.displayName}</AnswerPersonName>
                     </AnswerPersonNameBox>
                     <AnswerTimeBox isChangeColorRow={isLastRow(idx)}>
-                      <AnswerTime isChangeColorRow={isLastRow(idx)}>{answerPerson.id}</AnswerTime>
+                      <AnswerTime isChangeColorRow={isLastRow(idx)}>{idx + 1}</AnswerTime>
                     </AnswerTimeBox>
                   </RankRow>
                 );
