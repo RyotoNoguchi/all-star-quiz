@@ -1,4 +1,5 @@
 import firebase from '../../../../firebase/clientApp';
+import { io } from 'socket.io-client';
 import styled from 'styled-components';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollection } from 'react-firebase-hooks/firestore'; // firebaseに作ったDBを接続する
@@ -13,7 +14,7 @@ import {
   TypographyProps,
 } from '@material-ui/core';
 import { settings } from 'cluster';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const ClientContainer = styled(Container)<ContainerProps>`
   /* transform: translateY(-30px); */
@@ -61,14 +62,24 @@ const title3rdRow = titleArray[2];
 type ChoiceType = 'A' | 'B' | 'C' | 'D'
 
 const Home: React.FC = () => {
+  const socket = io('http://localhost:3333');
   const db = firebase.firestore();
   const [user, loading, error] = useAuthState(firebase.auth());
-  console.log("Loading: ", loading, "|", "Current user: ", user );
+  const [isDisabled, setIsDisabled] = useState(true)
+  console.log("Current user: ", user );
+
+  useEffect(() => {
+    socket.on('ready_go', ()=> {
+      setIsDisabled(false)
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const [answers, answersLoading, answersError] = useCollection(
     firebase.firestore().collection('answers'),
     {}
   );
+  
   const addAnswerDocument = async (answer: ChoiceType) => {
     await db.collection('answers').doc(user.uid).set({
       // "answers"テーブルに現在サインインしているユーザーのUIDで新しいレコードを作成する
@@ -76,9 +87,6 @@ const Home: React.FC = () => {
     });
   }
 
-  if (!answersLoading && answers) {
-    answers.docs.map((doc) => console.log(doc.data()));
-  }
   return (
     <>
       <ClientContainer disableGutters>
@@ -88,10 +96,10 @@ const Home: React.FC = () => {
           <TopTitlePart data-text={title3rdRow}>{title3rdRow}</TopTitlePart>
         </TopTitle>
         <StyledBox>
-          <ChoiceButton addAnswerDocument={addAnswerDocument} choice="A" buttonColor="red"/>
-          <ChoiceButton addAnswerDocument={addAnswerDocument} choice="B" buttonColor="blue"/>
-          <ChoiceButton addAnswerDocument={addAnswerDocument} choice="C" buttonColor="yellow"/>
-          <ChoiceButton addAnswerDocument={addAnswerDocument} choice="D" buttonColor="green"/>
+          <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="A" buttonColor="red"/>
+          <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="B" buttonColor="blue"/>
+          <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="C" buttonColor="yellow"/>
+          <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="D" buttonColor="green"/>
         </StyledBox>
       </ClientContainer>
     </>

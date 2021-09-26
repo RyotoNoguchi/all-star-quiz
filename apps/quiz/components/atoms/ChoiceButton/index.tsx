@@ -7,6 +7,7 @@ import React from 'react';
 
 type ChoiceType = 'A' | 'B' | 'C' | 'D'
 interface ButtonProps {
+  isDisabled: boolean
   buttonColor: 'red' | 'blue' | 'green' | 'yellow'
   choice: ChoiceType,
   addAnswerDocument: (choice: ChoiceType) => void
@@ -26,6 +27,7 @@ const StyledButton = styled(({buttonColor, ...props}) => <Button {...props}/>)`
 `
 
 const ChoiceButton: React.FC<ButtonProps> = ({
+  isDisabled = true,
   buttonColor: colorProp = "red",
   choice, 
   addAnswerDocument
@@ -41,6 +43,7 @@ const ChoiceButton: React.FC<ButtonProps> = ({
   return (
     <>
       <StyledButton 
+        disabled={isDisabled}
         variant="contained" 
         buttonColor={buttonColor} 
         onClick={()=> addAnswerDocument(choice)}>
