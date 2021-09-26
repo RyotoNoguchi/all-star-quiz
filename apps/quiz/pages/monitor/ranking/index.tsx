@@ -18,9 +18,9 @@ import { colors, textShadows } from '../../../components/styles/colors';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 
-type AnswerPersonInfo = {
-  uid: string
-  displayName: string
+type AnswerInfo = {
+  time: number
+  user: string
 }
 
 const isLastRow = (idx: number): boolean => {  return idx + 1 === 10 ? true : false }
@@ -61,20 +61,20 @@ const Ranking: React.FC = () => {
   }, []);
 
   const [users, usersLoading, usersError] = useCollectionData(
-    firebase.firestore().collection("users")
-    .orderBy("displayName", "asc"),
+    firebase.firestore().collection("answers")
+    .orderBy("time", "asc"),
     { snapshotListenOptions: { includeMetadataChanges: true },}
   );
 
   const itemNumber = 10;
   const totalNumber = users?.length
   const screenTop = totalNumber - itemNumber
-  const answerPeopleNames: AnswerPersonInfo[] = []
+  const answer: AnswerInfo[] = []
   
   for (let i = screenTop; i < totalNumber; i++) {
-      answerPeopleNames.push({
-        uid: users[i].uid,
-        displayName: users[i].displayName
+      answer.push({
+        time: users[i].time,
+        user: users[i].user
     });
   }
   
@@ -91,7 +91,7 @@ const Ranking: React.FC = () => {
         <Table arial-label="worst ranking table">
           {isRankingRowsShow && (
             <MotionTableBody variants={tbodyVariant}>
-              {answerPeopleNames.map((answerPerson: AnswerPersonInfo, idx: number) => {
+              {answer.map((answerPerson: AnswerInfo, idx: number) => {
                 return (
                   <RankRow
                     isChangeColorRow={isLastRow(idx)}
@@ -102,10 +102,10 @@ const Ranking: React.FC = () => {
                   >
                     <AnswerPersonNameBox isChangeColorRow={isLastRow(idx)}>
                       <Rank isChangeColorRow={isLastRow(idx)}>{idx + 1}</Rank>
-                      <AnswerPersonName isChangeColorRow={isLastRow(idx)}>{answerPerson.displayName}</AnswerPersonName>
+                      <AnswerPersonName isChangeColorRow={isLastRow(idx)}>{answerPerson.user}</AnswerPersonName>
                     </AnswerPersonNameBox>
                     <AnswerTimeBox isChangeColorRow={isLastRow(idx)}>
-                      <AnswerTime isChangeColorRow={isLastRow(idx)}>{idx + 1}</AnswerTime>
+                      <AnswerTime isChangeColorRow={isLastRow(idx)}>{answerPerson.time}</AnswerTime>
                     </AnswerTimeBox>
                   </RankRow>
                 );
