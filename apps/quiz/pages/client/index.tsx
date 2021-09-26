@@ -81,9 +81,11 @@ const Home: React.FC = () => {
   );
   
   const addAnswerDocument = async (answer: ChoiceType) => {
+    setIsDisabled(true)
     await db.collection('answers').doc(user.uid).set({
       // "answers"テーブルに現在サインインしているユーザーのUIDで新しいレコードを作成する
       answer,
+      user: user.displayName
     });
   }
 
