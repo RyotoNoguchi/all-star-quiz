@@ -94,7 +94,7 @@ const Home: React.FC = () => {
       // "answers"テーブルに現在サインインしているユーザーのUIDで新しいレコードを作成する
       answer,
       user: user.displayName,
-      time: answerTime,
+      time: answerTime.toFixed(2), // 2.50などと0埋めするため
     });
   }
 
