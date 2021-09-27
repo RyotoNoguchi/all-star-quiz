@@ -56,27 +56,28 @@ const Ranking: React.FC = () => {
 
   useEffect(() => {
     socket.on('show_worst_ranking', () => {
+      
       setIsRankingRowsShow(true);
     });
   }, []);
-
-  const [users, usersLoading, usersError] = useCollectionData(
-    firebase.firestore().collection("answers")
-    .orderBy("time", "asc"),
-    { snapshotListenOptions: { includeMetadataChanges: true },}
-  );
-
-  const itemNumber = 10;
-  const totalNumber = users?.length
-  const screenTop = totalNumber - itemNumber
-  const answer: AnswerInfo[] = []
   
-  for (let i = screenTop; i < totalNumber; i++) {
+  const [answers, answersLoading, answersError] = useCollectionData( 
+    firebase.firestore().collection("answers").where('answer', '==', 'A').orderBy('time', 'asc'),
+
+    { snapshotListenOptions: { includeMetadataChanges: true },}
+    );
+    
+    const itemNumber = 10;
+    const totalNumber = answers?.length
+    const screenTop = totalNumber - itemNumber
+    const answer: AnswerInfo[] = []
+  
+    for (let i = screenTop; i < totalNumber; i++) {
       answer.push({
-        time: users[i].time,
-        user: users[i].user
-    });
-  }
+        time: answers[i].time,
+        user: answers[i].user
+      });
+    }
   
   return (
     <>

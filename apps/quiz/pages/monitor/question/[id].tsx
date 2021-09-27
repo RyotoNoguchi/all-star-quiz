@@ -153,6 +153,7 @@ const blinkCountAnswerBox = keyframes`
   `;
 
 const CountAnswerBox = styled(({ isCorrect, ...props }) => <Box {...props} />)<BoxProps>`
+  text-align: right;
   width: 80px;
   position: absolute;
   right: 1rem;
@@ -177,8 +178,7 @@ const AnswerCount = styled(Typography)<TypographyProps>`
   font-size: 36px;
   line-height: normal;
   padding: 0;
-  margin: 0;
-  transform: translate(25%, 0);
+  margin-right: 10px;
 `;
 
 type CorrectAnswer = 'A' | 'B' | 'C' | 'D';
