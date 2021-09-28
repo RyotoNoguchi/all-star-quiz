@@ -57,6 +57,11 @@ export class AppGateway
     this.server.emit(GO_TO_DESIGNATED_PAGE, nextQuestionId)
   }
 
+  @SubscribeMessage('go_to_worst_ranking_page')
+  goToWorstRankingPage(@MessageBody() path: string): void {
+    this.server.emit('go_to_worst_ranking_page', path)
+  }
+
   @SubscribeMessage('go_to_next_question')
   goToNextQuestion(@MessageBody() path: string): void {
     console.log(`受け取ったURL: http://localhost:4200${path}`);

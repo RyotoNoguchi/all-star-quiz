@@ -35,6 +35,13 @@ const Index = () => {
 
   };
 
+  const goToWorstRanking = () => {
+    setIsReadyGoBtnDisabled(false)
+    const worstRankingPagePath = '/monitor/ranking'
+    setMonitorCurrentPath(worstRankingPagePath)
+    socket.emit('go_to_worst_ranking_page', worstRankingPagePath)
+  }
+
   const displayCuePage = () => {
     playActive()
     setIsReadyGoBtnDisabled(false)
@@ -54,7 +61,7 @@ const Index = () => {
   const showWorstRanking = () => {
     playWorstRanking()
     setIsReadyGoBtnDisabled(true)
-    socket.emit('show_worst_ranking')
+    socket.emit('show_worst_ranking', questionId)
   }
 
   const showChampionRanking = () => {
@@ -107,19 +114,26 @@ const Index = () => {
         <Button disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => readyGo()}>
           READY GO !
         </Button>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() => goToWorstRanking()}
+        >
+          Go To Worst Ranking
+        </Button>
         <StyledButton
           color="primary"
           variant="contained"
           onClick={() => showWorstRanking()}
         >
-          WorstRanking
+          ShowWorstRanking
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
           onClick={() => showChampionRanking()}
         >
-          ChampionRanking
+          ShowChampionRanking
         </StyledButton>
       </div>
     </>

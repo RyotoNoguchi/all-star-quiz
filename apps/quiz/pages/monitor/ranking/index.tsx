@@ -28,7 +28,8 @@ const isLastRow = (idx: number): boolean => {  return idx + 1 === 10 ? true : fa
 const Ranking: React.FC = () => {
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
-
+  const [questionId, setQuestionId] = useState('')
+  console.log(`現在のquestionId: ${questionId}`)
   const tbodyVariant = {
     hidden: {
       opacity: 0,
@@ -55,13 +56,19 @@ const Ranking: React.FC = () => {
   };
 
   useEffect(() => {
-    socket.on('show_worst_ranking', () => {
-      
+    socket.on('show_worst_ranking', (questionId) => {
+      console.log(questionId);
+      setQuestionId(questionId)
       setIsRankingRowsShow(true);
     });
   }, []);
-  
+
+  // const [questions, questionsLoading, questionsError] = useCollectionData(
+  //   firebase.firestore().collection("questions").where('questionId', '==', questionId),
+  //   { snapshotListenOptions: { includeMetadataChanges: true },}
+  // )
   const [answers, answersLoading, answersError] = useCollectionData( 
+    // firebase.firestore().collection("answers").where('answer', '==', questions.find(q => q.questionId === questionId).answer).orderBy('time', 'asc'),
     firebase.firestore().collection("answers").where('answer', '==', 'A').orderBy('time', 'asc'),
 
     { snapshotListenOptions: { includeMetadataChanges: true },}

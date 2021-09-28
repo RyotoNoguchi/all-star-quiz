@@ -264,7 +264,13 @@ const Question = ({ post }) => {
     });
     socket.on('display_top_page', () => {
       setIsTopPage(true);
-    });
+    }); 
+    socket.on('go_to_worst_ranking_page', (path) => {
+      resetQuestion()
+      const newCurrentPath = path;
+      setCurrentPath(newCurrentPath)
+      router.push(newCurrentPath)
+    })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
