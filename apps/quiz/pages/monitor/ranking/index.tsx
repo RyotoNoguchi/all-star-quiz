@@ -61,12 +61,16 @@ const Ranking: React.FC = () => {
       setQuestionId(questionId)
       setIsRankingRowsShow(true);
     });
+    
   }, []);
 
-  // const [questions, questionsLoading, questionsError] = useCollectionData(
-  //   firebase.firestore().collection("questions").where('questionId', '==', questionId),
-  //   { snapshotListenOptions: { includeMetadataChanges: true },}
-  // )
+  const [questions, questionsLoading, questionsError] = useCollectionData(
+    firebase.firestore().collection("questions").where('questionId', '==', questionId),
+    { snapshotListenOptions: { includeMetadataChanges: true },}
+  )
+
+  // console.log(questions.find(q => q.questionId === questionId).correctAnswer);
+  
   const [answers, answersLoading, answersError] = useCollectionData( 
     // firebase.firestore().collection("answers").where('answer', '==', questions.find(q => q.questionId === questionId).answer).orderBy('time', 'asc'),
     firebase.firestore().collection("answers").where('answer', '==', 'A').orderBy('time', 'asc'),

@@ -266,6 +266,7 @@ const Question = ({ post }) => {
       setIsTopPage(true);
     }); 
     socket.on('go_to_worst_ranking_page', (path) => {
+      console.log(path);
       resetQuestion()
       const newCurrentPath = path;
       setCurrentPath(newCurrentPath)

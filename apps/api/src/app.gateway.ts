@@ -84,8 +84,8 @@ export class AppGateway
   }
 
   @SubscribeMessage('show_worst_ranking')
-  showWorstRanking() {
-    this.server.emit('show_worst_ranking')
+  showWorstRanking(@MessageBody() questionId: string): void {
+    this.server.emit('show_worst_ranking', questionId)
   }
 
   @SubscribeMessage('show_champion_ranking')
