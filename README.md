@@ -130,4 +130,4 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 | 8 | test.hachiro800 | hachirotest800 |
 | 9 | test.kuro900 | kurotest900 |
 
-<!-- TODO /monitor/question/[id]から/monitor/ranking/に遷移するためのrouter.pushが動かない時があるのは何？？？ -->
+<!-- TODO /monitor/question/[id]から/monitor/ranking/に遷移するためのrouter.pushが動かない時があるのはネットワークの問題？ -->

@@ -201,6 +201,7 @@ const Question = ({ post }) => {
   const [isCorrectForC, setIsCorrectForC] = useState(false);
   const [isCorrectForD, setIsCorrectForD] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState<CorrectAnswer>('A');
+  const [mounted, setMounted] = useState(false)
   
   const resetQuestion = () => {
     setCountdownTimeSec(countdownSec);
@@ -213,65 +214,70 @@ const Question = ({ post }) => {
     setIsQuestionDisplayed(false);
   };
   useEffect(() => {
-    socket.on('ready_go', () => {
-      setIsQuestionDisplayed(true);
-      setIsTopPage(false);
-      const CD10SecTimerId = setInterval(() => {
-        setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
-        setCountdownTimeSec((countdownTimeSec) => {
-          if (countdownTimeSec === 0) {
-            clearInterval(CD10SecTimerId);
-
-            // カウントダウンが0になった3400ms（「アンサーチェック！」）後に解答数枠を表示する
-            setTimeout(() => {
-              setIsNumberCountShown(true);
-            }, 3400);
-
-            // カウントダウンが0になった7000ms（「正解はこちら！」）後に正解を点滅させる
-            setTimeout(() => {
-              switch (correctAnswer) {
-                case 'A':
-                  setIsCorrectForA(true);
-                  break;
-                case 'B':
-                  setIsCorrectForB(true);
-                  break;
-                case 'C':
-                  setIsCorrectForC(true);
-                  break;
-                case 'D':
-                  setIsCorrectForD(true);
-                  break;
-                default:
-                  break;
-              }
-            }, 7000);
-          }
-          return countdownTimeSec;
-        });
-      }, 1000);
-    });
-    socket.on('go_to_designated_page', (nextQuestionId) => {
-      resetQuestion();
-      const newQuestionId = nextQuestionId;
-      setQuestionId(newQuestionId);
-      const newCurrentPath = `/monitor/question/${newQuestionId}`;
-      setCurrentPath(newCurrentPath);
-      router.push(newCurrentPath);
-    });
-    socket.on('display_cue_page', () => {
-      setIsTopPage(false);
-    });
-    socket.on('display_top_page', () => {
-      setIsTopPage(true);
-    }); 
-    socket.on('go_to_worst_ranking_page', (path) => {
-      console.log(path);
-      resetQuestion()
-      const newCurrentPath = path;
-      setCurrentPath(newCurrentPath)
-      router.push(newCurrentPath)
-    })
+    setMounted(true)
+    setMounted((prev) => {
+      socket.on('ready_go', () => {
+        setIsQuestionDisplayed(true);
+        setIsTopPage(false);
+        const CD10SecTimerId = setInterval(() => {
+          setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
+          setCountdownTimeSec((countdownTimeSec) => {
+            if (countdownTimeSec === 0) {
+              clearInterval(CD10SecTimerId);
+  
+              // カウントダウンが0になった3400ms（「アンサーチェック！」）後に解答数枠を表示する
+              setTimeout(() => {
+                setIsNumberCountShown(true);
+              }, 3400);
+  
+              // カウントダウンが0になった7000ms（「正解はこちら！」）後に正解を点滅させる
+              setTimeout(() => {
+                switch (correctAnswer) {
+                  case 'A':
+                    setIsCorrectForA(true);
+                    break;
+                  case 'B':
+                    setIsCorrectForB(true);
+                    break;
+                  case 'C':
+                    setIsCorrectForC(true);
+                    break;
+                  case 'D':
+                    setIsCorrectForD(true);
+                    break;
+                  default:
+                    break;
+                }
+              }, 7000);
+            }
+            return countdownTimeSec;
+          });
+        }, 1000);
+      });
+      socket.on('go_to_designated_page', (nextQuestionId) => {
+        resetQuestion();
+        const newQuestionId = nextQuestionId;
+        setQuestionId(newQuestionId);
+        const newCurrentPath = `/monitor/question/${newQuestionId}`;
+        setCurrentPath(newCurrentPath);
+        router.push(newCurrentPath);
+      });
+      socket.on('display_cue_page', () => {
+        setIsTopPage(false);
+      });
+      socket.on('display_top_page', () => {
+        setIsTopPage(true);
+      }); 
+      socket.on('go_to_worst_ranking_page', (path) => {
+        console.log(path);
+        resetQuestion()
+        const newCurrentPath = path;
+        setCurrentPath(newCurrentPath)
+        router.push(newCurrentPath)
+      })
+      return prev
+    })  
+    return setMounted(false)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

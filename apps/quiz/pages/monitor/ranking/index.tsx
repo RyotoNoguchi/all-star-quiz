@@ -17,19 +17,21 @@ import AnswerTime from '../../../components/atoms/AnswerTime';
 import { colors, textShadows } from '../../../components/styles/colors';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-
 type AnswerInfo = {
-  time: number
-  user: string
-}
+  time: string;
+  user: string;
+  rank: string;
+};
 
-const isLastRow = (idx: number): boolean => {  return idx + 1 === 10 ? true : false }
+const isLastRow = (idx: number): boolean => {
+  return idx + 1 === 10 ? true : false;
+};
 
 const Ranking: React.FC = () => {
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
-  const [questionId, setQuestionId] = useState('')
-  console.log(`現在のquestionId: ${questionId}`)
+  const [questionId, setQuestionId] = useState('');
+  const [correctAnswer, setCorrectAnswer] = useState('');
   const tbodyVariant = {
     hidden: {
       opacity: 0,
@@ -58,45 +60,73 @@ const Ranking: React.FC = () => {
   useEffect(() => {
     socket.on('show_worst_ranking', (questionId) => {
       console.log(questionId);
-      setQuestionId(questionId)
+      setQuestionId(questionId);
       setIsRankingRowsShow(true);
+      setIsRankingRowsShow((prev) => {
+        if (prev) {
+          firebase
+            .firestore()
+            .collection('questions')
+            .where('questionId', '==', questionId)
+            .get()
+            .then((snapShot) => {
+              snapShot.forEach((doc) => {
+                setCorrectAnswer(doc.data().correctAnswer);
+              });
+            });
+        }
+        return prev
+      })
     });
-    
+    return setIsRankingRowsShow(false)
   }, []);
 
-  const [questions, questionsLoading, questionsError] = useCollectionData(
-    firebase.firestore().collection("questions").where('questionId', '==', questionId),
-    { snapshotListenOptions: { includeMetadataChanges: true },}
-  )
+  const [answers, answersLoading, answersError] = useCollectionData(
+    firebase
+      .firestore()
+      .collection('answers')
+      .where('answer', '==', correctAnswer ?? 'A')
+      .orderBy('time', 'asc'),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
 
-  // console.log(questions.find(q => q.questionId === questionId).correctAnswer);
-  
-  const [answers, answersLoading, answersError] = useCollectionData( 
-    // firebase.firestore().collection("answers").where('answer', '==', questions.find(q => q.questionId === questionId).answer).orderBy('time', 'asc'),
-    firebase.firestore().collection("answers").where('answer', '==', 'A').orderBy('time', 'asc'),
-
-    { snapshotListenOptions: { includeMetadataChanges: true },}
-    );
-    
-    const itemNumber = 10;
-    const totalNumber = answers?.length
-    const screenTop = totalNumber - itemNumber
-    const answer: AnswerInfo[] = []
-  
+  const itemNumber = 10;
+  const totalNumber = answers?.length;
+  const answer: AnswerInfo[] = [];
+  if (totalNumber > 10) {
+    const screenTop = totalNumber - itemNumber;
     for (let i = screenTop; i < totalNumber; i++) {
       answer.push({
         time: answers[i].time,
-        user: answers[i].user
+        user: answers[i].user,
+        rank: (i + 1).toString(),
       });
     }
-  
+  } else {
+    for (let i = 0; i < 10 - totalNumber; i++) {
+      answer.push({
+        time: '---',
+        user: '---',
+        rank: '---',
+      });
+    }
+    for (let i = 0; i < totalNumber; i++) {
+      answer.push({
+        time: answers[i].time,
+        user: answers[i].user,
+        rank: (i + 1).toString(),
+      });
+    }
+  }
+
   return (
     <>
       <RankingTableContainer>
         <RankingTitleBox>
-          <RankingTitle 
-            color={colors.rankingTitleBlue} 
-            textShadow={textShadows.rankingTitleBlue}>
+          <RankingTitle
+            color={colors.rankingTitleBlue}
+            textShadow={textShadows.rankingTitleBlue}
+          >
             早押しワ<HyphenRotation>ー</HyphenRotation>スト10
           </RankingTitle>
         </RankingTitleBox>
@@ -113,11 +143,17 @@ const Ranking: React.FC = () => {
                     key={idx}
                   >
                     <AnswerPersonNameBox isChangeColorRow={isLastRow(idx)}>
-                      <Rank isChangeColorRow={isLastRow(idx)}>{idx + 1}</Rank>
-                      <AnswerPersonName isChangeColorRow={isLastRow(idx)}>{answerPerson.user}</AnswerPersonName>
+                      <Rank isChangeColorRow={isLastRow(idx)}>
+                        {answerPerson.rank}
+                      </Rank>
+                      <AnswerPersonName isChangeColorRow={isLastRow(idx)}>
+                        {answerPerson.user}
+                      </AnswerPersonName>
                     </AnswerPersonNameBox>
                     <AnswerTimeBox isChangeColorRow={isLastRow(idx)}>
-                      <AnswerTime isChangeColorRow={isLastRow(idx)}>{answerPerson.time}</AnswerTime>
+                      <AnswerTime isChangeColorRow={isLastRow(idx)}>
+                        {answerPerson.time}
+                      </AnswerTime>
                     </AnswerTimeBox>
                   </RankRow>
                 );
