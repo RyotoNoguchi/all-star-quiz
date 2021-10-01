@@ -8,9 +8,10 @@ import AlphabetCircle from '../../../components/atoms/AlphabetCircle/index';
 import { io } from 'socket.io-client';
 import Cue from '../cue';
 import Index from '../../index';
-import { GetStaticPaths, GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
 import { useCollection } from 'react-firebase-hooks/firestore';
 import React from 'react';
+import { ParsedUrlQuery } from 'querystring';
 
 type Post = {
   userId: number;
@@ -38,12 +39,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 // TODO SSGで正解を事前にfirebaseからとってくるようにして、それを判定に使う
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext<ParsedUrlQuery>) => {
   const id = context.params.id;
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${id}`
   );
-  const data = await response.json();
+  const data: Post = await response.json();
   return {
     props: { post: data },
   };

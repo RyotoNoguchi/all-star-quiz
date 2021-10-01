@@ -1,10 +1,23 @@
+import React from 'react';
+import styled from 'styled-components';
 
-const AdminLogo: React.FC = () => {
+type asoviewLogoUrl = {
+  url: string;
+};
+
+const AdminPageLogo = styled.img`
+  width: 80%;
+  text-align: center;
+`;
+
+const AdminLogo: React.FC<asoviewLogoUrl> = ({ 
+  url 
+}) => {
   return (
     <>
-      
+        <AdminPageLogo src={url} alt="ロゴ" />
     </>
-  ) 
-}
+  );
+};
 
-export default AdminLogo
+export default React.memo(AdminLogo)

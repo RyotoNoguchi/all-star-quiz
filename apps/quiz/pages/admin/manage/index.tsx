@@ -1,54 +1,34 @@
-import firebase from "firebase/clientApp";
-import 'firebase/storage';
-import { useEffect, useState } from "react";
-const db = firebase.firestore()
+import firebase from 'firebase/clientApp';
+import AdminLogo from "../../../components/atoms/AdminLogo";
+import { GetStaticProps, GetStaticPropsContext } from 'next';
+import { ParsedUrlQuery } from 'querystring';
+import React from 'react';
+// import Image from 'next/image';
+// import NextImage from '../../../components/atoms/NextImage';
+const db = firebase.firestore();
 
-const Manage: React.FC = () => {
-  const [fileUrl, setFileUrl] = useState('')
-  const [logoUrl, setLogoUrl] = useState('')
+type LogoURL = {
+  url: string
+}
 
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
-    const file = e.currentTarget.files[0]
-    const storageRef = firebase.storage().ref()
-    const fileRef = storageRef.child(`img/${file.name}`) // ファイルを格納するパスを指定
-    await fileRef.put(file)
-    const newFileUrl = await fileRef.getDownloadURL()
-    setFileUrl(newFileUrl)
-  }
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => { 
-    e.preventDefault()
-    const fileName = e.currentTarget.pictureName.value
-    if (!fileName) {
-      return
-    }
-    db.collection("images").doc(fileName).set({
-      name: fileName,
-      url: fileUrl
-    })
-  }
+export const getStaticProps: GetStaticProps<LogoURL> = async (context: GetStaticPropsContext<ParsedUrlQuery>) => {
+  const imageCollection = await db.collection('images').get();
+  const asoviewLogoUrl: string = imageCollection.docs
+    .find((doc) => doc.data().name === '管理者画面トップロゴ')
+    .data().url;
 
-  useEffect(() => {
-    const fetchImg = async () => {
-      const imageCollection = await db.collection("images").get()
-      const logoURL = imageCollection.docs.find(d => d.data().name === 'ロゴ').data().url
-      setLogoUrl(logoURL)
-      console.log(logoURL);
-    } 
-    fetchImg()
-  }, [])
+  return {
+    props: { url: asoviewLogoUrl },
+  };
+};
+
+const Manage: React.FC<LogoURL>= ({url}) => {
   
   return (
     <>
-      <form action="submit" onSubmit={onSubmit}>
-        <input type="file" onChange={onFileChange}/> 
-        <input type="text" name="pictureName" placeholder="picture name"/>
-        <button type="submit">Submit</button>
-      </form>
-      <ul>
-        <li>{logoUrl}</li>
-      </ul>
+        <AdminLogo url={url}/>
     </>
   );
 };
 
-export default Manage;
+export default React.memo(Manage);
