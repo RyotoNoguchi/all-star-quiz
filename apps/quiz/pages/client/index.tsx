@@ -13,7 +13,6 @@ import {
   Typography,
   TypographyProps,
 } from '@material-ui/core';
-import { settings } from 'cluster';
 import React, { useEffect, useRef, useState } from 'react';
 
 const ClientContainer = styled(Container)<ContainerProps>`

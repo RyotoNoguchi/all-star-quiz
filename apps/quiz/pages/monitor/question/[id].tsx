@@ -36,6 +36,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: false,
   };
 };
+// TODO SSGで正解を事前にfirebaseからとってくるようにして、それを判定に使う
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const id = context.params.id;
@@ -285,9 +286,6 @@ const Question = ({ post }) => {
     firebase.firestore().collection('answers'),
     {}
   );
-  // https://github.com/CSFrequency/react-firebase-hooks/tree/master/firestore ← firebase-hooks
-  // https://firebase.google.com/docs/firestore/query-data/order-limit-data ← firebase query
-
 
   if (isTopPage) {
     return <Index />;
