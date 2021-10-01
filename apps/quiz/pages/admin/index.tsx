@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { io } from 'socket.io-client';
 import { useState } from 'react';
 import useSound from 'use-sound';
+import router, { useRouter } from 'next/router';
 
 const StyledButton = styled(Button)`
   background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
@@ -68,6 +69,10 @@ const Index = () => {
     playChampionRanking()
     setIsReadyGoBtnDisabled(true)
     socket.emit('show_champion_ranking')
+  }
+
+  const goToQuestionManage = () => {
+    router.push('admin/manage')
   }
 
 
@@ -135,6 +140,13 @@ const Index = () => {
         >
           ShowChampionRanking
         </StyledButton>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() => goToQuestionManage()}
+        >
+          Q Manage Page
+        </Button>
       </div>
     </>
   );
