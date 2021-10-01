@@ -7,8 +7,13 @@ import styled from 'styled-components';
 
 const StyledTypography = styled(Typography)`
   text-align: left;
-  font-weight: 900;
+  font-weight: 400;
   margin-left: 12px;
+  font-size: 2rem;
+`
+const StyledMenuBookIcon = styled(MenuBookIcon)`
+  font-size: 2rem;
+  margin-left: 7px;
 `
 
 const MenuContainer = styled(Grid)`
@@ -34,9 +39,7 @@ const MenuTitle = styled(Box)`
   display: flex;
   align-items: center;
 `
-const StyledMenuBookIcon = styled(MenuBookIcon)`
-  font-size: 4rem;
-`
+
 
 const AdminSidebar: React.FC = () => {
   return (
