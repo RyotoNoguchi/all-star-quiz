@@ -1,0 +1,74 @@
+import { Box, Grid, List, ListItem, ListItemIcon, Typography } from '@material-ui/core';
+import LiveHelpIcon from '@material-ui/icons/LiveHelp';
+import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
+import PeopleAlt from '@material-ui/icons/PeopleAlt';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import styled from 'styled-components';
+
+const StyledTypography = styled(Typography)`
+  text-align: left;
+  font-weight: 900;
+  margin-left: 12px;
+`
+
+const MenuContainer = styled(Grid)`
+  font-size: 2.5rem;
+  background-image: linear-gradient(#7580c0, #7988d3);
+  border-radius: 16px;
+  margin-top: 24px;
+  margin-left: 12px;
+  height: 656px;
+`;
+
+const StyledLiveHelpIcon = styled(LiveHelpIcon)`
+  font-size: 3rem;
+`;
+const StyledPeopleAlt = styled(PeopleAlt)`
+  font-size: 3rem;
+`;
+const StyledFormatListNumberedIcon = styled(FormatListNumberedIcon)`
+  font-size: 3rem;
+`;
+
+const MenuTitle = styled(Box)`
+  display: flex;
+  align-items: center;
+`
+const StyledMenuBookIcon = styled(MenuBookIcon)`
+  font-size: 4rem;
+`
+
+const AdminSidebar: React.FC = () => {
+  return (
+    <>
+      <MenuContainer item xs={3}>
+        <MenuTitle>
+          <StyledMenuBookIcon/>
+          <StyledTypography variant="h2" >Menu</StyledTypography>
+        </MenuTitle>
+        <List component="nav" disablePadding>
+          <ListItem button style={{ padding: '10px 0' }}>
+            <ListItemIcon>
+              <StyledLiveHelpIcon />
+            </ListItemIcon>
+            Question
+          </ListItem>
+          <ListItem button style={{ padding: '10px 0' }}>
+            <ListItemIcon>
+              <StyledPeopleAlt />
+            </ListItemIcon>
+            User
+          </ListItem>
+          <ListItem button style={{ padding: '10px 0' }}>
+            <ListItemIcon>
+              <StyledFormatListNumberedIcon />
+            </ListItemIcon>
+            Ranking
+          </ListItem>
+        </List>
+      </MenuContainer>
+    </>
+  );
+};
+
+export default AdminSidebar;
