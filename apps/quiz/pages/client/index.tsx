@@ -85,7 +85,6 @@ const Home: React.FC = () => {
   const addAnswerDocument = async (answer: ChoiceType) => {
     
     finishTime.current = new Date()
-    console.log(finishTime.current.getTime() - startTime.current.getTime());
     const answerTime = Math.round((finishTime.current.getTime() - startTime.current.getTime()) / 10) / 100
     
     setIsDisabled(true)
