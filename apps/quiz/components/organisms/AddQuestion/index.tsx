@@ -13,9 +13,10 @@ const StyledPaper = styled(Paper)`
   border-radius: 12px;
 `;
 
-const StyledTextField = styled(TextField)`
+const StyledTextField = styled(({isError, ...props}) => <TextField {...props}/>)`
   display: flex;
-  margin-bottom: 12px;
+  /* margin-bottom: 12px;. */
+  margin-bottom: ${p => p.isError ? 8 : 12}px;
 `;
 
 type FormValueType = {
@@ -114,6 +115,13 @@ const AddQuestion: React.FC = () => {
     formik.handleChange(e)
   }
 
+  const hasQIdInputErr = formik.errors.questionId
+  const hasQInputErr = formik.errors.question
+  const hasAInputErr = formik.errors.choices?.A
+  const hasBInputErr = formik.errors.choices?.B
+  const hasCInputErr = formik.errors.choices?.C
+  const hasDInputErr = formik.errors.choices?.D
+
   return (
     <>
       <StyledPaper>
@@ -129,8 +137,9 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.questionId}
-            error={formik.errors.questionId ? true : false}
-            helperText={formik.errors.questionId ?? ''}
+            error={hasQIdInputErr ? true : false}
+            helperText={hasQIdInputErr ?? ''}
+            isError={hasQIdInputErr}
           />
           <StyledTextField
             id="outlined-basic"
@@ -139,8 +148,9 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.question}
-            error={formik.errors.question ? true : false}
-            helperText={formik.errors.question ?? ''}
+            error={hasQInputErr ? true : false}
+            helperText={hasQInputErr ?? ''}
+            isError={hasQInputErr}
           />
           <StyledTextField
             id="outlined-select-answer"
@@ -148,8 +158,7 @@ const AddQuestion: React.FC = () => {
             label="正解"
             name="answer"
             value={choice}
-            onChange={(e) => handleChange(e)}
-            helperText={formik.errors.answer ?? "正解をA, B, C, Dの中から選んでください"}
+            onChange={(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => handleChange(e)}
           >
             {choices.map((option) => (
               <MenuItem key={option} value={option}>
@@ -164,8 +173,9 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.choices.A}
-            error={formik.errors.choices?.A ? true : false}
-            helperText={formik.errors.choices?.A ?? ''}
+            error={hasAInputErr ? true : false}
+            helperText={hasAInputErr ?? ''}
+            isError={hasAInputErr}
           />
           <StyledTextField
             id="outlined-choice-B"
@@ -174,8 +184,9 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.choices.B}
-            error={formik.errors.choices?.B ? true : false}
-            helperText={formik.errors.choices?.B ?? ''}
+            error={hasBInputErr ? true : false}
+            helperText={hasBInputErr ?? ''}
+            isError={hasBInputErr}
           />
           <StyledTextField
             id="outlined-choice-C"
@@ -184,8 +195,9 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.choices.C}
-            error={formik.errors.choices?.C ? true : false}
-            helperText={formik.errors.choices?.C ?? ''}
+            error={hasCInputErr ? true : false}
+            helperText={hasCInputErr ?? ''}
+            isError={hasCInputErr}
           />
           <StyledTextField
             id="outlined-choice-D"
@@ -194,11 +206,12 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.choices.D}
-            error={formik.errors.choices?.D ? true : false}
-            helperText={formik.errors.choices?.D ?? ''}
+            error={hasDInputErr ? true : false}
+            helperText={hasDInputErr ?? ''}
+            isError={hasDInputErr}
           />
 
-          <Button type="submit">送信</Button>
+          <Button variant="contained" type="submit">送信</Button>
         </Box>
       </StyledPaper>
     </>
