@@ -13,9 +13,10 @@ const StyledPaper = styled(Paper)`
   border-radius: 12px;
 `;
 
-const StyledTextField = styled(({isError, ...props}) => <TextField {...props}/>)`
+
+
+const StyledTextField = styled(({isError:string, ...props}): JSX.Element => <TextField {...props}/>)`
   display: flex;
-  /* margin-bottom: 12px;. */
   margin-bottom: ${p => p.isError ? 8 : 12}px;
 `;
 
@@ -46,10 +47,6 @@ type FormErrorType = {
                                         //   answer?: string
                                         // ?
 };
-
-
-
-
 
 const onSubmit = (values: FormValueType) => {
   console.log(values);
@@ -108,13 +105,20 @@ const AddQuestion: React.FC = () => {
     validate
   });
 
-  console.log(formik.errors);
+  console.log(formik.touched);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setChoice(e.target.value as Choice)
     formik.handleChange(e)
   }
 
+  const touched = formik.touched
+  const isQIdVisited = touched.questionId
+  const isQVisited = touched.question
+  const isAVisited = touched.choices?.A
+  const isBVisited = touched.choices?.B
+  const isCVisited = touched.choices?.C
+  const isDVisited = touched.choices?.D
   const hasQIdInputErr = formik.errors.questionId
   const hasQInputErr = formik.errors.question
   const hasAInputErr = formik.errors.choices?.A
@@ -136,10 +140,11 @@ const AddQuestion: React.FC = () => {
             label="問題番号"
             variant="outlined"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             value={formik.values.questionId}
-            error={hasQIdInputErr ? true : false}
-            helperText={hasQIdInputErr ?? ''}
-            isError={hasQIdInputErr}
+            error={(isQIdVisited && hasQIdInputErr) ? true : false}
+            helperText={(isQIdVisited && hasQIdInputErr) ?? ''}
+            isError={isQIdVisited && hasQIdInputErr}
           />
           <StyledTextField
             id="outlined-basic"
@@ -147,10 +152,11 @@ const AddQuestion: React.FC = () => {
             label="問題文"
             variant="outlined"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             value={formik.values.question}
-            error={hasQInputErr ? true : false}
-            helperText={hasQInputErr ?? ''}
-            isError={hasQInputErr}
+            error={(isQVisited && hasQInputErr) ? true : false}
+            helperText={(isQVisited && hasQInputErr) ?? ''}
+            isError={isQVisited && hasQInputErr}
           />
           <StyledTextField
             id="outlined-select-answer"
@@ -159,6 +165,7 @@ const AddQuestion: React.FC = () => {
             name="answer"
             value={choice}
             onChange={(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => handleChange(e)}
+            onBlur={formik.handleBlur}
           >
             {choices.map((option) => (
               <MenuItem key={option} value={option}>
@@ -172,10 +179,11 @@ const AddQuestion: React.FC = () => {
             label="選択肢A"
             variant="outlined"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             value={formik.values.choices.A}
-            error={hasAInputErr ? true : false}
-            helperText={hasAInputErr ?? ''}
-            isError={hasAInputErr}
+            error={(isAVisited && hasAInputErr) ? true : false}
+            helperText={(isAVisited && hasAInputErr) ?? ''}
+            isError={isAVisited && hasAInputErr}
           />
           <StyledTextField
             id="outlined-choice-B"
@@ -183,10 +191,11 @@ const AddQuestion: React.FC = () => {
             label="選択肢B"
             variant="outlined"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             value={formik.values.choices.B}
-            error={hasBInputErr ? true : false}
-            helperText={hasBInputErr ?? ''}
-            isError={hasBInputErr}
+            error={(isBVisited && hasBInputErr) ? true : false}
+            helperText={(isBVisited && hasBInputErr) ?? ''}
+            isError={isBVisited && hasBInputErr}
           />
           <StyledTextField
             id="outlined-choice-C"
@@ -194,10 +203,11 @@ const AddQuestion: React.FC = () => {
             label="選択肢C"
             variant="outlined"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             value={formik.values.choices.C}
-            error={hasCInputErr ? true : false}
-            helperText={hasCInputErr ?? ''}
-            isError={hasCInputErr}
+            error={(isCVisited && hasCInputErr) ? true : false}
+            helperText={(isCVisited && hasCInputErr) ?? ''}
+            isError={isCVisited && hasCInputErr}
           />
           <StyledTextField
             id="outlined-choice-D"
@@ -205,10 +215,11 @@ const AddQuestion: React.FC = () => {
             label="選択肢D"
             variant="outlined"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             value={formik.values.choices.D}
-            error={hasDInputErr ? true : false}
-            helperText={hasDInputErr ?? ''}
-            isError={hasDInputErr}
+            error={(isDVisited && hasDInputErr) ? true : false}
+            helperText={(isDVisited && hasDInputErr) ?? ''}
+            isError={isDVisited && hasDInputErr}
           />
 
           <Button variant="contained" type="submit">送信</Button>
