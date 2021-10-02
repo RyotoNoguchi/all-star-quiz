@@ -48,17 +48,7 @@ type FormErrorType = {
 
 
 
-const initialValues = {
-  questionId: '',
-  question: '',
-  answer: '',
-  choices: {
-    A: '',
-    B: '',
-    C: '',
-    D: '',
-  }
-}
+
 
 const onSubmit = (values: FormValueType) => {
   console.log(values);
@@ -99,6 +89,18 @@ const validate = (values: FormValueType): FormErrorType => {
 const AddQuestion: React.FC = () => {
   const [choice, setChoice] = useState<Choice>('A');
   const choices: Choice[] = ['A', 'B', 'C', 'D'];
+  const initialValues = {
+    questionId: '',
+    question: '',
+    answer: choice,
+    choices: {
+      A: '',
+      B: '',
+      C: '',
+      D: '',
+    }
+  }
+
   const formik = useFormik<FormValueType>({
     initialValues,
     onSubmit,
@@ -127,6 +129,8 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.questionId}
+            error={formik.errors.questionId ? true : false}
+            helperText={formik.errors.questionId ?? ''}
           />
           <StyledTextField
             id="outlined-basic"
@@ -135,6 +139,8 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.question}
+            error={formik.errors.question ? true : false}
+            helperText={formik.errors.question ?? ''}
           />
           <StyledTextField
             id="outlined-select-answer"
@@ -143,7 +149,7 @@ const AddQuestion: React.FC = () => {
             name="answer"
             value={choice}
             onChange={(e) => handleChange(e)}
-            helperText="正解をA, B, C, Dの中から選んでください"
+            helperText={formik.errors.answer ?? "正解をA, B, C, Dの中から選んでください"}
           >
             {choices.map((option) => (
               <MenuItem key={option} value={option}>
@@ -158,6 +164,8 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.choices.A}
+            error={formik.errors.choices?.A ? true : false}
+            helperText={formik.errors.choices?.A ?? ''}
           />
           <StyledTextField
             id="outlined-choice-B"
@@ -166,6 +174,8 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.choices.B}
+            error={formik.errors.choices?.B ? true : false}
+            helperText={formik.errors.choices?.B ?? ''}
           />
           <StyledTextField
             id="outlined-choice-C"
@@ -174,6 +184,8 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.choices.C}
+            error={formik.errors.choices?.C ? true : false}
+            helperText={formik.errors.choices?.C ?? ''}
           />
           <StyledTextField
             id="outlined-choice-D"
@@ -182,6 +194,8 @@ const AddQuestion: React.FC = () => {
             variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.choices.D}
+            error={formik.errors.choices?.D ? true : false}
+            helperText={formik.errors.choices?.D ?? ''}
           />
 
           <Button type="submit">送信</Button>
