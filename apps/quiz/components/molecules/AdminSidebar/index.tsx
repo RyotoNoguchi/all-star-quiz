@@ -18,7 +18,9 @@ const StyledMenuBookIcon = styled(MenuBookIcon)`
 
 const MenuContainer = styled(Grid)`
   font-size: 2.5rem;
-  background-image: linear-gradient(#848dc2, #7988d3);
+  /* background-image: linear-gradient(#a1aff8, #8590c9); */
+  background-image: none;
+  background-color: #fff;
   border-radius: 16px;
   margin-top: 12px;
   margin-left: 12px;

@@ -1,36 +1,71 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from '@mui/x-data-grid'
-import DetailButton from '../../atoms/DetailButton'
-import DeleteButton from '../../atoms/DeleteButton'
-import Paper from '@mui/material/Paper'
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridValueGetterParams,
+} from '@mui/x-data-grid';
+import DetailButton from '../../atoms/DetailButton';
+import DeleteButton from '../../atoms/DeleteButton';
+import Paper from '@mui/material/Paper';
 
-
+const buttonWidth = 80
 const columns: GridColDef[] = [
-  {field: 'id', headerName: 'ID', width: 30},
-  {field: 'question', headerName: '問題文', width: 150},
-  {field: 'answer', headerName: '正解', description: '各選択肢は詳細ボタンをクリックして確認できます', width: 30},
-  {field: 'detailBtn', headerName: '詳細', width: 30, sortable: false, renderCell: function detailButton(params: GridRenderCellParams) {
-    return <DetailButton rowId={params.id.toString()}>詳細</DetailButton> 
-  }},
-  {field: 'deleteBtn', headerName: '削除', width: 30, sortable: false, renderCell: function deleteButton(params: GridRenderCellParams) {
-    return <DeleteButton rowId={params.id.toString()}>削除</DeleteButton> 
-  }},
-]
+  { field: 'id', headerName: 'No.', width: 100 },
+  { field: 'question', headerName: '問題文', width: 492 },
+  {
+    field: 'answer',
+    headerName: '正解',
+    filterable: false,
+    description: '各選択肢は詳細ボタンをクリックして確認できます',
+    width: 110,
+  },
+  {
+    field: 'detailBtn',
+    headerName: '詳細',
+    width: buttonWidth,
+    sortable: false,
+    filterable: false,
+    renderCell: function detailButton(params: GridRenderCellParams) {
+      return <DetailButton rowId={params.id.toString()}>詳細</DetailButton>;
+    },
+  },
+  {
+    field: 'deleteBtn',
+    headerName: '削除',
+    width: buttonWidth,
+    sortable: false,
+    filterable: false,
+    renderCell: function deleteButton(params: GridRenderCellParams) {
+      return <DeleteButton rowId={params.id.toString()}>削除</DeleteButton>;
+    },
+  },
+];
 
-const row = [
-  {id: 1, question: 'アソビューのCEOは次の内誰でしょうか？', answer: 'A', }
-]
+const rows = [
+  { id: 1, question: 'アソビューのCEOは次の内誰でしょうか？', answer: 'B' },
+];
 
 const StyledPaper = styled(Paper)`
-  border-radius: 8px;
+  border-radius: 12px;
   height: 655px;
-`
+  margin-top: 12px;
+  /* background-image: linear-gradient(#4161eef9, #cfd4ec); */
+  background-color: #fff;
+`;
 const AdminQuestion: React.FC = () => {
   return (
     <>
       <StyledPaper>
-        ter
+        <DataGrid style={{borderRadius: '12px'}}
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          checkboxSelection
+          disableSelectionOnClick
+        />
       </StyledPaper>
     </>
   );
