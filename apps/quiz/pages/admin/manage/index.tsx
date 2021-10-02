@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import firebase from 'firebase/clientApp';
 import AdminLogo from '../../../components/atoms/AdminLogo';
 import AdminSidebar from '../../../components/molecules/AdminSidebar';
 import AdminQuestion from '../../../components/organisms/AdminQuestion';
+import AddQuestion from '../../../components/organisms/AddQuestion';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Box, Grid } from '@material-ui/core';
 import styled from 'styled-components';
-import { DefaultDeserializer } from 'v8';
 // import Image from 'next/image';
 // import NextImage from '../../../components/atoms/NextImage';
 const db = firebase.firestore();
@@ -60,8 +60,9 @@ const MainContainer = styled(Grid)`
   padding-right: 8px;
 `;
 
+type ShowContent = 'QUESTION_LIST' | 'ADD_NEW_QUESTION';
 const Manage: React.FC<Props> = ({ logo, questions }) => {
-  
+  const [showContent, setShowContent] = useState<ShowContent>('ADD_NEW_QUESTION')
   return (
     <>
       <StyledBox>
@@ -72,7 +73,9 @@ const Manage: React.FC<Props> = ({ logo, questions }) => {
           <AdminSidebar />
         </Grid>
         <Grid item xs={9}>
-          <AdminQuestion questions={questions}  />
+          {showContent === 'QUESTION_LIST' && <AdminQuestion questions={questions}  />}
+          {showContent === 'ADD_NEW_QUESTION' && <AddQuestion/>}
+
         </Grid>
       </MainContainer>
     </>

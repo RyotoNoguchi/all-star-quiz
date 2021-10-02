@@ -112,8 +112,9 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 17. yarn add socket-controllers
 18. yarn add reflect-metadata
 19. yarn add @material-ui/core @material-ui/icons <!-- https://www.youtube.com/watch?v=0rnVfshKqDI -->
-20. nx run api:serve <!-- バックエンド側のサーバー立てる>
-21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
+20. yarn add formik
+21. nx run api:serve <!-- バックエンド側のサーバー立てる>
+22. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
 
 
 ### テスト用Googleアカウント一覧
