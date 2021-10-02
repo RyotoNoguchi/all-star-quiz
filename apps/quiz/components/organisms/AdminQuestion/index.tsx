@@ -4,11 +4,23 @@ import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
-  GridValueGetterParams,
 } from '@mui/x-data-grid';
 import DetailButton from '../../atoms/DetailButton';
 import DeleteButton from '../../atoms/DeleteButton';
 import Paper from '@mui/material/Paper';
+import firebase from 'firebase/clientApp';
+import { GetStaticProps, GetStaticPropsContext } from 'next';
+import { ParsedUrlQuery } from 'querystring';
+const db = firebase.firestore();
+
+export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext<ParsedUrlQuery>) => {
+  const questionCollection = await db.collection('questions').get()
+  const fetchedRows = questionCollection.docs
+  
+  return {
+    props: {fetchedRows: fetchedRows}
+  }
+}
 
 const buttonWidth = 80
 const columns: GridColDef[] = [
@@ -46,6 +58,7 @@ const columns: GridColDef[] = [
 const rows = [
   { id: 1, question: 'アソビューのCEOは次の内誰でしょうか？', answer: 'B' },
 ];
+
 
 const StyledPaper = styled(Paper)`
   border-radius: 12px;
