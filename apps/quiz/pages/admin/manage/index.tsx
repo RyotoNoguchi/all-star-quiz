@@ -1,9 +1,10 @@
 import React from 'react';
 import firebase from 'firebase/clientApp';
 import AdminLogo from '../../../components/atoms/AdminLogo';
+import AdminSidebar from '../../../components/molecules/AdminSidebar';
+import AdminQuestion from '../../../components/organisms/AdminQuestion';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import AdminSidebar from '../../../components/molecules/AdminSidebar';
 import { Box, Container, Grid } from '@material-ui/core';
 import styled from 'styled-components';
 // import Image from 'next/image';
@@ -31,12 +32,12 @@ const StyledBox = styled(Box)`
   margin-bottom: 28px;
 `;
 
-const StyledContainer = styled(Container)`
+const MainContainer = styled(Grid)`
   background-image: linear-gradient(#2d3870, #586dd4);
   border-radius: 16px;
   height: 700px;
+  padding-right: 8px;
 `;
-
 
 const Manage: React.FC<LogoURL> = ({ url }) => {
   return (
@@ -44,12 +45,14 @@ const Manage: React.FC<LogoURL> = ({ url }) => {
       <StyledBox>
         <AdminLogo url={url} />
       </StyledBox>
-      <StyledContainer>
-        <Grid container spacing={3}>
+      <MainContainer container spacing={3}>
+        <Grid item xs={3}>
           <AdminSidebar />
-          <Grid item xs={9}></Grid>
         </Grid>
-      </StyledContainer>
+        <Grid item xs={9}>
+          <AdminQuestion />
+        </Grid>
+      </MainContainer>
     </>
   );
 };

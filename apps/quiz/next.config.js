@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-// const withNx = require('@nrwl/next/plugins/with-nx');
-import * as withNx from '@nrwl/next/plugins/with-nx'
+const withNx = require('@nrwl/next/plugins/with-nx');
+// import * as withNx from '@nrwl/next/plugins/with-nx'
 
 /**
  * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
@@ -15,8 +15,8 @@ const nextConfig = {
 
 module.exports = withNx(nextConfig);
 
-module.exports = {
-  images: {
-    domain: ['https://firebasestorage.googleapis.com']//指定しなければエラーが発生する
-  },
-}
+// module.exports = {
+//   images: {
+//     domain: ['https://firebasestorage.googleapis.com']//指定しなければエラーが発生する
+//   },
+// }

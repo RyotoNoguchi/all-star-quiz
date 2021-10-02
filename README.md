@@ -131,3 +131,6 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 | 9 | test.kuro900 | kurotest900 |
 
 <!-- TODO /monitor/question/[id]から/monitor/ranking/に遷移するためのrouter.pushが動かない時があるのはネットワークの問題？ -->
+
+<!-- TODO https://mui.com/components/tables/#sticky-header これ見てAdminQuestionのテーブル作る -->
+<!-- TODO https://www.youtube.com/watch?v=aTPkos3LKi8 43:37 -->

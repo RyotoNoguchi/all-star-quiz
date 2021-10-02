@@ -18,11 +18,12 @@ const StyledMenuBookIcon = styled(MenuBookIcon)`
 
 const MenuContainer = styled(Grid)`
   font-size: 2.5rem;
-  background-image: linear-gradient(#7580c0, #7988d3);
+  background-image: linear-gradient(#848dc2, #7988d3);
   border-radius: 16px;
-  margin-top: 24px;
+  margin-top: 12px;
   margin-left: 12px;
   height: 656px;
+  padding: 8px;
 `;
 
 const StyledLiveHelpIcon = styled(LiveHelpIcon)`
@@ -44,7 +45,7 @@ const MenuTitle = styled(Box)`
 const AdminSidebar: React.FC = () => {
   return (
     <>
-      <MenuContainer item xs={3}>
+      <MenuContainer>
         <MenuTitle>
           <StyledMenuBookIcon/>
           <StyledTypography variant="h2" >Menu</StyledTypography>
