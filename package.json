@@ -68,7 +68,8 @@
     "socket.io-client": "^4.2.0",
     "styled-components": "5.2.1",
     "tslib": "^2.0.0",
-    "use-sound": "^4.0.1"
+    "use-sound": "^4.0.1",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@nestjs/schematics": "^7.0.0",

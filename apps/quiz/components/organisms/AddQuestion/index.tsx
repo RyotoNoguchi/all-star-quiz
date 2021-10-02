@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import * as yup from 'yup'
 import { useFormik } from 'formik';
 import styled from 'styled-components';
 import { ChangeEvent, useState } from 'react';
@@ -82,7 +83,17 @@ const validate = (values: FormValueType): FormErrorType => {
   return errors
 };
 
-
+const validationSchema = yup.object({
+  questionId: yup.string().required('問題番号を入力してください。'),
+  question: yup.string().required('問題文を入力してください。'),
+  answer: yup.string().required('問題の正解を入力してください。'),
+  choices: yup.object({
+    A: yup.string().required('Aに入力してください'),
+    B: yup.string().required('Bに入力してください'),
+    C: yup.string().required('Cに入力してください'),
+    D: yup.string().required('Dに入力してください'),
+  })
+})
 
 const AddQuestion: React.FC = () => {
   const [choice, setChoice] = useState<Choice>('A');
@@ -102,7 +113,7 @@ const AddQuestion: React.FC = () => {
   const formik = useFormik<FormValueType>({
     initialValues,
     onSubmit,
-    validate
+    validationSchema
   });
 
   console.log(formik.touched);
