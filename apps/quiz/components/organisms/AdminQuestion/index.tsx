@@ -9,18 +9,7 @@ import DetailButton from '../../atoms/DetailButton';
 import DeleteButton from '../../atoms/DeleteButton';
 import Paper from '@mui/material/Paper';
 import firebase from 'firebase/clientApp';
-import { GetStaticProps, GetStaticPropsContext } from 'next';
-import { ParsedUrlQuery } from 'querystring';
 const db = firebase.firestore();
-
-export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext<ParsedUrlQuery>) => {
-  const questionCollection = await db.collection('questions').get()
-  const fetchedRows = questionCollection.docs
-  
-  return {
-    props: {fetchedRows: fetchedRows}
-  }
-}
 
 const buttonWidth = 80
 const columns: GridColDef[] = [
@@ -55,10 +44,13 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [
-  { id: 1, question: 'アソビューのCEOは次の内誰でしょうか？', answer: 'B' },
-];
 
+
+type Question =  {
+  id: string
+  question: string
+  answer: string
+}
 
 const StyledPaper = styled(Paper)`
   border-radius: 12px;
@@ -67,12 +59,12 @@ const StyledPaper = styled(Paper)`
   /* background-image: linear-gradient(#4161eef9, #cfd4ec); */
   background-color: #fff;
 `;
-const AdminQuestion: React.FC = () => {
+const AdminQuestion: React.FC<{questions : Question[]}> = ({questions}) => {
   return (
     <>
       <StyledPaper>
         <DataGrid style={{borderRadius: '12px'}}
-          rows={rows}
+          rows={questions}  
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}

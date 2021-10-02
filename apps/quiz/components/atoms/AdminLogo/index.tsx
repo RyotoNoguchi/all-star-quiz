@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-type asoviewLogoUrl = {
+type LogoURL = {
   url: string;
 };
 
@@ -10,7 +10,7 @@ const AdminPageLogo = styled.img`
   text-align: center;
 `;
 
-const AdminLogo: React.FC<asoviewLogoUrl> = ({ 
+const AdminLogo: React.FC<LogoURL> = ({ 
   url 
 }) => {
   return (

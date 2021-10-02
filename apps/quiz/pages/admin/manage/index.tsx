@@ -12,48 +12,40 @@ import { DefaultDeserializer } from 'v8';
 // import NextImage from '../../../components/atoms/NextImage';
 const db = firebase.firestore();
 
-type LogoURL = {
-  url: string;
-};
-
 type Question = {
   question: string
-  questionId: string
+  id: string
   answer: string
 }
 
-// type Props = {
-//   logo: LogoURL
-//   questions: Question[]
-// }
+type Props = {
+  logo: string
+  questions: Question[]
+}
 
-
-export const getStaticProps = async (
+export const getStaticProps: GetStaticProps<Props> = async (
   context: GetStaticPropsContext<ParsedUrlQuery>
 ) => {
   const imageCollection = await db.collection('images').get();
-  const asoviewLogoUrl: LogoURL = imageCollection.docs
+  const asoviewLogoUrl: string = imageCollection.docs
     .find((doc) => doc.data().name === '管理者画面トップロゴ')
     .data().url;
 
-  const questionCollection = await db.collection('questions').get()
-  const test: Question[] = []
+  const questionCollection = await db.collection('questions').orderBy('questionId').get()
+  const questions: Question[] = []
   questionCollection.docs.forEach(d => {
-    test.push({
+    questions.push({
       question: d.data().question,
-      questionId: d.data().questionId,
+      id: d.data().questionId,
       answer: d.data().correctAnswer
     })
   })
 
-  const data = {
-    url: asoviewLogoUrl,
-    questionInfo: test,
-  }
-
-
   return {
-    props: {post: data}
+    props: {     
+      logo: asoviewLogoUrl,
+      questions: questions, 
+    }
   };
 };
 
@@ -68,20 +60,19 @@ const MainContainer = styled(Grid)`
   padding-right: 8px;
 `;
 
-const Manage = ({ post }) => {
-  console.log(post.questionInfo);
+const Manage: React.FC<Props> = ({ logo, questions }) => {
   
   return (
     <>
       <StyledBox>
-        <AdminLogo url={post.url} />
+        <AdminLogo url={logo} />
       </StyledBox>
       <MainContainer container spacing={3}>
         <Grid item xs={3}>
           <AdminSidebar />
         </Grid>
         <Grid item xs={9}>
-          <AdminQuestion />
+          <AdminQuestion questions={questions}  />
         </Grid>
       </MainContainer>
     </>
