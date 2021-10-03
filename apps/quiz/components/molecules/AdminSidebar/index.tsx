@@ -29,7 +29,7 @@ const MenuContainer = styled(Grid)`
   border-radius: 16px;
   margin-top: 12px;
   margin-left: 12px;
-  height: 656px;
+  height: 680px;
   padding: 8px;
 `;
 

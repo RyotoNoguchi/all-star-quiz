@@ -56,7 +56,7 @@ const StyledBox = styled(Box)`
 const MainContainer = styled(Grid)`
   background-image: linear-gradient(#2d3870, #586dd4);
   border-radius: 16px;
-  height: 700px;
+  height: 720px;
   padding-right: 8px;
 `;
 

@@ -54,7 +54,7 @@ type Question =  {
 
 const StyledPaper = styled(Paper)`
   border-radius: 12px;
-  height: 655px;
+  height: 680px;
   margin-top: 12px;
   /* background-image: linear-gradient(#4161eef9, #cfd4ec); */
   background-color: #fff;
