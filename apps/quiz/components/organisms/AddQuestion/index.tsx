@@ -154,9 +154,7 @@ const AddQuestion: React.FC = () => {
             name="questionId"
             label="問題番号"
             variant="outlined"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.questionId}
+            {...formik.getFieldProps('questionId')}
             error={(isQIdVisited && hasQIdInputErr) ? true : false}
             helperText={(isQIdVisited && hasQIdInputErr) ?? ''}
             isError={isQIdVisited && hasQIdInputErr}
@@ -166,9 +164,7 @@ const AddQuestion: React.FC = () => {
             name="question"
             label="問題文"
             variant="outlined"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.question}
+            {...formik.getFieldProps('question')}
             error={(isQVisited && hasQInputErr) ? true : false}
             helperText={(isQVisited && hasQInputErr) ?? ''}
             isError={isQVisited && hasQInputErr}
@@ -193,9 +189,7 @@ const AddQuestion: React.FC = () => {
             name="choices.A"
             label="選択肢A"
             variant="outlined"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.choices.A}
+            {...formik.getFieldProps('choices.A')}
             error={(isAVisited && hasAInputErr) ? true : false}
             helperText={(isAVisited && hasAInputErr) ?? ''}
             isError={isAVisited && hasAInputErr}
@@ -205,9 +199,7 @@ const AddQuestion: React.FC = () => {
             name="choices.B"
             label="選択肢B"
             variant="outlined"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.choices.B}
+            {...formik.getFieldProps('choices.B')}
             error={(isBVisited && hasBInputErr) ? true : false}
             helperText={(isBVisited && hasBInputErr) ?? ''}
             isError={isBVisited && hasBInputErr}
@@ -217,9 +209,7 @@ const AddQuestion: React.FC = () => {
             name="choices.C"
             label="選択肢C"
             variant="outlined"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.choices.C}
+            {...formik.getFieldProps('choices.C')}
             error={(isCVisited && hasCInputErr) ? true : false}
             helperText={(isCVisited && hasCInputErr) ?? ''}
             isError={isCVisited && hasCInputErr}
@@ -229,9 +219,7 @@ const AddQuestion: React.FC = () => {
             name="choices.D"
             label="選択肢D"
             variant="outlined"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.choices.D}
+            {...formik.getFieldProps('choices.D')}
             error={(isDVisited && hasDInputErr) ? true : false}
             helperText={(isDVisited && hasDInputErr) ?? ''}
             isError={isDVisited && hasDInputErr}
