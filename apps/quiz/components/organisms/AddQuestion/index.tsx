@@ -1,12 +1,12 @@
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import * as yup from 'yup'
-import { useFormik } from 'formik';
 import styled from 'styled-components';
+import FormTextField from '../../atoms/FormTextField'
+import * as yup from 'yup';
+import { Formik, Form, Field} from 'formik';
 import { ChangeEvent, useState } from 'react';
+import React from 'react';
 
 const StyledPaper = styled(Paper)`
   height: 655px;
@@ -14,50 +14,45 @@ const StyledPaper = styled(Paper)`
   border-radius: 12px;
 `;
 
-
-
-const StyledTextField = styled(({isError:string, ...props}): JSX.Element => <TextField {...props}/>)`
-  display: flex;
-  margin-bottom: ${p => p.isError ? 8 : 12}px;
-`;
-
 type FormValueType = {
   questionId: string;
   question: string;
   answer: string;
-  choices: Choices
+  choices: Choices;
 };
 
 type Choices = {
-  A: string
-  B: string
-  C: string
-  D: string
-}
+  A: string;
+  B: string;
+  C: string;
+  D: string;
+};
 
 type Choice = 'A' | 'B' | 'C' | 'D';
 
 const onSubmit = (values: FormValueType) => {
   console.log(values);
-}
+};
 
-yup.addMethod<yup.NumberSchema>(yup.number, "noWhitespace", function () {
-  return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
+yup.addMethod<yup.NumberSchema>(yup.number, 'noWhitespace', function () {
+  return this.transform((value, originalValue) =>
+    /\s/.test(originalValue) ? NaN : value
+  );
 });
 
 const validationSchema = yup.object({
   questionId: yup.number().required('問題番号を入力してください。').integer('問題番号は整数を入力してください').min(1, '問題番号は1以上を入力してください').max(100, '登録できる問題数は100個までです。')?.noWhitespace(),
   // ↑ https://github.com/jquense/yup/issues/312#issuecomment-745034006（TSでのメソッドの定義追加）
   // ↑ https://github.com/jquense/yup/issues/694#issuecomment-663613804（noWhitespace()を追加するコード）
-  question: yup.string().strict().trim('空欄はあかんで。').required('問題文を入力してください。'),
+  question: yup.string().strict().trim('スペースは除いてください。').required('問題文を入力してください。'),
   answer: yup.string().required('問題の正解を入力してください。'),
   choices: yup.object({
-    A: yup.string().strict().trim('空欄はあかんで。').required('Aに入力してください'),
-    B: yup.string().strict().trim('空欄はあかんで。').required('Bに入力してください'),
-    C: yup.string().strict().trim('空欄はあかんで。').required('Cに入力してください'),
-    D: yup.string().strict().trim('空欄はあかんで。').required('Dに入力してください'),
-  })
-})
+    A: yup.string().strict().trim('スペースは除いてください。').required('Aに入力してください'),
+    B: yup.string().strict().trim('スペースは除いてください。').required('Bに入力してください'),
+    C: yup.string().strict().trim('スペースは除いてください。').required('Cに入力してください'),
+    D: yup.string().strict().trim('スペースは除いてください。').required('Dに入力してください'),
+  }),
+});
 
 const AddQuestion: React.FC = () => {
   const [choice, setChoice] = useState<Choice>('A');
@@ -71,123 +66,36 @@ const AddQuestion: React.FC = () => {
       B: '',
       C: '',
       D: '',
-    }
-  }
-
-  const formik = useFormik<FormValueType>({
-    initialValues,
-    onSubmit,
-    validationSchema
-  });
-
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setChoice(e.target.value as Choice)
-    formik.handleChange(e)
-  }
-
-  const touched = formik.touched
-  const isQIdVisited = touched.questionId
-  const isQVisited = touched.question
-  const isAVisited = touched.choices?.A
-  const isBVisited = touched.choices?.B
-  const isCVisited = touched.choices?.C
-  const isDVisited = touched.choices?.D
-  const hasQIdInputErr = formik.errors.questionId
-  const hasQInputErr = formik.errors.question
-  const hasAInputErr = formik.errors.choices?.A
-  const hasBInputErr = formik.errors.choices?.B
-  const hasCInputErr = formik.errors.choices?.C
-  const hasDInputErr = formik.errors.choices?.D
+    },
+  };
 
   return (
     <>
-      <StyledPaper>
-        <Box
-          style={{ padding: '12px' }}
-          component="form"
-          onSubmit={formik.handleSubmit}
-        >
-          <StyledTextField
-            id="standard-basic"
-            name="questionId"
-            label="問題番号"
-            variant="outlined"
-            {...formik.getFieldProps('questionId')}
-            error={(isQIdVisited && hasQIdInputErr) ? true : false}
-            helperText={(isQIdVisited && hasQIdInputErr) ?? ''}
-            isError={isQIdVisited && hasQIdInputErr}
-          />
-          <StyledTextField
-            id="outlined-basic"
-            name="question"
-            label="問題文"
-            variant="outlined"
-            {...formik.getFieldProps('question')}
-            error={(isQVisited && hasQInputErr) ? true : false}
-            helperText={(isQVisited && hasQInputErr) ?? ''}
-            isError={isQVisited && hasQInputErr}
-          />
-          <StyledTextField
-            id="outlined-select-answer"
-            select
-            label="正解"
-            name="answer"
-            value={choice}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => handleChange(e)}
-            onBlur={formik.handleBlur}
-          >
-            {choices.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </StyledTextField>
-          <StyledTextField
-            id="outlined-choice-A"
-            name="choices.A"
-            label="選択肢A"
-            variant="outlined"
-            {...formik.getFieldProps('choices.A')}
-            error={(isAVisited && hasAInputErr) ? true : false}
-            helperText={(isAVisited && hasAInputErr) ?? ''}
-            isError={isAVisited && hasAInputErr}
-          />
-          <StyledTextField
-            id="outlined-choice-B"
-            name="choices.B"
-            label="選択肢B"
-            variant="outlined"
-            {...formik.getFieldProps('choices.B')}
-            error={(isBVisited && hasBInputErr) ? true : false}
-            helperText={(isBVisited && hasBInputErr) ?? ''}
-            isError={isBVisited && hasBInputErr}
-          />
-          <StyledTextField
-            id="outlined-choice-C"
-            name="choices.C"
-            label="選択肢C"
-            variant="outlined"
-            {...formik.getFieldProps('choices.C')}
-            error={(isCVisited && hasCInputErr) ? true : false}
-            helperText={(isCVisited && hasCInputErr) ?? ''}
-            isError={isCVisited && hasCInputErr}
-          />
-          <StyledTextField
-            id="outlined-choice-D"
-            name="choices.D"
-            label="選択肢D"
-            variant="outlined"
-            {...formik.getFieldProps('choices.D')}
-            error={(isDVisited && hasDInputErr) ? true : false}
-            helperText={(isDVisited && hasDInputErr) ?? ''}
-            isError={isDVisited && hasDInputErr}
-          />
+      <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+        <StyledPaper>
+          <Form style={{ padding: '12px' }} >
 
-          <Button variant="contained" type="submit">送信</Button>
-        </Box>
-      </StyledPaper>
+            <Field id="questionId" name="questionId" label="問題番号" component={FormTextField}/>
+
+            <Field id="answerSelector" label="正解" name="answer" component={FormTextField} select
+              onChange={(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => setChoice(e.currentTarget.value as Choice)}>
+              {choices.map((option) => ( <MenuItem key={option} value={option}>{option}</MenuItem>))}
+            </Field>
+
+            <Field id="question" name="question" label="問題文" fullWidth multiline maxRows={4} component={FormTextField}/>
+
+            <Field id="choiceA" name="choices.A" label="選択肢A" fullWidth component={FormTextField}/>
+            <Field id="choiceB" name="choices.B" label="選択肢B" fullWidth component={FormTextField}/>
+            <Field id="choiceC" name="choices.C" label="選択肢C" fullWidth component={FormTextField}/>
+            <Field id="choiceD" name="choices.D" label="選択肢D" fullWidth component={FormTextField}/>
+
+            <Button variant="contained" type="submit">送信</Button>
+            
+          </Form>
+        </StyledPaper>
+      </Formik>
     </>
   );
 };
 
-export default AddQuestion;
+export default React.memo(AddQuestion);
