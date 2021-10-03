@@ -37,51 +37,9 @@ type Choices = {
 
 type Choice = 'A' | 'B' | 'C' | 'D';
 
-
-
-
-type FormErrorType = {
-  [P in keyof FormValueType]?: string | Choices;  // FormValueTypeのプロパティと同じですべてオプショナルなtypeを定義。下と同じ
-                                        // type FormErrorType = {
-                                        //   questionId?: string
-                                        //   question?: string
-                                        //   answer?: string
-                                        // ?
-};
-
 const onSubmit = (values: FormValueType) => {
   console.log(values);
 }
-
-const validate = (values: FormValueType): FormErrorType => {
-  const errors: FormErrorType = {};
-
-  if (!values.questionId) {
-    errors.questionId = '問題番号を入力してください。';
-  } else if (values.questionId.length > 100) {
-    errors.questionId = '登録できる問題数は100個までです。';
-  }
-
-  if (!values.question) {
-    errors.question = '問題文を入力してください。';
-  } else if (values.question.length > 100) {
-    errors.question = '問題文は200文字まで入力可能です。';
-  }
-
-  if (!values.answer) {
-    errors.answer = '問題の正解を入力してください。';
-  }
-
-  if (!values.choices.A || !values.choices.B || !values.choices.C || !values.choices.D) {
-    errors.choices = {
-      A: !values.choices.A ? 'Aに入力してください' : '',
-      B: !values.choices.B ? 'Bに入力してください' : '',
-      C: !values.choices.C ? 'Cに入力してください' : '',
-      D: !values.choices.D ? 'Dに入力してください' : '',
-    }
-  }
-  return errors
-};
 
 yup.addMethod<yup.NumberSchema>(yup.number, "noWhitespace", function () {
   return this.transform((value, originalValue) => (/\s/.test(originalValue) ? NaN : value));
