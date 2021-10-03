@@ -4,7 +4,7 @@ import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
 import FormTextField from '../../atoms/FormTextField'
 import * as yup from 'yup';
-import { Formik, Form, Field} from 'formik';
+import { Formik, Form, FastField} from 'formik';
 import { ChangeEvent, useState } from 'react';
 import React from 'react';
 
@@ -75,19 +75,19 @@ const AddQuestion: React.FC = () => {
         <StyledPaper>
           <Form style={{ padding: '12px' }} >
 
-            <Field id="questionId" name="questionId" label="問題番号" component={FormTextField}/>
+            <FastField id="questionId" name="questionId" label="問題番号" component={FormTextField}/>
 
-            <Field id="answerSelector" label="正解" name="answer" component={FormTextField} select
+            <FastField id="answerSelector" label="正解" name="answer" component={FormTextField} select
               onChange={(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => setChoice(e.currentTarget.value as Choice)}>
               {choices.map((option) => ( <MenuItem key={option} value={option}>{option}</MenuItem>))}
-            </Field>
+            </FastField>
 
-            <Field id="question" name="question" label="問題文" fullWidth multiline maxRows={4} component={FormTextField}/>
+            <FastField id="question" name="question" label="問題文" fullWidth multiline maxRows={4} component={FormTextField}/>
 
-            <Field id="choiceA" name="choices.A" label="選択肢A" fullWidth component={FormTextField}/>
-            <Field id="choiceB" name="choices.B" label="選択肢B" fullWidth component={FormTextField}/>
-            <Field id="choiceC" name="choices.C" label="選択肢C" fullWidth component={FormTextField}/>
-            <Field id="choiceD" name="choices.D" label="選択肢D" fullWidth component={FormTextField}/>
+            <FastField id="choiceA" name="choices.A" label="選択肢A" fullWidth component={FormTextField}/>
+            <FastField id="choiceB" name="choices.B" label="選択肢B" fullWidth component={FormTextField}/>
+            <FastField id="choiceC" name="choices.C" label="選択肢C" fullWidth component={FormTextField}/>
+            <FastField id="choiceD" name="choices.D" label="選択肢D" fullWidth component={FormTextField}/>
 
             <Button variant="contained" type="submit">送信</Button>
             
