@@ -27,7 +27,10 @@ const columns: GridColDef[] = [
     sortable: false,
     filterable: false,
     renderCell: function detailButton(params: GridRenderCellParams) {
-      return <DetailButton rowId={params.id.toString()}>詳細</DetailButton>;
+      console.log(params);
+      console.log(params.id);
+      
+      return <DetailButton params={params}>詳細</DetailButton>;
     },
   },
   {

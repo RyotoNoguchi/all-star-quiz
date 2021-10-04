@@ -67,7 +67,7 @@ const MainContainer = styled(Grid)`
 
 type ShowContent = 'QUESTION_LIST' | 'ADD_NEW_QUESTION';
 const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
-  const [showContent, setShowContent] = useState<ShowContent>('ADD_NEW_QUESTION')
+  const [showContent, setShowContent] = useState<ShowContent>('QUESTION_LIST')
   return (
     <>
       <StyledBox>
