@@ -1,7 +1,7 @@
 import firebase from "firebase/clientApp";
+const db = firebase.firestore()
 import 'firebase/storage';
 import { useEffect, useState } from "react";
-const db = firebase.firestore()
 
 const ImageUploadTest: React.FC = () => {
   const [fileUrl, setFileUrl] = useState('')

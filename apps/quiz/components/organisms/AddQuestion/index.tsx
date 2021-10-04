@@ -1,3 +1,4 @@
+import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
@@ -6,7 +7,8 @@ import FormTextField from '../../atoms/FormTextField';
 import * as yup from 'yup';
 import { Formik, Form, FastField, FormikProps } from 'formik';
 import { ChangeEvent, useState } from 'react';
-import React from 'react';
+import firebase from "firebase/clientApp";
+const db = firebase.firestore()
 
 const StyledPaper = styled(Paper)`
   height: 680px;
@@ -31,9 +33,15 @@ type Choices = {
 type Choice = 'A' | 'B' | 'C' | 'D';
 
 // TODO firebaseの"questions"コレクションに追加する処理追記
-const onSubmit = (values: FormValueType, onSubmitProps: FormikProps<FormValueType>): void => {
-  console.log(values);
+const onSubmit = (v: FormValueType, onSubmitProps: FormikProps<FormValueType>): void => {
+  console.log(v);
   console.log('onSubmitProps', onSubmitProps);
+  db.collection('questions').add({
+    questionId: v.questionId,
+    question: v.question,
+    correctAnswer: v.answer,
+    choices: v.choices
+  })
   onSubmitProps.setSubmitting(false)
   onSubmitProps.resetForm()
 };
@@ -56,11 +64,11 @@ const validationSchema = yup.object({
   }),
 });
 
-const AddQuestion: React.FC = () => {
+const AddQuestion: React.FC<{nextQuestionId: string}> = ({nextQuestionId}) => {
   const [choice, setChoice] = useState<Choice>('A');
   const choices: Choice[] = ['A', 'B', 'C', 'D'];
   const initialValues = {
-    questionId: '',
+    questionId: nextQuestionId,
     question: '',
     answer: choice,
     choices: {
@@ -78,7 +86,7 @@ const AddQuestion: React.FC = () => {
           {(formik) => {
             return (
               <Form style={{ padding: '12px' }}>
-                <FastField id="questionId" name="questionId" label="問題番号" component={FormTextField}/>
+                <FastField id="questionId" name="questionId" label="問題番号" disabled component={FormTextField}/>
 
                 <FastField id="answerSelector" label="正解" name="answer" component={FormTextField} select 
                 onChange={(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => setChoice(e.currentTarget.value as Choice)}>

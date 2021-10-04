@@ -21,6 +21,7 @@ type Question = {
 type Props = {
   logo: string
   questions: Question[]
+  nextQuestionId: string
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (
@@ -41,11 +42,15 @@ export const getStaticProps: GetStaticProps<Props> = async (
     })
   })
 
+  const nextQuestionId = (questions.length + 1).toString()
+
   return {
     props: {     
       logo: asoviewLogoUrl,
       questions: questions, 
-    }
+      nextQuestionId,
+    },
+    revalidate: 10,
   };
 };
 
@@ -61,7 +66,7 @@ const MainContainer = styled(Grid)`
 `;
 
 type ShowContent = 'QUESTION_LIST' | 'ADD_NEW_QUESTION';
-const Manage: React.FC<Props> = ({ logo, questions }) => {
+const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
   const [showContent, setShowContent] = useState<ShowContent>('ADD_NEW_QUESTION')
   return (
     <>
@@ -74,8 +79,7 @@ const Manage: React.FC<Props> = ({ logo, questions }) => {
         </Grid>
         <Grid item xs={9}>
           {showContent === 'QUESTION_LIST' && <AdminQuestion questions={questions}  />}
-          {showContent === 'ADD_NEW_QUESTION' && <AddQuestion/>}
-
+          {showContent === 'ADD_NEW_QUESTION' && <AddQuestion nextQuestionId={nextQuestionId}/>}
         </Grid>
       </MainContainer>
     </>

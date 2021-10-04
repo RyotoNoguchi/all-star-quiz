@@ -8,8 +8,6 @@ import {
 import DetailButton from '../../atoms/DetailButton';
 import DeleteButton from '../../atoms/DeleteButton';
 import Paper from '@mui/material/Paper';
-import firebase from 'firebase/clientApp';
-const db = firebase.firestore();
 
 const buttonWidth = 80
 const columns: GridColDef[] = [
@@ -44,8 +42,6 @@ const columns: GridColDef[] = [
   },
 ];
 
-
-
 type Question =  {
   id: string
   question: string
@@ -58,9 +54,8 @@ const StyledPaper = styled(Paper)`
   margin-top: 12px;
   /* background-image: linear-gradient(#4161eef9, #cfd4ec); */
   background-color: #fff;
-  /* display: flex; */
-
 `;
+
 const AdminQuestion: React.FC<{questions : Question[]}> = ({questions}) => {
   return (
     <>
