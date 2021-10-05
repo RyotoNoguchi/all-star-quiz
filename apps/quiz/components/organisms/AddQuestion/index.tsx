@@ -4,11 +4,10 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
 import FormTextField from '../../atoms/FormTextField';
-import * as yup from 'yup';
-import { Formik, Form, FastField, FormikProps } from 'formik';
+import { Formik, Form, FastField } from 'formik';
 import { ChangeEvent, useState } from 'react';
-import firebase from "firebase/clientApp";
-const db = firebase.firestore()
+import onSubmit from '../../utils/onSubmit';
+import validationSchema from '../../utils/validationSchema';
 
 const StyledPaper = styled(Paper)`
   height: 680px;
@@ -16,53 +15,7 @@ const StyledPaper = styled(Paper)`
   border-radius: 12px;
 `;
 
-type FormValueType = {
-  questionId: string;
-  question: string;
-  answer: string;
-  choices: Choices;
-};
-
-type Choices = {
-  A: string;
-  B: string;
-  C: string;
-  D: string;
-};
-
 type Choice = 'A' | 'B' | 'C' | 'D';
-
-// TODO firebaseの"questions"コレクションに追加する処理追記
-const onSubmit = (v: FormValueType, onSubmitProps: FormikProps<FormValueType>): void => {
-  console.log(v);
-  console.log('onSubmitProps', onSubmitProps);
-  db.collection('questions').add({
-    questionId: v.questionId,
-    question: v.question,
-    correctAnswer: v.answer,
-    choices: v.choices
-  })
-  onSubmitProps.setSubmitting(false)
-  onSubmitProps.resetForm()
-};
-
-yup.addMethod<yup.NumberSchema>(yup.number, 'noWhitespace', function () {
-  return this.transform((value, originalValue) => /\s/.test(originalValue) ? NaN : value );
-});
-
-const validationSchema = yup.object({
-  questionId: yup.number().required('問題番号を入力してください。').integer('問題番号は整数を入力してください').min(1, '問題番号は1以上を入力してください').max(100, '登録できる問題数は100個までです。')?.noWhitespace(),
-  // ↑ https://github.com/jquense/yup/issues/312#issuecomment-745034006（TSでのメソッドの定義追加）
-  // ↑ https://github.com/jquense/yup/issues/694#issuecomment-663613804（noWhitespace()を追加するコード）
-  question: yup.string().strict().trim('スペースは除いてください。').required('問題文を入力してください。'),
-  answer: yup.string().required('問題の正解を入力してください。'),
-  choices: yup.object({
-    A: yup.string().strict().trim('スペースは除いてください。').required('Aに入力してください'),
-    B: yup.string().strict().trim('スペースは除いてください。').required('Bに入力してください'),
-    C: yup.string().strict().trim('スペースは除いてください。').required('Cに入力してください'),
-    D: yup.string().strict().trim('スペースは除いてください。').required('Dに入力してください'),
-  }),
-});
 
 const AddQuestion: React.FC<{nextQuestionId: string}> = ({nextQuestionId}) => {
   const [choice, setChoice] = useState<Choice>('A');
