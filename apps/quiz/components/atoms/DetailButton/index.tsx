@@ -7,37 +7,32 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
-import {
-
-  GridRenderCellParams,
-} from '@mui/x-data-grid';
+import { GridRenderCellParams } from '@mui/x-data-grid';
+import EditQuestion from '../../organisms/EditQuestion';
 
 type Props = {
-  params: GridRenderCellParams
-}
+  params: GridRenderCellParams;
+};
 
-const DetailButton: React.FC<Props> = ({
-    params
-  }) => {
-  const [open, setOpen] = useState(false) // 確認ダイアログの表示/非表示
+const DetailButton: React.FC<Props> = ({ params }) => {
+  const [open, setOpen] = useState(false); // 確認ダイアログの表示/非表示
 
-  const handleOpen = () => { 
-    setOpen(true)
+  const handleOpen = () => {
+    setOpen(true);
     console.log(params.row.question);
     console.log('問題ID', params.row.id);
-  }
+  };
 
-  const handleClose = () => { setOpen(false) }
-
-  const editQuestion = (id: string, e: React.MouseEvent<HTMLButtonElement>) => {
-    // (ここで削除処理)
-    console.log('ターゲット', e.currentTarget.value);
-    
-    console.log(`問題${id}の情報を変更しました`);
-    
+  const handleClose = () => {
     setOpen(false);
   };
-  
+
+  const editQuestion = (id: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    // ここで編集モーダル（Formik）を表示
+    console.log('ターゲット', e.currentTarget.value);
+    console.log(`問題${id}の情報を変更しました`);
+    setOpen(false);
+  };
 
   return (
     <>
@@ -52,8 +47,10 @@ const DetailButton: React.FC<Props> = ({
       >
         <DialogTitle id="dialog-title">問題{params.row.id}の詳細</DialogTitle>
         <DialogContent>
+          {/* TODO Formikでplaceholderに現在の問題情報を入れたフォームを初期表示はdisabledで表示。[編集]ボタン押下で編集可&[確定]ボタン表示 */}
+          <EditQuestion />
           <DialogContentText id="alert-dialog-description">
-            問題{params.row.id}の詳細です        
+            問題{params.row.id}の詳細です
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -65,7 +62,11 @@ const DetailButton: React.FC<Props> = ({
           >
             閉じる
           </Button>
-          <Button onClick={(e) => editQuestion(params.row.id.toString(), e)} variant="contained" color="primary">
+          <Button
+            onClick={(e) => editQuestion(params.row.id.toString(), e)}
+            variant="contained"
+            color="primary"
+          >
             編集する
           </Button>
         </DialogActions>

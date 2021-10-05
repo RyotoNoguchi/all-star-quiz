@@ -29,7 +29,6 @@ const columns: GridColDef[] = [
     renderCell: function detailButton(params: GridRenderCellParams) {
       console.log(params);
       console.log(params.id);
-      
       return <DetailButton params={params}>詳細</DetailButton>;
     },
   },
