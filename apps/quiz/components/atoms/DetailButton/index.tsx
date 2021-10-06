@@ -10,13 +10,10 @@ import {
 import { GridRenderCellParams } from '@mui/x-data-grid';
 import EditQuestion from '../../organisms/EditQuestion';
 
-type Props = {
-  params: GridRenderCellParams;
-};
-
-const DetailButton: React.FC<Props> = ({ params }) => {
+const DetailButton: React.FC<{params: GridRenderCellParams}> = ({ params }) => {
   const [open, setOpen] = useState(false); // 確認ダイアログの表示/非表示
-
+  console.log('params', params);
+  
   const handleOpen = () => {
     setOpen(true);
     console.log(params.row.question);

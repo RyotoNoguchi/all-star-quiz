@@ -7,16 +7,11 @@ import AddQuestion from '../../../components/organisms/AddQuestion';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Box, Grid } from '@material-ui/core';
+import { Question } from '../../../components/types/question';
 import styled from 'styled-components';
 // import Image from 'next/image';
 // import NextImage from '../../../components/atoms/NextImage';
 const db = firebase.firestore();
-
-type Question = {
-  question: string
-  id: string
-  answer: string
-}
 
 type Props = {
   logo: string
@@ -67,7 +62,7 @@ const MainContainer = styled(Grid)`
 
 type ShowContent = 'QUESTION_LIST' | 'ADD_NEW_QUESTION';
 const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
-  const [showContent, setShowContent] = useState<ShowContent>('ADD_NEW_QUESTION')
+  const [showContent, setShowContent] = useState<ShowContent>('QUESTION_LIST')
   return (
     <>
       <StyledBox>
@@ -79,7 +74,7 @@ const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
         </Grid>
         <Grid item xs={9}>
           {showContent === 'QUESTION_LIST' && <AdminQuestion questions={questions}  />}
-          {showContent === 'ADD_NEW_QUESTION' && <AddQuestion nextQuestionId={nextQuestionId}/>}
+          {showContent === 'ADD_NEW_QUESTION' && <AddQuestion nextQuestionId={nextQuestionId} />}
         </Grid>
       </MainContainer>
     </>

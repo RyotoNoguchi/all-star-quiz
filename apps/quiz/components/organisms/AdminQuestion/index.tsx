@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import DetailButton from '../../atoms/DetailButton';
+import DeleteButton from '../../atoms/DeleteButton';
+import Paper from '@mui/material/Paper';
+import { Question } from '../../types/question'
 import {
   DataGrid,
   GridColDef,
   GridRenderCellParams,
 } from '@mui/x-data-grid';
-import DetailButton from '../../atoms/DetailButton';
-import DeleteButton from '../../atoms/DeleteButton';
-import Paper from '@mui/material/Paper';
 
 const buttonWidth = 80
 const columns: GridColDef[] = [
@@ -43,12 +44,6 @@ const columns: GridColDef[] = [
     },
   },
 ];
-
-type Question =  {
-  id: string
-  question: string
-  answer: string
-}
 
 const StyledPaper = styled(Paper)`
   border-radius: 12px;
