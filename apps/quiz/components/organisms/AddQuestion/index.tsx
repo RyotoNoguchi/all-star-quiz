@@ -7,11 +7,11 @@ import onSubmit from '../../utils/onSubmit';
 import validationSchema from '../../utils/validationSchema';
 import { Formik, Form, FastField } from 'formik';
 import { ChangeEvent, useState } from 'react';
-import { Choice } from "../../types/question";
+import { Answer } from "../../types/question";
 
 const AddQuestion: React.FC<{nextQuestionId: string}> = ({nextQuestionId}) => {
-  const [choice, setChoice] = useState<Choice>('A');
-  const choices: Choice[] = ['A', 'B', 'C', 'D'];
+  const [choice, setAnswer] = useState<Answer>('A');
+  const choices: Answer[] = ['A', 'B', 'C', 'D'];
   const initialValues = {
     questionId: nextQuestionId,
     question: '',
@@ -34,7 +34,7 @@ const AddQuestion: React.FC<{nextQuestionId: string}> = ({nextQuestionId}) => {
                 <FastField id="questionId" name="questionId" label="問題番号" disabled component={FormTextField}/>
 
                 <FastField id="answerSelector" label="正解" name="answer" component={FormTextField} select 
-                onChange={(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => setChoice(e.currentTarget.value as Choice)}>
+                onChange={(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => setAnswer(e.currentTarget.value as Answer)}>
                   {choices.map((option) => (<MenuItem key={option} value={option}>{option}</MenuItem>))}
                 </FastField>
 

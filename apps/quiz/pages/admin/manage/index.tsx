@@ -33,7 +33,8 @@ export const getStaticProps: GetStaticProps<Props> = async (
     questions.push({
       question: d.data().question,
       id: d.data().questionId,
-      answer: d.data().correctAnswer
+      answer: d.data().correctAnswer,
+      choices: d.data().choices
     })
   })
 

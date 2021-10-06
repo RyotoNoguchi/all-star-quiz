@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { GridRenderCellParams } from '@mui/x-data-grid';
+import EditQuestion from '../../organisms/EditQuestion';
+import { Question } from "../../types/question";
 import {
   Button,
   Dialog,
@@ -7,17 +10,14 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
-import { GridRenderCellParams } from '@mui/x-data-grid';
-import EditQuestion from '../../organisms/EditQuestion';
 
 const DetailButton: React.FC<{params: GridRenderCellParams}> = ({ params }) => {
   const [open, setOpen] = useState(false); // 確認ダイアログの表示/非表示
   console.log('params', params);
-  
   const handleOpen = () => {
     setOpen(true);
-    console.log(params.row.question);
-    console.log('問題ID', params.row.id);
+    console.log(params.row.choices);
+    // console.log('問題ID', params.row.id);
   };
 
   const handleClose = () => {
@@ -25,10 +25,9 @@ const DetailButton: React.FC<{params: GridRenderCellParams}> = ({ params }) => {
   };
 
   const editQuestion = (id: string, e: React.MouseEvent<HTMLButtonElement>) => {
-    // ここで編集モーダル（Formik）を表示
     console.log('ターゲット', e.currentTarget.value);
     console.log(`問題${id}の情報を変更しました`);
-    setOpen(false);
+    // setOpen(false);
   };
 
   return (
@@ -45,7 +44,7 @@ const DetailButton: React.FC<{params: GridRenderCellParams}> = ({ params }) => {
         <DialogTitle id="dialog-title">問題{params.row.id}の詳細</DialogTitle>
         <DialogContent>
           {/* TODO Formikでplaceholderに現在の問題情報を入れたフォームを初期表示はdisabledで表示。[編集]ボタン押下で編集可&[確定]ボタン表示 */}
-          <EditQuestion />
+          <EditQuestion q={params.row as Question} />
           <DialogContentText id="alert-dialog-description">
             問題{params.row.id}の詳細です
           </DialogContentText>
