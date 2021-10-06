@@ -1,21 +1,13 @@
 import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import styled from 'styled-components';
 import FormTextField from '../../atoms/FormTextField';
+import FormPaper from '../../atoms/FormPaper';
 import { Formik, Form, FastField } from 'formik';
 import { ChangeEvent, useState } from 'react';
 import onSubmit from '../../utils/onSubmit';
 import validationSchema from '../../utils/validationSchema';
-
-const StyledPaper = styled(Paper)`
-  height: 680px;
-  margin-top: 12px;
-  border-radius: 12px;
-`;
-
-type Choice = 'A' | 'B' | 'C' | 'D';
+import { Choice } from "../../types/question";
 
 const EditQuestion: React.FC = () => {
   const [choice, setChoice] = useState<Choice>('A');
@@ -34,7 +26,7 @@ const EditQuestion: React.FC = () => {
 
   return (
     <>
-      <StyledPaper>
+      <FormPaper>
         <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
           {(formik) => {
             return (
@@ -59,7 +51,7 @@ const EditQuestion: React.FC = () => {
             );
           }}
         </Formik>
-      </StyledPaper>
+      </FormPaper>
     </>
   )
 }
