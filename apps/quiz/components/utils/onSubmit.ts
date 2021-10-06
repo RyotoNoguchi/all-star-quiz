@@ -28,3 +28,22 @@ const onSubmit = (v: FormValueType, onSubmitProps: FormikProps<FormValueType>): 
 };
 
 export default onSubmit
+
+export const handleUpdate = async (v: FormValueType, onSubmitProps: FormikProps<FormValueType>) => {
+  const docs = await db.collection('questions').where('questionId', '==', v.questionId).get()
+
+  const docId: string[] = []
+  docs.forEach(doc => {
+    docId.push(doc.id)
+  })
+  console.log(docId[0]);
+    
+  db.collection('questions').doc(docId[0]).set({
+    questionId: v.questionId,
+    question: v.question,
+    correctAnswer: v.answer,
+    choices: v.choices
+  })
+  onSubmitProps.setSubmitting(false)
+  onSubmitProps.resetForm() 
+}
