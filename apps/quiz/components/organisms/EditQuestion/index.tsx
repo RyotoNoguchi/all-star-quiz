@@ -6,7 +6,6 @@ import FormPaper from '../../atoms/FormPaper';
 import { Formik, Form, FastField } from 'formik';
 import { ChangeEvent, useState } from 'react';
 import onSubmit from '../../utils/onSubmit';
-import { handleUpdate } from '../../utils/onSubmit';
 import validationSchema from '../../utils/validationSchema';
 import { Answer } from "../../types/question";
 import { Question } from '../../types/question'
@@ -24,7 +23,7 @@ const EditQuestion: React.FC<{q: Question}> = ({q}) => {
   return (
     <>
       <FormPaper>
-        <Formik initialValues={initialValues} onSubmit={handleUpdate} validationSchema={validationSchema}>
+        <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
           {(formik) => {
             return (
               <Form style={{ padding: '12px' }}>
