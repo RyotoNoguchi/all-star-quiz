@@ -60,8 +60,8 @@ const AdminQuestion: React.FC<{questions : Question[]}> = ({questions}) => {
         <DataGrid style={{borderRadius: '12px'}}
           rows={questions}  
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          pageSize={10}
+          rowsPerPageOptions={[10]}
           checkboxSelection
           disableSelectionOnClick
         />
