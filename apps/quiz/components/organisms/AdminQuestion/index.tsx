@@ -28,8 +28,6 @@ const columns: GridColDef[] = [
     sortable: false,
     filterable: false,
     renderCell: function detailButton(params: GridRenderCellParams) {
-      console.log(params);
-      console.log(params.id);
       return <DetailButton params={params}>詳細</DetailButton>;
     },
   },
@@ -40,7 +38,7 @@ const columns: GridColDef[] = [
     sortable: false,
     filterable: false,
     renderCell: function deleteButton(params: GridRenderCellParams) {
-      return <DeleteButton rowId={params.id.toString()}>削除</DeleteButton>;
+      return <DeleteButton params={params}>削除</DeleteButton>;
     },
   },
 ];

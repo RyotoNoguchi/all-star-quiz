@@ -5,7 +5,7 @@ import FormTextField from '../../atoms/FormTextField';
 import FormPaper from '../../atoms/FormPaper';
 import { Formik, Form, FastField } from 'formik';
 import { ChangeEvent, useState } from 'react';
-import onSubmit from '../../utils/onSubmit';
+import { onSubmit } from '../../utils/onSubmit';
 import validationSchema from '../../utils/validationSchema';
 import { Answer } from "../../types/question";
 import { Question } from '../../types/question'

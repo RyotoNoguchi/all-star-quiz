@@ -3,7 +3,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import FormTextField from '../../atoms/FormTextField';
 import FormPaper from '../../atoms/FormPaper';
-import onSubmit from '../../utils/onSubmit';
+import { onSubmit } from '../../utils/onSubmit';
 import validationSchema from '../../utils/validationSchema';
 import { Formik, Form, FastField } from 'formik';
 import { ChangeEvent, useState } from 'react';

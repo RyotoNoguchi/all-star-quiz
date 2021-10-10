@@ -7,7 +7,7 @@ export type Question =  {
   choices: Choices
 }
 
-type Choices = {
+export type Choices = {
   A: string
   B: string
   C: string

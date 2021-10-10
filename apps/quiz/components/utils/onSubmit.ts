@@ -1,5 +1,6 @@
 import { FormikProps } from 'formik';
 import firebase from "firebase/clientApp";
+import {Choices} from '../types/question'
 const db = firebase.firestore()
 
 type FormValueType = {
@@ -7,13 +8,6 @@ type FormValueType = {
   question: string;
   answer: string;
   choices: Choices;
-};
-
-type Choices = {
-  A: string;
-  B: string;
-  C: string;
-  D: string;
 };
 
 export const onSubmit = async (v: FormValueType, onSubmitProps: FormikProps<FormValueType>) => {
@@ -42,5 +36,3 @@ export const onSubmit = async (v: FormValueType, onSubmitProps: FormikProps<Form
   onSubmitProps.setSubmitting(false)
   onSubmitProps.resetForm() 
 }
-
-export default onSubmit
