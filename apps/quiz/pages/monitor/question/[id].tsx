@@ -9,11 +9,13 @@ import { io } from 'socket.io-client';
 import Cue from '../cue';
 import Index from '../../index';
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
+import { ParsedUrlQuery } from 'querystring';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import React from 'react';
-import { ParsedUrlQuery } from 'querystring';
+import { Question as QuestionType} from "../../../components/types/question";
+const db = firebase.firestore()
 
-type Post = {
+type Props = {
   userId: number;
   id: number;
   title: string;
@@ -21,12 +23,24 @@ type Post = {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  // const docs = await db.collection('questions').get()
+  // const questions: QuestionType[] = []
+  // docs.forEach(doc => {
+  //   questions.push(doc.data() as QuestionType)
+  // })
+  // console.log(questions);
+  // const paths = questions.map((question: QuestionType) => {
+  //   return {
+  //     params: { id: question.id }
+  //   }
+  // })
+  
   const response = await axios.get(
     'https://jsonplaceholder.typicode.com/posts'
   );
-  const data = response.data;
+  const data: Props[] = response.data;
 
-  const paths = data.map((post: Post) => {
+  const paths = data.map((post: Props) => {
     return {
       params: { id: post.id.toString() },
     };
@@ -37,16 +51,27 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: false,
   };
 };
-// TODO SSGで正解を事前にfirebaseからとってくるようにして、それを判定に使う
+// TODO SSGの処理がどっかで間違っているからその修正から。値がちゃんと取れているかはほかの画面でconsole.log使いながら見る
 
-export const getStaticProps: GetStaticProps = async (context: GetStaticPropsContext<ParsedUrlQuery>) => {
+export const getStaticProps: GetStaticProps<Props> = async (context: GetStaticPropsContext<ParsedUrlQuery>) => {
+  // const questions = await db.collection('question').where('questionId', '==', id).get()
+  // console.log(questions);
+  // const question = questions[0]
+  // console.log(question);
+  
   const id = context.params.id;
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${id}`
   );
-  const data: Post = await response.json();
+  const data: Props = await response.json();
   return {
-    props: { post: data },
+    props: { 
+      userId: data.userId,
+      id: data.id,
+      title: data.title,
+      body: data.body
+    },
+    revalidate: 10,
   };
 };
 
@@ -187,7 +212,7 @@ type CorrectAnswer = 'A' | 'B' | 'C' | 'D';
 
 const countdownSec = 10;
 
-const Question = ({ post }) => {
+const Question: React.FC<Props> = ({userId, id, title, body}) => {
   const router = useRouter();
   const socket = io('http://localhost:3333');
   const [questionId, setQuestionId] = useState('1');
@@ -301,13 +326,13 @@ const Question = ({ post }) => {
       <QuestionContainer container spacing={3}>
         <QuestionBox item xs={12}>
           <QuestionMark>Q</QuestionMark>
-          <QuestionText variant="h1">{post.title}</QuestionText>
+          <QuestionText variant="h1">{title}</QuestionText>
           <CountDownCircle>{countdownTimeSec}</CountDownCircle>
         </QuestionBox>
         <ChoiceBox item xs={6}>
           <QuestionCell isCorrect={isCorrectForA}>
             <AlphabetCircle choice="A" color="red" />
-            <ChoiceText variant="h2">{post.title}</ChoiceText>
+            <ChoiceText variant="h2">{title}</ChoiceText>
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForA}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'A').length}</AnswerCount>
@@ -318,7 +343,7 @@ const Question = ({ post }) => {
         <ChoiceBox item xs={6}>
           <QuestionCell isCorrect={isCorrectForB}>
             <AlphabetCircle choice="B" color="blue" />
-            <ChoiceText variant="h2">{post.title}</ChoiceText>
+            <ChoiceText variant="h2">{title}</ChoiceText>
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForB}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'B').length}</AnswerCount>
@@ -329,7 +354,7 @@ const Question = ({ post }) => {
         <ChoiceBox item xs={6}>
           <QuestionCell isCorrect={isCorrectForC}>
             <AlphabetCircle choice="C" color="yellow" />
-            <ChoiceText variant="h2">{post.title}</ChoiceText>
+            <ChoiceText variant="h2">{title}</ChoiceText>
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForC}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'C').length}</AnswerCount>
@@ -340,7 +365,7 @@ const Question = ({ post }) => {
         <ChoiceBox item xs={6}>
           <QuestionCell isCorrect={isCorrectForD}>
             <AlphabetCircle choice="D" color="green" />
-            <ChoiceText variant="h2">{post.title}</ChoiceText>
+            <ChoiceText variant="h2">{title}</ChoiceText>
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForD}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'D').length}</AnswerCount>
