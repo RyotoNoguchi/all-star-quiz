@@ -33,10 +33,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       choices: doc.data().choices
     })
   })
-  console.log(questions);
   const paths = questions.map((question: QuestionType) => {
-    console.log(question);
-    
     return {
       params: { id: question.id },
     }
@@ -61,13 +58,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
 // TODO SSGの処理がどっかで間違っているからその修正から。値がちゃんと取れているかはほかの画面でconsole.log使いながら見る
 
 export const getStaticProps: GetStaticProps<Props> = async (context: GetStaticPropsContext<ParsedUrlQuery>) => {
-  // const questions = await db.collection('question').where('questionId', '==', id).get()
   // console.log(questions);
   // const question = questions[0]
   // console.log(question);
   
   const id = context.params.id;
-  console.log('ID', id);
+  const docs = await db.collection('questions').where('questionId', '==', id).get()
+  const questions: QuestionType[] = []
+  docs.forEach(doc => {
+    questions.push({
+      id: doc.data().questionId,
+      question: doc.data().question,
+      answer: doc.data().correctAnswer,
+      choices: doc.data().choices
+    })
+  })
   
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${id}`
