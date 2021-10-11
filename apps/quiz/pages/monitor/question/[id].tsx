@@ -23,28 +23,35 @@ type Props = {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // const docs = await db.collection('questions').get()
-  // const questions: QuestionType[] = []
-  // docs.forEach(doc => {
-  //   questions.push(doc.data() as QuestionType)
-  // })
-  // console.log(questions);
-  // const paths = questions.map((question: QuestionType) => {
-  //   return {
-  //     params: { id: question.id }
-  //   }
-  // })
-  
-  const response = await axios.get(
-    'https://jsonplaceholder.typicode.com/posts'
-  );
-  const data: Props[] = response.data;
-
-  const paths = data.map((post: Props) => {
+  const docs = await db.collection('questions').get()
+  const questions: QuestionType[] = []
+  docs.forEach(doc => {
+    questions.push({
+      id: doc.data().questionId,
+      question: doc.data().question,
+      answer: doc.data().correctAnswer,
+      choices: doc.data().choices
+    })
+  })
+  console.log(questions);
+  const paths = questions.map((question: QuestionType) => {
+    console.log(question);
+    
     return {
-      params: { id: post.id.toString() },
-    };
-  });
+      params: { id: question.id },
+    }
+  })
+  
+  // const response = await axios.get(
+  //   'https://jsonplaceholder.typicode.com/posts'
+  // );
+  // const data: Props[] = response.data;
+
+  // const paths = data.map((post: Props) => {
+  //   return {
+  //     params: { id: post.id.toString() },
+  //   };
+  // });
 
   return {
     paths: paths,
@@ -60,6 +67,8 @@ export const getStaticProps: GetStaticProps<Props> = async (context: GetStaticPr
   // console.log(question);
   
   const id = context.params.id;
+  console.log('ID', id);
+  
   const response = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${id}`
   );
