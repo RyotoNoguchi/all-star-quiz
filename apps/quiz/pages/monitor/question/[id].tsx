@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import firebase from '../../../../../firebase/clientApp';
 import { Typography, Grid, Card, Box, GridProps, TypographyProps, BoxProps } from '@material-ui/core';
 import { useRouter } from 'next/router';
@@ -11,7 +12,7 @@ import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
 import { ParsedUrlQuery } from 'querystring';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import React from 'react';
-import { Question as QuestionType} from "../../../components/types/question";
+import { Question as QuestionType, Answer} from "../../../components/types/question";
 const db = firebase.firestore()
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -194,14 +195,13 @@ const AnswerCount = styled(Typography)<TypographyProps>`
   margin-right: 10px;
 `;
 
-type CorrectAnswer = 'A' | 'B' | 'C' | 'D';
-
 const countdownSec = 10;
 
 const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
+  
   const router = useRouter();
   const socket = io('http://localhost:3333');
-  const [questionId, setQuestionId] = useState('1');
+  const [questionId, setQuestionId] = useState(id);
   const [currentPath, setCurrentPath] = useState(
     `/monitor/question/${questionId}`
   );
@@ -213,8 +213,8 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
   const [isCorrectForB, setIsCorrectForB] = useState(false);
   const [isCorrectForC, setIsCorrectForC] = useState(false);
   const [isCorrectForD, setIsCorrectForD] = useState(false);
-  const [correctAnswer, setCorrectAnswer] = useState<CorrectAnswer>('A');
   const [mounted, setMounted] = useState(false)
+  console.log("answer", answer);
   
   const resetQuestion = () => {
     setCountdownTimeSec(countdownSec);
@@ -245,7 +245,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
   
               // カウントダウンが0になった7000ms（「正解はこちら！」）後に正解を点滅させる
               setTimeout(() => {
-                switch (correctAnswer) {
+                switch (answer as Answer) {
                   case 'A':
                     setIsCorrectForA(true);
                     break;
@@ -266,6 +266,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
             return countdownTimeSec;
           });
         }, 1000);
+        return () => clearInterval(CD10SecTimerId)
       });
       socket.on('go_to_designated_page', (nextQuestionId) => {
         resetQuestion();
@@ -291,8 +292,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
       return prev
     })  
     return setMounted(false)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [answer]);
 
   const [answers, answersLoading, answersError] = useCollection(
     firebase.firestore().collection('answers'),
