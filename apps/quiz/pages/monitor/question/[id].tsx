@@ -295,6 +295,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
     })  
     return setMounted(false)
   }, [answer]);
+  // TODO 2問目に行くとカウントダウンが2秒されてしまうバグ直す
 
   const [answers, answersLoading, answersError] = useCollection(
     firebase.firestore().collection('answers'),
