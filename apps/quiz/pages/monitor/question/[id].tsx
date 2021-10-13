@@ -214,7 +214,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
   const [isCorrectForC, setIsCorrectForC] = useState(false);
   const [isCorrectForD, setIsCorrectForD] = useState(false);
   const [mounted, setMounted] = useState(false)
-  console.log("answer", answer);
+
   
   const resetQuestion = () => {
     setCountdownTimeSec(countdownSec);
@@ -227,12 +227,14 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
     setIsQuestionDisplayed(false);
   };
   useEffect(() => {
+    console.log("answer", answer);
     setMounted(true)
     setMounted((prev) => {
       socket.on('ready_go', () => {
         setIsQuestionDisplayed(true);
         setIsTopPage(false);
         const CD10SecTimerId = setInterval(() => {
+          console.log("-1秒");
           setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
           setCountdownTimeSec((countdownTimeSec) => {
             if (countdownTimeSec === 0) {
