@@ -1,5 +1,3 @@
-
-
 # Allstar
 
 This project was generated using [Nx](https://nx.dev).
@@ -114,5 +112,29 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 17. yarn add socket-controllers
 18. yarn add reflect-metadata
 19. yarn add @material-ui/core @material-ui/icons <!-- https://www.youtube.com/watch?v=0rnVfshKqDI -->
-20. nx run api:serve <!-- バックエンド側のサーバー立てる>
-21. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
+20. yarn add formik
+21. yarn add yup
+22. nx run api:serve <!-- バックエンド側のサーバー立てる>
+23. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
+
+
+### テスト用Googleアカウント一覧
+
+|  No.  |  E-mail  |  Password  |
+| ---- | ---- | ---- |
+| 1 | test.ichiro100 | ichirotest100 |
+| 2 | test.jiro76 | jirotest200 |
+| 3 | test.saburo300 | saburotest300 |
+| 4 | test.shiro400 | shirotest400 |
+| 5 | test.goro500 | gorotest500 |
+| 6 | test.rokuro600 | rokurotest600 |
+| 7 | test.nanaro700 | nanarotest700 |
+| 8 | test.hachiro800 | hachirotest800 |
+| 9 | test.kuro900 | kurotest900 |
+
+<!-- TODO '/admin/manage'の「Question」のメニューでListとNewボタン押下で切り替わるように修正 -->
+<!-- TODO '/admin/manage'の「User」のメニューで「Active」と「Inactive」ボタン作成して、削除フラグでユーザーを分類、Client画面で「Inactive」になっている場合はグレーダウンとボタンの非活性化に修正 -->
+<!-- TODO '/admin'画面のボタンのUI整える -->
+<!-- TODO '/monitor/champion'を動的になるように修正 -->
+<!-- TODO '/client'で回答した選択肢を選択肢を選んだ後に表示（SSR） -->
+<!-- TODO '/client'で正解オープンと同時にclient画面で「正解/不正解」を表示し、不正解ならグレーアウト -->

@@ -1,32 +1,36 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import firebase from '../../../../../firebase/clientApp';
 import { Typography, Grid, Card, Box, GridProps, TypographyProps, BoxProps } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
 import AlphabetCircle from '../../../components/atoms/AlphabetCircle/index';
 import { io } from 'socket.io-client';
 import Cue from '../cue';
 import Index from '../../index';
-import { GetStaticPaths, GetStaticProps } from 'next'
-
-type Post = {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-};
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
+import { ParsedUrlQuery } from 'querystring';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import React from 'react';
+import { Question as QuestionType, Answer} from "../../../components/types/question";
+const db = firebase.firestore()
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const response = await axios.get(
-    'https://jsonplaceholder.typicode.com/posts'
-  );
-  const data = response.data;
-
-  const paths = data.map((post: Post) => {
+  const docs = await db.collection('questions').get()
+  const questions: QuestionType[] = []
+  docs.forEach(doc => {
+    questions.push({
+      id: doc.data().questionId,
+      question: doc.data().question,
+      answer: doc.data().correctAnswer,
+      choices: doc.data().choices
+    })
+  })
+  const paths = questions.map((question: QuestionType) => {
     return {
-      params: { id: post.id.toString() },
-    };
-  });
+      params: { id: question.id },
+    }
+  })
 
   return {
     paths: paths,
@@ -34,14 +38,27 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps<QuestionType> = async (context: GetStaticPropsContext<ParsedUrlQuery>) => {
   const id = context.params.id;
-  const response = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${id}`
-  );
-  const data = await response.json();
+  const docs = await db.collection('questions').where('questionId', '==', id).get()
+  const questions: QuestionType[] = []
+  docs.forEach(doc => {
+    questions.push({
+      id: doc.data().questionId,
+      question: doc.data().question,
+      answer: doc.data().correctAnswer,
+      choices: doc.data().choices
+    })
+  })
+  const question = questions[0]
   return {
-    props: { post: data },
+    props: { 
+      id: question.id,
+      question: question.question,
+      answer: question.answer,
+      choices: question.choices
+    },
+    revalidate: 10,
   };
 };
 
@@ -132,8 +149,8 @@ const QuestionCell = styled(({ isCorrect, ...props }) => <Card {...props} />)`
   position: relative;
   box-shadow: 2px 2px 2px 2px #5f72d1;
   font-size: 4rem;
-  text-shadow: 2px 2px #555;
   background-image: linear-gradient(#2d3870, #586dd4);
+  text-shadow: 2px 2px #555;
   color: white;
   animation: ${(props) => (props.isCorrect ? blinkQuestionCell : '')} 600ms
     linear 0ms 4 normal forwards;
@@ -150,6 +167,7 @@ const blinkCountAnswerBox = keyframes`
   `;
 
 const CountAnswerBox = styled(({ isCorrect, ...props }) => <Box {...props} />)<BoxProps>`
+  text-align: right;
   width: 80px;
   position: absolute;
   right: 1rem;
@@ -174,18 +192,16 @@ const AnswerCount = styled(Typography)<TypographyProps>`
   font-size: 36px;
   line-height: normal;
   padding: 0;
-  margin: 0;
-  transform: translate(25%, 0);
+  margin-right: 10px;
 `;
-
-type CorrectAnswer = 'A' | 'B' | 'C' | 'D';
 
 const countdownSec = 10;
 
-const Question = ({ post }) => {
+const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
+  
   const router = useRouter();
   const socket = io('http://localhost:3333');
-  const [questionId, setQuestionId] = useState('1');
+  const [questionId, setQuestionId] = useState(id);
   const [currentPath, setCurrentPath] = useState(
     `/monitor/question/${questionId}`
   );
@@ -197,7 +213,8 @@ const Question = ({ post }) => {
   const [isCorrectForB, setIsCorrectForB] = useState(false);
   const [isCorrectForC, setIsCorrectForC] = useState(false);
   const [isCorrectForD, setIsCorrectForD] = useState(false);
-  const [correctAnswer, setCorrectAnswer] = useState<CorrectAnswer>('A');
+  const [mounted, setMounted] = useState(false)
+
   
   const resetQuestion = () => {
     setCountdownTimeSec(countdownSec);
@@ -210,60 +227,80 @@ const Question = ({ post }) => {
     setIsQuestionDisplayed(false);
   };
   useEffect(() => {
-    socket.on('ready_go', () => {
-      setIsQuestionDisplayed(true);
-      setIsTopPage(false);
-      const CD10SecTimerId = setInterval(() => {
-        setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
-        setCountdownTimeSec((countdownTimeSec) => {
-          if (countdownTimeSec === 0) {
-            clearInterval(CD10SecTimerId);
+    console.log("answer", answer);
+    setMounted(true)
+    setMounted((prev) => {
+      socket.on('ready_go', () => {
+        setIsQuestionDisplayed(true);
+        setIsTopPage(false);
+        const CD10SecTimerId = setInterval(() => {
+          console.log("-1秒");
+          setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
+          setCountdownTimeSec((countdownTimeSec) => {
+            if (countdownTimeSec === 0) {
+              clearInterval(CD10SecTimerId);
+  
+              // カウントダウンが0になった3400ms（「アンサーチェック！」）後に解答数枠を表示する
+              setTimeout(() => {
+                setIsNumberCountShown(true);
+              }, 3400);
+  
+              // カウントダウンが0になった7000ms（「正解はこちら！」）後に正解を点滅させる
+              setTimeout(() => {
+                switch (answer as Answer) {
+                  case 'A':
+                    setIsCorrectForA(true);
+                    break;
+                  case 'B':
+                    setIsCorrectForB(true);
+                    break;
+                  case 'C':
+                    setIsCorrectForC(true);
+                    break;
+                  case 'D':
+                    setIsCorrectForD(true);
+                    break;
+                  default:
+                    break;
+                }
+              }, 7000);
+            }
+            return countdownTimeSec;
+          });
+        }, 1000);
+        return () => clearInterval(CD10SecTimerId)
+      });
+      socket.on('go_to_designated_page', (nextQuestionId) => {
+        resetQuestion();
+        const newQuestionId = nextQuestionId;
+        setQuestionId(newQuestionId);
+        const newCurrentPath = `/monitor/question/${newQuestionId}`;
+        setCurrentPath(newCurrentPath);
+        router.push(newCurrentPath);
+      });
+      socket.on('display_cue_page', () => {
+        setIsTopPage(false);
+      });
+      socket.on('display_top_page', () => {
+        setIsTopPage(true);
+      }); 
+      socket.on('go_to_worst_ranking_page', (path) => {
+        console.log(path);
+        resetQuestion()
+        const newCurrentPath = path;
+        setCurrentPath(newCurrentPath)
+        router.push(newCurrentPath)
+      })
+      return prev
+    })  
+    return setMounted(false)
+  }, [answer]);
+  // TODO 2問目に行くとカウントダウンが2秒されてしまうバグ直す
 
-            // カウントダウンが0になった3400ms（「アンサーチェック！」）後に解答数枠を表示する
-            setTimeout(() => {
-              setIsNumberCountShown(true);
-            }, 3400);
-
-            // カウントダウンが0になった7000ms（「正解はこちら！」）後に正解を点滅させる
-            setTimeout(() => {
-              switch (correctAnswer) {
-                case 'A':
-                  setIsCorrectForA(true);
-                  break;
-                case 'B':
-                  setIsCorrectForB(true);
-                  break;
-                case 'C':
-                  setIsCorrectForC(true);
-                  break;
-                case 'D':
-                  setIsCorrectForD(true);
-                  break;
-                default:
-                  break;
-              }
-            }, 7000);
-          }
-          return countdownTimeSec;
-        });
-      }, 1000);
-    });
-    socket.on('go_to_designated_page', (nextQuestionId) => {
-      resetQuestion();
-      const newQuestionId = nextQuestionId;
-      setQuestionId(newQuestionId);
-      const newCurrentPath = `/monitor/question/${newQuestionId}`;
-      setCurrentPath(newCurrentPath);
-      router.push(newCurrentPath);
-    });
-    socket.on('display_cue_page', () => {
-      setIsTopPage(false);
-    });
-    socket.on('display_top_page', () => {
-      setIsTopPage(true);
-    });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [answers, answersLoading, answersError] = useCollection(
+    firebase.firestore().collection('answers'),
+    {}
+  );
 
   if (isTopPage) {
     return <Index />;
@@ -272,63 +309,62 @@ const Question = ({ post }) => {
   if (!isQuestionDisplayed) {
     // [READY-GO]ボタンが押下される前
     return <Cue questionNumber={questionId} />;
-  } else {
-    return (
-      <>
-        <QuestionContainer container spacing={3}>
-          <QuestionBox item xs={12}>
-            <QuestionMark>Q</QuestionMark>
-            <QuestionText variant="h1">{post.title}</QuestionText>
-            <CountDownCircle>{countdownTimeSec}</CountDownCircle>
-          </QuestionBox>
-          <ChoiceBox item xs={6}>
-            <QuestionCell isCorrect={isCorrectForA}>
-              <AlphabetCircle choice="A" color="red" />
-              <ChoiceText variant="h2">{post.title}</ChoiceText>
-              {isNumberCountShown && (
-                <CountAnswerBox isCorrect={isCorrectForA}>
-                  <AnswerCount variant="body1">{post.id}</AnswerCount>
-                </CountAnswerBox>
-              )}
-            </QuestionCell>
-          </ChoiceBox>
-          <ChoiceBox item xs={6}>
-            <QuestionCell isCorrect={isCorrectForB}>
-              <AlphabetCircle choice="B" color="blue" />
-              <ChoiceText variant="h2">{post.title}</ChoiceText>
-              {isNumberCountShown && (
-                <CountAnswerBox isCorrect={isCorrectForB}>
-                  <AnswerCount variant="body1">{post.id}</AnswerCount>
-                </CountAnswerBox>
-              )}
-            </QuestionCell>
-          </ChoiceBox>
-          <ChoiceBox item xs={6}>
-            <QuestionCell isCorrect={isCorrectForC}>
-              <AlphabetCircle choice="C" color="yellow" />
-              <ChoiceText variant="h2">{post.title}</ChoiceText>
-              {isNumberCountShown && (
-                <CountAnswerBox isCorrect={isCorrectForC}>
-                  <AnswerCount variant="body1">{post.id}</AnswerCount>
-                </CountAnswerBox>
-              )}
-            </QuestionCell>
-          </ChoiceBox>
-          <ChoiceBox item xs={6}>
-            <QuestionCell isCorrect={isCorrectForD}>
-              <AlphabetCircle choice="D" color="green" />
-              <ChoiceText variant="h2">{post.title}</ChoiceText>
-              {isNumberCountShown && (
-                <CountAnswerBox isCorrect={isCorrectForD}>
-                  <AnswerCount variant="body1">{post.id}</AnswerCount>
-                </CountAnswerBox>
-              )}
-            </QuestionCell>
-          </ChoiceBox>
-        </QuestionContainer>
-      </>
-    );
-  }
+  } 
+  return (
+    <>
+      <QuestionContainer container spacing={3}>
+        <QuestionBox item xs={12}>
+          <QuestionMark>Q</QuestionMark>
+          <QuestionText variant="h1">{question}</QuestionText>
+          <CountDownCircle>{countdownTimeSec}</CountDownCircle>
+        </QuestionBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell isCorrect={isCorrectForA}>
+            <AlphabetCircle choice="A" color="red" />
+            <ChoiceText variant="h2">{choices.A}</ChoiceText>
+            {isNumberCountShown && (
+              <CountAnswerBox isCorrect={isCorrectForA}>
+                <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'A').length}</AnswerCount>
+              </CountAnswerBox>
+            )}
+          </QuestionCell>
+        </ChoiceBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell isCorrect={isCorrectForB}>
+            <AlphabetCircle choice="B" color="blue" />
+            <ChoiceText variant="h2">{choices.B}</ChoiceText>
+            {isNumberCountShown && (
+              <CountAnswerBox isCorrect={isCorrectForB}>
+                <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'B').length}</AnswerCount>
+              </CountAnswerBox>
+            )}
+          </QuestionCell>
+        </ChoiceBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell isCorrect={isCorrectForC}>
+            <AlphabetCircle choice="C" color="yellow" />
+            <ChoiceText variant="h2">{choices.C}</ChoiceText>
+            {isNumberCountShown && (
+              <CountAnswerBox isCorrect={isCorrectForC}>
+                <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'C').length}</AnswerCount>
+              </CountAnswerBox>
+            )}
+          </QuestionCell>
+        </ChoiceBox>
+        <ChoiceBox item xs={6}>
+          <QuestionCell isCorrect={isCorrectForD}>
+            <AlphabetCircle choice="D" color="green" />
+            <ChoiceText variant="h2">{choices.D}</ChoiceText>
+            {isNumberCountShown && (
+              <CountAnswerBox isCorrect={isCorrectForD}>
+                <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'D').length}</AnswerCount>
+              </CountAnswerBox>
+            )}
+          </QuestionCell>
+        </ChoiceBox>
+      </QuestionContainer>
+    </>
+  );
 };
 
-export default Question;
+export default React.memo(Question);

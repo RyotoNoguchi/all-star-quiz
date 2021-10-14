@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import firebase from '../../../../../firebase/clientApp';
 import { Table } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { GetStaticProps } from 'next';
-import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
 import RankingTableContainer from '../../../components/organisms/RankingTableContainer';
 import RankingTitleBox from '../../../components/molecules/RankingTitleBox';
@@ -17,59 +15,24 @@ import Rank from '../../../components/atoms/Rank';
 import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
 import AnswerTime from '../../../components/atoms/AnswerTime';
 import { colors, textShadows } from '../../../components/styles/colors';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+const db = firebase.firestore()
 
-export const getStaticProps: GetStaticProps = async () => {
-  const response = await axios.get(
-    'https://jsonplaceholder.typicode.com/users'
-  );
-  const data: User[] = response.data;
-
-  return {
-    props: {
-      users: data,
-    },
-  };
-};
-
-type User = {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
-  };
-  phone: string;
-  website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
+type AnswerInfo = {
+  time: string;
+  user: string;
+  rank: string;
 };
 
 const isLastRow = (idx: number): boolean => {
-  return idx + 1 === 10 ? true : false
-}
+  return idx + 1 === 10 ? true : false;
+};
 
-const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Ranking: React.FC = () => {
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
-  const numberItemShow = 10;
-  const answerPersonTotalNumber = users.length;
-  const numberScreenTop = answerPersonTotalNumber - numberItemShow;
-  const displayAnswerPeople: User[] = [];
-  for (let i = numberScreenTop; i < answerPersonTotalNumber; i++) {
-    displayAnswerPeople.push(users[i]);
-  }
-
+  const [questionId, setQuestionId] = useState('');
+  const [correctAnswer, setCorrectAnswer] = useState('');
   const tbodyVariant = {
     hidden: {
       opacity: 0,
@@ -96,25 +59,71 @@ const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticPr
   };
 
   useEffect(() => {
-    socket.on('show_worst_ranking', () => {
+    socket.on('show_worst_ranking', (questionId) => {
+      console.log(questionId);
+      setQuestionId(questionId);
       setIsRankingRowsShow(true);
+      setIsRankingRowsShow((prev) => {
+        if (prev) {
+          db.collection('questions').where('questionId', '==', questionId).get().then((snapShot) => {
+              snapShot.forEach((doc) => { setCorrectAnswer(doc.data().correctAnswer)})
+            })
+        }
+        return prev
+      })
     });
+    return setIsRankingRowsShow(false)
   }, []);
+
+  const [answers, answersLoading, answersError] = useCollectionData(
+    db.collection('answers').where('answer', '==', correctAnswer).orderBy('time', 'asc'),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+
+  const itemNumber = 10;
+  const totalNumber = answers?.length;
+  const answer: AnswerInfo[] = [];
+  if (totalNumber > 10) {
+    const screenTop = totalNumber - itemNumber;
+    for (let i = screenTop; i < totalNumber; i++) {
+      answer.push({
+        time: answers[i].time,
+        user: answers[i].user,
+        rank: (i + 1).toString(),
+      });
+    }
+  } else {
+    for (let i = 0; i < 10 - totalNumber; i++) {
+      answer.push({
+        time: '---',
+        user: '---',
+        rank: '---',
+      });
+    }
+    for (let i = 0; i < totalNumber; i++) {
+      answer.push({
+        time: answers[i].time,
+        user: answers[i].user,
+        rank: (i + 1).toString(),
+      });
+    }
+  }
 
   return (
     <>
       <RankingTableContainer>
         <RankingTitleBox>
-          <RankingTitle 
-            color={colors.rankingTitleBlue} 
-            textShadow={textShadows.rankingTitleBlue}>
+          <RankingTitle
+            color={colors.rankingTitleBlue}
+            textShadow={textShadows.rankingTitleBlue}
+          >
             早押しワ<HyphenRotation>ー</HyphenRotation>スト10
           </RankingTitle>
         </RankingTitleBox>
         <Table arial-label="worst ranking table">
           {isRankingRowsShow && (
             <MotionTableBody variants={tbodyVariant}>
-              {displayAnswerPeople.map((answerPerson: User, idx: number) => {
+              {answer.map((answerPerson: AnswerInfo, idx: number) => {
                 return (
                   <RankRow
                     isChangeColorRow={isLastRow(idx)}
@@ -124,11 +133,17 @@ const Ranking: React.FC = ({ users }: InferGetStaticPropsType<typeof getStaticPr
                     key={idx}
                   >
                     <AnswerPersonNameBox isChangeColorRow={isLastRow(idx)}>
-                      <Rank isChangeColorRow={isLastRow(idx)}>{answerPerson.id}</Rank>
-                      <AnswerPersonName isChangeColorRow={isLastRow(idx)}>{answerPerson.name}</AnswerPersonName>
+                      <Rank isChangeColorRow={isLastRow(idx)}>
+                        {answerPerson.rank}
+                      </Rank>
+                      <AnswerPersonName isChangeColorRow={isLastRow(idx)}>
+                        {answerPerson.user}
+                      </AnswerPersonName>
                     </AnswerPersonNameBox>
                     <AnswerTimeBox isChangeColorRow={isLastRow(idx)}>
-                      <AnswerTime isChangeColorRow={isLastRow(idx)}>{answerPerson.id}</AnswerTime>
+                      <AnswerTime isChangeColorRow={isLastRow(idx)}>
+                        {answerPerson.time}
+                      </AnswerTime>
                     </AnswerTimeBox>
                   </RankRow>
                 );
