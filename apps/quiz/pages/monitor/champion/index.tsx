@@ -3,6 +3,7 @@ import { GetStaticProps } from 'next';
 import React, { useEffect, useState } from 'react';
 import { InferGetStaticPropsType } from 'next';
 import { io } from 'socket.io-client';
+import { AnswerInfo } from "../../../components/types/client";
 import axios from 'axios';
 import ChampionRankingTableContainer from "../../../components/organisms/ChampingRankingTableContainer";
 

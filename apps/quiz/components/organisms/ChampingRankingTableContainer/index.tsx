@@ -3,6 +3,7 @@ import RankingTitleBox from '../../molecules/RankingTitleBox';
 import RankingTitle from '../../atoms/RankingTitle';
 import { colors, textShadows } from '../../styles/colors';
 import { Table } from '@material-ui/core';
+import { AnswerInfo } from "../../types/client";
 import MotionTableBody from '../../molecules/MotionTableBody';
 import RankRow from '../../molecules/RankRow';
 import AnswerPersonNameBox from '../../molecules/AnswerPersonNameBox';

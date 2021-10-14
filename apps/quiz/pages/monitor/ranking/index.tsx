@@ -16,13 +16,8 @@ import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
 import AnswerTime from '../../../components/atoms/AnswerTime';
 import { colors, textShadows } from '../../../components/styles/colors';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { AnswerInfo } from "../../../components/types/client";
 const db = firebase.firestore()
-
-type AnswerInfo = {
-  time: string;
-  user: string;
-  rank: string;
-};
 
 const isLastRow = (idx: number): boolean => {
   return idx + 1 === 10 ? true : false;
@@ -31,8 +26,13 @@ const isLastRow = (idx: number): boolean => {
 const Ranking: React.FC = () => {
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
-  const [questionId, setQuestionId] = useState('');
+  // const [questionId, setQuestionId] = useState('');
   const [correctAnswer, setCorrectAnswer] = useState('');
+  const [answers, answersLoading, answersError] = useCollectionData(
+    db.collection('answers').where('answer', '==', correctAnswer).orderBy('time', 'asc'),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+
   const tbodyVariant = {
     hidden: {
       opacity: 0,
@@ -60,8 +60,7 @@ const Ranking: React.FC = () => {
 
   useEffect(() => {
     socket.on('show_worst_ranking', (questionId) => {
-      console.log(questionId);
-      setQuestionId(questionId);
+      // setQuestionId(questionId);
       setIsRankingRowsShow(true);
       setIsRankingRowsShow((prev) => {
         if (prev) {
@@ -75,10 +74,7 @@ const Ranking: React.FC = () => {
     return setIsRankingRowsShow(false)
   }, []);
 
-  const [answers, answersLoading, answersError] = useCollectionData(
-    db.collection('answers').where('answer', '==', correctAnswer).orderBy('time', 'asc'),
-    { snapshotListenOptions: { includeMetadataChanges: true } }
-  );
+
 
   const itemNumber = 10;
   const totalNumber = answers?.length;
