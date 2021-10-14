@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Button, Typography, Box } from '@mui/material';
 import styled from 'styled-components';
 import { io } from 'socket.io-client';
 import { useState } from 'react';
@@ -35,12 +35,13 @@ export const getStaticProps: GetStaticProps<Props> = async (
 }
 
 const StyledButton = styled(Button)`
-  background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
-  border-radius: 3px;
-  border: 0;
-  color: white;
-  box-shadow: 0 3px 5px 2px rgba(255, 105, 135, 0.3);
+  margin-right: 10px;
 `;
+
+const StyledBox = styled(Box)`
+  display: flex;
+  justify-content: space-around;
+`
 
 const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, championRankingUrl}) => {
   const socket = io('http://localhost:3333');
@@ -119,67 +120,67 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
         現在の問題番号: {questionId === '' ? 0 : questionId}
       </Typography>
       {/* TODO HStackを導入して横のmargin開ける */}
-      <div>
-        <Button
+      <StyledBox>
+        <StyledButton
           color="primary"
           variant="contained"
           onClick={() => displayCuePage()}
         >
           CUE
-        </Button>
-        <Button
+        </StyledButton>
+        <StyledButton
           color="primary"
           variant="contained"
           onClick={() => displayTopPage()}
         >
           TOP
-        </Button>
-        <StyledButton
-          color="primary"
-          variant="contained"
-          onClick={() => goToQuestion()}
-        >
-          GO TO Q-INDEX
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
           onClick={() => goToQuestion()}
         >
-          GO TO NEXT-Q
+          INDEX
         </StyledButton>
-        <Button disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => readyGo()}>
-          READY GO !
-        </Button>
-        <Button
+        <StyledButton
+          color="primary"
+          variant="contained"
+          onClick={() => goToQuestion()}
+        >
+          NEXT
+        </StyledButton>
+        <StyledButton disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => readyGo()}>
+          READY-GO
+        </StyledButton>
+        <StyledButton
           color="primary"
           variant="contained"
           onClick={() => goToWorstRanking()}
         >
-          Go To Worst Ranking
-        </Button>
+          Worst Ranking
+        </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
           onClick={() => showWorstRanking()}
         >
-          ShowWorstRanking
+          Open Worst Ranking
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
           onClick={() => showChampionRanking()}
         >
-          ShowChampionRanking
+          Open Champion Ranking
         </StyledButton>
-        <Button
+        <StyledButton
           color="primary"
           variant="contained"
           onClick={() => goToQuestionManage()}
         >
-          Q Manage Page
-        </Button>
-      </div>
+          Q Manage
+        </StyledButton>
+      </StyledBox>
     </>
   );
 };

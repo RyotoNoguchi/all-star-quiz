@@ -132,7 +132,7 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 | 8 | test.hachiro800 | hachirotest800 |
 | 9 | test.kuro900 | kurotest900 |
 
-<!-- TODO /monitor/question/[id]から/monitor/ranking/に遷移するためのrouter.pushが動かない時があるのはネットワークの問題？ -->
-
-<!-- TODO https://mui.com/components/tables/#sticky-header これ見てAdminQuestionのテーブル作る -->
-<!-- TODO https://www.youtube.com/watch?v=aTPkos3LKi8 43:37 -->
+<!-- TODO '/admin/manage'の「Question」のメニューでListとNewボタン押下で切り替わるように修正 -->
+<!-- TODO '/admin/manage'の「User」のメニューで「Active」と「Inactive」ボタン作成して、削除フラグでユーザーを分類、Client画面で「Inactive」になっている場合はグレーダウンとボタンの非活性化に修正 -->
+<!-- TODO '/admin'画面のボタンのUI整える -->
+<!-- TODO '/monitor/champion'を動的になるように修正 -->
