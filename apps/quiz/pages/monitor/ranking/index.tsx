@@ -16,6 +16,7 @@ import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
 import AnswerTime from '../../../components/atoms/AnswerTime';
 import { colors, textShadows } from '../../../components/styles/colors';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+const db = firebase.firestore()
 
 type AnswerInfo = {
   time: string;
@@ -64,16 +65,9 @@ const Ranking: React.FC = () => {
       setIsRankingRowsShow(true);
       setIsRankingRowsShow((prev) => {
         if (prev) {
-          firebase
-            .firestore()
-            .collection('questions')
-            .where('questionId', '==', questionId)
-            .get()
-            .then((snapShot) => {
-              snapShot.forEach((doc) => {
-                setCorrectAnswer(doc.data().correctAnswer);
-              });
-            });
+          db.collection('questions').where('questionId', '==', questionId).get().then((snapShot) => {
+              snapShot.forEach((doc) => { setCorrectAnswer(doc.data().correctAnswer)})
+            })
         }
         return prev
       })
@@ -82,11 +76,7 @@ const Ranking: React.FC = () => {
   }, []);
 
   const [answers, answersLoading, answersError] = useCollectionData(
-    firebase
-      .firestore()
-      .collection('answers')
-      .where('answer', '==', correctAnswer ?? 'A')
-      .orderBy('time', 'asc'),
+    db.collection('answers').where('answer', '==', correctAnswer).orderBy('time', 'asc'),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
 

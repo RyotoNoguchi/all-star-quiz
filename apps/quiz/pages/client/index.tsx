@@ -1,10 +1,10 @@
 import firebase from '../../../../firebase/clientApp';
-import { io } from 'socket.io-client';
 import styled from 'styled-components';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollection } from 'react-firebase-hooks/firestore'; // firebaseに作ったDBを接続する
-import { colors } from '../../components/styles/colors';
 import ChoiceButton from '../../components/atoms/ChoiceButton'
+import { Answer } from "../../components/types/question";
+import { io } from 'socket.io-client';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { colors } from '../../components/styles/colors';
 import {
   Box,
   BoxProps,
@@ -12,7 +12,7 @@ import {
   ContainerProps,
   Typography,
   TypographyProps,
-} from '@material-ui/core';
+} from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 
 const ClientContainer = styled(Container)<ContainerProps>`
@@ -58,8 +58,6 @@ const title1stRow = titleArray[0];
 const title2ndRow = titleArray[1];
 const title3rdRow = titleArray[2];
 
-type ChoiceType = 'A' | 'B' | 'C' | 'D'
-
 const Home: React.FC = () => {
   const socket = io('http://localhost:3333');
   const db = firebase.firestore();
@@ -67,7 +65,6 @@ const Home: React.FC = () => {
   const [isDisabled, setIsDisabled] = useState(true)
   const startTime = useRef<Date>(null)
   const finishTime = useRef<Date>(null)
-  const answerTime = useRef<Date>(null)
 
   useEffect(() => {
   socket.on('ready_go', ()=> {
@@ -76,20 +73,13 @@ const Home: React.FC = () => {
         })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const [answers, answersLoading, answersError] = useCollection(
-    firebase.firestore().collection('answers'),
-    {}
-  );
   
-  const addAnswerDocument = async (answer: ChoiceType) => {
-    
+  const addAnswerDocument = async (answer: Answer) => {
     finishTime.current = new Date()
     const answerTime = Math.round((finishTime.current.getTime() - startTime.current.getTime()) / 10) / 100
-    
     setIsDisabled(true)
+    // ↓ "answers"テーブルに現在サインインしているユーザーのUIDで新しいレコードを作成する
     await db.collection('answers').doc(user.uid).set({
-      // "answers"テーブルに現在サインインしているユーザーのUIDで新しいレコードを作成する
       answer,
       user: user.displayName,
       time: answerTime.toFixed(2), // 2.50などと0埋めするため
