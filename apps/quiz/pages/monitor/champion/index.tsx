@@ -7,7 +7,9 @@ import { AnswerInfo } from "../../../components/types/client";
 import axios from 'axios';
 import ChampionRankingTableContainer from "../../../components/organisms/ChampingRankingTableContainer";
 
+// TODO SSRで"answers"コレクションをとってきてpropsとしてわたす
 export const getStaticProps: GetStaticProps = async () => {
+
   const response = await axios.get(
     'https://jsonplaceholder.typicode.com/users'
   );

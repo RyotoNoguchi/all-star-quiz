@@ -78,11 +78,11 @@ const Ranking: React.FC = () => {
 
   const itemNumber = 10;
   const totalNumber = answers?.length;
-  const answer: AnswerInfo[] = [];
+  const answerList: AnswerInfo[] = [];
   if (totalNumber > 10) {
     const screenTop = totalNumber - itemNumber;
     for (let i = screenTop; i < totalNumber; i++) {
-      answer.push({
+      answerList.push({
         time: answers[i].time,
         user: answers[i].user,
         rank: (i + 1).toString(),
@@ -90,14 +90,14 @@ const Ranking: React.FC = () => {
     }
   } else {
     for (let i = 0; i < 10 - totalNumber; i++) {
-      answer.push({
+      answerList.push({
         time: '---',
         user: '---',
         rank: '---',
       });
     }
     for (let i = 0; i < totalNumber; i++) {
-      answer.push({
+      answerList.push({
         time: answers[i].time,
         user: answers[i].user,
         rank: (i + 1).toString(),
@@ -119,7 +119,7 @@ const Ranking: React.FC = () => {
         <Table arial-label="worst ranking table">
           {isRankingRowsShow && (
             <MotionTableBody variants={tbodyVariant}>
-              {answer.map((answerPerson: AnswerInfo, idx: number) => {
+              {answerList.map((answerPerson: AnswerInfo, idx: number) => {
                 return (
                   <RankRow
                     isChangeColorRow={isLastRow(idx)}
