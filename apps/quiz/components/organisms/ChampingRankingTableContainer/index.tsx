@@ -12,31 +12,8 @@ import AnswerPersonName from '../../atoms/AnswerPersonName';
 import AnswerTimeBox from '../../molecules/AnswerTimeBox';
 import AnswerTime from '../../atoms/AnswerTime';
 
-type User = {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: {
-      lat: string;
-      lng: string;
-    };
-  };
-  phone: string;
-  website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
-};
-interface Props {
-  users: User[];
+type Props = {
+  answerInfo: AnswerInfo[];
   isRankingRowsShow: boolean;
 }
 
@@ -45,7 +22,7 @@ const isFirstRow = (idx: number) => {
 };
 
 const ChampionRankingTableContainer: React.FC<Props> = ({
-  users,
+  answerInfo,
   isRankingRowsShow,
 }) => {
   const tbodyVariant = {
@@ -86,7 +63,7 @@ const ChampionRankingTableContainer: React.FC<Props> = ({
         <Table arial-label="champion ranking table">
           {isRankingRowsShow && (
             <MotionTableBody variants={tbodyVariant}>
-              {users.map((user: User, idx: number) => {
+              {answerInfo.map((singleAnswerInfo: AnswerInfo, idx: number) => {
                 return (
                   <RankRow
                     isChangeColorRow={isFirstRow(idx)}
@@ -96,14 +73,14 @@ const ChampionRankingTableContainer: React.FC<Props> = ({
                     key={idx}
                   >
                     <AnswerPersonNameBox isChangeColorRow={isFirstRow(idx)} isChampion={true}>
-                      <Rank isChangeColorRow={isFirstRow(idx)} isChampion={true}>{user.id}</Rank>
+                      <Rank isChangeColorRow={isFirstRow(idx)} isChampion={true}>{singleAnswerInfo.rank}</Rank>
                       <AnswerPersonName isChangeColorRow={isFirstRow(idx)} isChampion={true}>
-                        {user.name}
+                        {singleAnswerInfo.user}
                       </AnswerPersonName>
                     </AnswerPersonNameBox>
                     <AnswerTimeBox isChangeColorRow={isFirstRow(idx)} isChampion={true}>
                       <AnswerTime isChangeColorRow={isFirstRow(idx)} isChampion={true}>
-                        {user.id}
+                        {singleAnswerInfo.time}
                       </AnswerTime>
                     </AnswerTimeBox>
                   </RankRow>

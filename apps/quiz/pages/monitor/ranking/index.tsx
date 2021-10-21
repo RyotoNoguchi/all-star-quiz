@@ -26,7 +26,6 @@ const isLastRow = (idx: number): boolean => {
 const Ranking: React.FC = () => {
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
-  // const [questionId, setQuestionId] = useState('');
   const [correctAnswer, setCorrectAnswer] = useState('');
   const [answers, answersLoading, answersError] = useCollectionData(
     db.collection('answers').where('answer', '==', correctAnswer).orderBy('time', 'asc'),
@@ -74,8 +73,6 @@ const Ranking: React.FC = () => {
     return setIsRankingRowsShow(false)
   }, []);
 
-
-
   const itemNumber = 10;
   const totalNumber = answers?.length;
   const answerList: AnswerInfo[] = [];
@@ -83,6 +80,7 @@ const Ranking: React.FC = () => {
     const screenTop = totalNumber - itemNumber;
     for (let i = screenTop; i < totalNumber; i++) {
       answerList.push({
+        answer: answers[i].answer,
         time: answers[i].time,
         user: answers[i].user,
         rank: (i + 1).toString(),
@@ -91,6 +89,7 @@ const Ranking: React.FC = () => {
   } else {
     for (let i = 0; i < 10 - totalNumber; i++) {
       answerList.push({
+        answer: '---',
         time: '---',
         user: '---',
         rank: '---',
@@ -98,6 +97,7 @@ const Ranking: React.FC = () => {
     }
     for (let i = 0; i < totalNumber; i++) {
       answerList.push({
+        answer: answers[i].answer,
         time: answers[i].time,
         user: answers[i].user,
         rank: (i + 1).toString(),

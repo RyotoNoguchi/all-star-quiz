@@ -1,12 +1,13 @@
 import { Button, Typography, Box } from '@mui/material';
 import styled from 'styled-components';
 import { io } from 'socket.io-client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSound from 'use-sound';
 import router from 'next/router';
 import firebase from '../../../../firebase/clientApp';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
+import { Answer } from '../../components/types/question';
 const db = firebase.firestore()
 
 type Props = {
@@ -47,6 +48,7 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   const socket = io('http://localhost:3333');
   const MONITOR_BASE_URL = '/monitor/question';
   const [questionId, setQuestionId] = useState('1');
+  const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
   const [monitorCurrentPath, setMonitorCurrentPath] = useState(`${MONITOR_BASE_URL}/${questionId}`);
   const [isReadyGoBtnDisabled, setIsReadyGoBtnDisabled] = useState(false)
   const [playActive] = useSound(cueUrl, { volume: 0.5 })
@@ -101,13 +103,18 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   const showChampionRanking = () => {
     playChampionRanking()
     setIsReadyGoBtnDisabled(true)
-    socket.emit('show_champion_ranking')
+    socket.emit('show_champion_ranking', correctAnswer)
   }
 
   const goToQuestionManage = () => {
     router.push('admin/manage')
   }
 
+  useEffect(() => {
+    db.collection('questions').where('questionId', '==', questionId).get().then((snapShot) => {
+      snapShot.forEach((doc) => { setCorrectAnswer(doc.data().correctAnswer)})
+    })
+  }, [correctAnswer, questionId])
 
   return (
     <>

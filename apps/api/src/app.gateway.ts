@@ -1,5 +1,4 @@
 import {
-  // ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -7,10 +6,8 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  // WsResponse,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
-// import { MessageBody } from 'socket-controllers';
 import { Logger } from '@nestjs/common';
 
 const GO_TO_DESIGNATED_PAGE = 'go_to_designated_page'
@@ -89,7 +86,7 @@ export class AppGateway
   }
 
   @SubscribeMessage('show_champion_ranking')
-  showChampionRanking() {
-    this.server.emit('show_champion_ranking')
+  showChampionRanking(@MessageBody() correctAnswer: string): void {
+    this.server.emit('show_champion_ranking', correctAnswer)
   }
 }
