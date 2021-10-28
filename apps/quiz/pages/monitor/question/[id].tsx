@@ -271,6 +271,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
   useEffect(() => {
     console.log("answer", answer);
     setMounted(true)
+    socket.open()
     setMounted((prev) => {
       socket.on('ready_go', () => {
         setIsQuestionDisplayed(true);
@@ -301,6 +302,9 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
       return prev
     })  
     setMounted(false)
+    return function cleanup() {
+      socket.close()
+    }
   }, [correctAnswer]);
 
   const [answers, answersLoading, answersError] = useCollection(
