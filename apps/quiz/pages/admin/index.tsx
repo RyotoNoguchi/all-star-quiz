@@ -8,6 +8,7 @@ import firebase from '../../../../firebase/clientApp';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Answer } from '../../components/types/question';
+
 const db = firebase.firestore()
 
 type Props = {

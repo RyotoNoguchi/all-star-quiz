@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import firebase from '../../../../../firebase/clientApp';
+import { useRouter } from 'next/router';
 import { Table } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
@@ -24,6 +25,7 @@ const isLastRow = (idx: number): boolean => {
 };
 
 const Ranking: React.FC = () => {
+  const router = useRouter();
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState('');
@@ -70,7 +72,13 @@ const Ranking: React.FC = () => {
         return prev
       })
     });
-    return setIsRankingRowsShow(false)
+    socket.on('go_to_designated_page', (nextQuestionId) => {
+      router.push(`/monitor/question/${nextQuestionId}`)
+    })
+    return function cleanup() {
+      setIsRankingRowsShow(false)
+      socket.close()
+    }
   }, []);
 
   const itemNumber = 10;
