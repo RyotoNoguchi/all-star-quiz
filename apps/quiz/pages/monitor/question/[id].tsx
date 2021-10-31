@@ -293,7 +293,12 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
         setIsTopPage(true);
       }); 
       socket.on('go_to_worst_ranking_page', (path) => {
-        console.log(path);
+        resetQuestion()
+        const newCurrentPath = path;
+        setCurrentPath(newCurrentPath)
+        router.push(newCurrentPath)
+      })
+      socket.on('go_to_champion_ranking_page', (path) => {
         resetQuestion()
         const newCurrentPath = path;
         setCurrentPath(newCurrentPath)

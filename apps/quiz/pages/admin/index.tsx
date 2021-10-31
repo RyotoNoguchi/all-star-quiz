@@ -79,6 +79,15 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     socket.emit('go_to_worst_ranking_page', worstRankingPagePath)
   }
 
+  const goToChampionRanking = () => {
+    console.log('チャンピオンボタンが押されました');
+    
+    setIsReadyGoBtnDisabled(false)
+    const championRankingPagePath = '/monitor/champion'
+    setMonitorCurrentPath(championRankingPagePath)
+    socket.emit('go_to_champion_ranking_page', championRankingPagePath)
+  }
+
   const displayCuePage = () => {
     playActive()
     setIsReadyGoBtnDisabled(false)
@@ -173,6 +182,13 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
           onClick={() => showWorstRanking()}
         >
           Open Worst Ranking
+        </StyledButton>
+        <StyledButton
+          color="primary"
+          variant="contained"
+          onClick={() => goToChampionRanking()}
+        >
+          Champion Ranking
         </StyledButton>
         <StyledButton
           color="primary"

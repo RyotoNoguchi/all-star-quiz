@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetStaticProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { AnswerInfo } from "../../../components/types/client";
@@ -29,10 +29,8 @@ const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSide
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
   const [answerList, setAnswerList] = useState<AnswerInfo[]>(answers)
-  console.log('answerList', answerList);
   const numberItemShow = 10;
   const totalNumber = answerList?.length
-  console.log(totalNumber);
   
   const Top10AnswerInfo: AnswerInfo[] = []
   if (answerList.length >= 10) {
@@ -63,17 +61,16 @@ const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSide
     }
   }
   useEffect(() => {
+    socket.open();
     socket.on('show_champion_ranking', (newCorrectAnswer) => {
-      console.log("newCorrectAnswer", newCorrectAnswer);
-      
       setCorrectAnswer(newCorrectAnswer)
       const correctAnswerPeople = answerList.filter(answerList => answerList.answer === newCorrectAnswer)
       setAnswerList(correctAnswerPeople)
-      console.log("correctAnswerPeople", correctAnswerPeople);
-      console.log("セットされました");
-      
       setIsRankingRowsShow(true);
     });
+    return function cleanup () {
+      socket.close()
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answerList, correctAnswer]);
   

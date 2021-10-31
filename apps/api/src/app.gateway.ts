@@ -85,6 +85,11 @@ export class AppGateway
     this.server.emit('show_worst_ranking', questionId)
   }
 
+  @SubscribeMessage('go_to_champion_ranking_page')
+  goToChampionRankingPage(@MessageBody() path: string): void {
+    this.server.emit('go_to_champion_ranking_page', path) 
+  }
+
   @SubscribeMessage('show_champion_ranking')
   showChampionRanking(@MessageBody() correctAnswer: string): void {
     this.server.emit('show_champion_ranking', correctAnswer)
