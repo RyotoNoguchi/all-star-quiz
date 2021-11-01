@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import firebase from '../../../../../firebase/clientApp';
+import { useRouter } from 'next/router';
 import { Table } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
@@ -16,23 +17,23 @@ import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
 import AnswerTime from '../../../components/atoms/AnswerTime';
 import { colors, textShadows } from '../../../components/styles/colors';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { AnswerInfo } from "../../../components/types/client";
 const db = firebase.firestore()
-
-type AnswerInfo = {
-  time: string;
-  user: string;
-  rank: string;
-};
 
 const isLastRow = (idx: number): boolean => {
   return idx + 1 === 10 ? true : false;
 };
 
 const Ranking: React.FC = () => {
+  const router = useRouter();
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
-  const [questionId, setQuestionId] = useState('');
   const [correctAnswer, setCorrectAnswer] = useState('');
+  const [answers, answersLoading, answersError] = useCollectionData(
+    db.collection('answers').where('answer', '==', correctAnswer).orderBy('time', 'asc'),
+    { snapshotListenOptions: { includeMetadataChanges: true } }
+  );
+
   const tbodyVariant = {
     hidden: {
       opacity: 0,
@@ -60,8 +61,7 @@ const Ranking: React.FC = () => {
 
   useEffect(() => {
     socket.on('show_worst_ranking', (questionId) => {
-      console.log(questionId);
-      setQuestionId(questionId);
+      // setQuestionId(questionId);
       setIsRankingRowsShow(true);
       setIsRankingRowsShow((prev) => {
         if (prev) {
@@ -72,21 +72,23 @@ const Ranking: React.FC = () => {
         return prev
       })
     });
-    return setIsRankingRowsShow(false)
+    socket.on('go_to_designated_page', (nextQuestionId) => {
+      router.push(`/monitor/question/${nextQuestionId}`)
+    })
+    return function cleanup() {
+      setIsRankingRowsShow(false)
+      socket.close()
+    }
   }, []);
-
-  const [answers, answersLoading, answersError] = useCollectionData(
-    db.collection('answers').where('answer', '==', correctAnswer).orderBy('time', 'asc'),
-    { snapshotListenOptions: { includeMetadataChanges: true } }
-  );
 
   const itemNumber = 10;
   const totalNumber = answers?.length;
-  const answer: AnswerInfo[] = [];
+  const answerList: AnswerInfo[] = [];
   if (totalNumber > 10) {
     const screenTop = totalNumber - itemNumber;
     for (let i = screenTop; i < totalNumber; i++) {
-      answer.push({
+      answerList.push({
+        answer: answers[i].answer,
         time: answers[i].time,
         user: answers[i].user,
         rank: (i + 1).toString(),
@@ -94,14 +96,16 @@ const Ranking: React.FC = () => {
     }
   } else {
     for (let i = 0; i < 10 - totalNumber; i++) {
-      answer.push({
+      answerList.push({
+        answer: '---',
         time: '---',
         user: '---',
         rank: '---',
       });
     }
     for (let i = 0; i < totalNumber; i++) {
-      answer.push({
+      answerList.push({
+        answer: answers[i].answer,
         time: answers[i].time,
         user: answers[i].user,
         rank: (i + 1).toString(),
@@ -123,7 +127,7 @@ const Ranking: React.FC = () => {
         <Table arial-label="worst ranking table">
           {isRankingRowsShow && (
             <MotionTableBody variants={tbodyVariant}>
-              {answer.map((answerPerson: AnswerInfo, idx: number) => {
+              {answerList.map((answerPerson: AnswerInfo, idx: number) => {
                 return (
                   <RankRow
                     isChangeColorRow={isLastRow(idx)}

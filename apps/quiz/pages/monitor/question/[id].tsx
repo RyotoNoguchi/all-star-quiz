@@ -12,6 +12,8 @@ import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
 import { ParsedUrlQuery } from 'querystring';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import React from 'react';
+import useInterval from "use-interval";
+
 import { Question as QuestionType, Answer} from "../../../components/types/question";
 const db = firebase.firestore()
 
@@ -214,6 +216,8 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
   const [isCorrectForC, setIsCorrectForC] = useState(false);
   const [isCorrectForD, setIsCorrectForD] = useState(false);
   const [mounted, setMounted] = useState(false)
+  const [correctAnswer, setCorrectAnswer] = useState<Answer>(answer as Answer)
+  const [isPlaying, setIsPlaying] = useState<boolean>(false)
 
   
   const resetQuestion = () => {
@@ -226,49 +230,53 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
     setIsTopPage(false);
     setIsQuestionDisplayed(false);
   };
+  // https://usehooks-typescript.com/react-hook/use-interval
+  useInterval(() => {
+    console.log("-1 second");
+    
+    if (isQuestionDisplayed && countdownTimeSec > 0) {
+      setCountdownTimeSec(countdownTimeSec - 1)
+    }
+    if (countdownTimeSec === 0) {
+      // カウントダウンが0になった3400ms（「アンサーチェック！」）後に解答数枠を表示する
+      setIsPlaying(false)
+      setTimeout(() => {
+        setIsNumberCountShown(true);
+      }, 3400);
+
+      // カウントダウンが0になった7000ms（「正解はこちら！」）後に正解を点滅させる
+      setTimeout(() => {
+        switch (correctAnswer) {
+          case 'A':
+            setIsCorrectForA(true);
+            break;
+          case 'B':
+            setIsCorrectForB(true);
+            break;
+          case 'C':
+            setIsCorrectForC(true);
+            break;
+          case 'D':
+            setIsCorrectForD(true);
+            break;
+          default:
+            break;
+        }
+      }, 7000);
+      
+    }
+
+  }, isPlaying ? 1000 : null)
+
   useEffect(() => {
     console.log("answer", answer);
     setMounted(true)
+    socket.open()
     setMounted((prev) => {
       socket.on('ready_go', () => {
         setIsQuestionDisplayed(true);
         setIsTopPage(false);
-        const CD10SecTimerId = setInterval(() => {
-          console.log("-1秒");
-          setCountdownTimeSec((countdownTimeSec) => countdownTimeSec - 1);
-          setCountdownTimeSec((countdownTimeSec) => {
-            if (countdownTimeSec === 0) {
-              clearInterval(CD10SecTimerId);
-  
-              // カウントダウンが0になった3400ms（「アンサーチェック！」）後に解答数枠を表示する
-              setTimeout(() => {
-                setIsNumberCountShown(true);
-              }, 3400);
-  
-              // カウントダウンが0になった7000ms（「正解はこちら！」）後に正解を点滅させる
-              setTimeout(() => {
-                switch (answer as Answer) {
-                  case 'A':
-                    setIsCorrectForA(true);
-                    break;
-                  case 'B':
-                    setIsCorrectForB(true);
-                    break;
-                  case 'C':
-                    setIsCorrectForC(true);
-                    break;
-                  case 'D':
-                    setIsCorrectForD(true);
-                    break;
-                  default:
-                    break;
-                }
-              }, 7000);
-            }
-            return countdownTimeSec;
-          });
-        }, 1000);
-        return () => clearInterval(CD10SecTimerId)
+        setIsPlaying(true)
       });
       socket.on('go_to_designated_page', (nextQuestionId) => {
         resetQuestion();
@@ -285,7 +293,12 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
         setIsTopPage(true);
       }); 
       socket.on('go_to_worst_ranking_page', (path) => {
-        console.log(path);
+        resetQuestion()
+        const newCurrentPath = path;
+        setCurrentPath(newCurrentPath)
+        router.push(newCurrentPath)
+      })
+      socket.on('go_to_champion_ranking_page', (path) => {
         resetQuestion()
         const newCurrentPath = path;
         setCurrentPath(newCurrentPath)
@@ -293,9 +306,11 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
       })
       return prev
     })  
-    return setMounted(false)
-  }, [answer]);
-  // TODO 2問目に行くとカウントダウンが2秒されてしまうバグ直す
+    setMounted(false)
+    return function cleanup() {
+      socket.close()
+    }
+  }, [correctAnswer]);
 
   const [answers, answersLoading, answersError] = useCollection(
     firebase.firestore().collection('answers'),

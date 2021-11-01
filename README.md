@@ -135,6 +135,8 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 <!-- TODO '/admin/manage'の「Question」のメニューでListとNewボタン押下で切り替わるように修正 -->
 <!-- TODO '/admin/manage'の「User」のメニューで「Active」と「Inactive」ボタン作成して、削除フラグでユーザーを分類、Client画面で「Inactive」になっている場合はグレーダウンとボタンの非活性化に修正 -->
 <!-- TODO '/admin'画面のボタンのUI整える -->
-<!-- TODO '/monitor/champion'を動的になるように修正 -->
 <!-- TODO '/client'で回答した選択肢を選択肢を選んだ後に表示（SSR） -->
 <!-- TODO '/client'で正解オープンと同時にclient画面で「正解/不正解」を表示し、不正解ならグレーアウト -->
+<!-- TODO チャンピオンランキング前にゴング入れる -->
+<!-- TODO 問題を文字だけでなく画像で出せるようにする -->
+
