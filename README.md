@@ -140,3 +140,4 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 <!-- TODO チャンピオンランキング前にゴング入れる -->
 
 <!-- TODO '/monitor/champion'を動的になるように修正 -->
+<!-- TODO CORSの問題解決のためにgsutilを使えるようにする -->
