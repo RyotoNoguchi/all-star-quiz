@@ -49,6 +49,7 @@
     "cors": "^2.8.5",
     "cross-storage": "^1.0.0",
     "dompurify": "^2.3.1",
+    "favi": "^1.0.0",
     "firebase": "^8.10.0",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",

@@ -138,6 +138,5 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 <!-- TODO '/client'で回答した選択肢を選択肢を選んだ後に表示（SSR） -->
 <!-- TODO '/client'で正解オープンと同時にclient画面で「正解/不正解」を表示し、不正解ならグレーアウト -->
 <!-- TODO チャンピオンランキング前にゴング入れる -->
+<!-- TODO 問題を文字だけでなく画像で出せるようにする -->
 
-<!-- TODO '/monitor/champion'を動的になるように修正 -->
-<!-- TODO CORSの問題解決のためにgsutilを使えるようにする -->
