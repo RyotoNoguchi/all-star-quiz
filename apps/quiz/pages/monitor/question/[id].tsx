@@ -247,7 +247,9 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
       setTimeout(() => {
         setIsNumberCountShown(true);
         if (isLastQuestion) {
-          playGong()
+          setTimeout(() => {
+            playGong()
+          }, 7000);
         }
       }, 3400);
 
