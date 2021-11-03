@@ -80,6 +80,11 @@ export class AppGateway
     this.server.emit('ready_go')
   }
 
+  @SubscribeMessage('final_ready_go')
+  finalReadyGo() {
+    this.server.emit('final_ready_go')
+  }
+  
   @SubscribeMessage('show_worst_ranking')
   showWorstRanking(@MessageBody() questionId: string): void {
     this.server.emit('show_worst_ranking', questionId)

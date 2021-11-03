@@ -104,6 +104,12 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     socket.emit('ready_go');
   };
 
+  const finalReadyGo = () => {
+    playCountDown()
+    setIsReadyGoBtnDisabled(true)
+    socket.emit('final_ready_go');
+  }
+
   const showWorstRanking = () => {
     playWorstRanking()
     setIsReadyGoBtnDisabled(true)
@@ -168,6 +174,9 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
         </StyledButton>
         <StyledButton disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => readyGo()}>
           READY-GO
+        </StyledButton>
+        <StyledButton disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => finalReadyGo()}>
+          FINAL READY-GO
         </StyledButton>
         <StyledButton
           color="primary"
