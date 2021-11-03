@@ -222,6 +222,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(answer as Answer)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [playGong] = useSound(gongUrl, { volume: 0.5 })
+  const QImgBaseUrl = 'https://firebasestorage.googleapis.com'
 
   
   const resetQuestion = () => {
@@ -236,7 +237,6 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
   };
   // https://usehooks-typescript.com/react-hook/use-interval
   useInterval(() => {
-    console.log("-1 second");
     
     if (isQuestionDisplayed && countdownTimeSec > 0) {
       setCountdownTimeSec(countdownTimeSec - 1)
@@ -278,7 +278,6 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
   }, isPlaying ? 1000 : null)
 
   useEffect(() => {
-    console.log("answer", answer);
     setMounted(true)
     socket.open()
     setMounted((prev) => {
@@ -340,6 +339,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
     // [READY-GO]ボタンが押下される前
     return <Cue questionNumber={questionId} />;
   } 
+
   return (
     <>
       <QuestionContainer container spacing={3}>
@@ -351,7 +351,9 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell isCorrect={isCorrectForA}>
             <AlphabetCircle choice="A" color="red" />
-            <ChoiceText variant="h2">{choices.A}</ChoiceText>
+            {choices.A.startsWith(QImgBaseUrl) 
+              ? <img src={choices.A} alt="選択肢Aの画像"/> 
+              : <ChoiceText variant="h2">{choices.A}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForA}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'A').length}</AnswerCount>
@@ -362,7 +364,9 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell isCorrect={isCorrectForB}>
             <AlphabetCircle choice="B" color="blue" />
-            <ChoiceText variant="h2">{choices.B}</ChoiceText>
+            {choices.B.startsWith(QImgBaseUrl) 
+              ? <img src={choices.B} alt="選択肢Bの画像"/> 
+              : <ChoiceText variant="h2">{choices.B}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForB}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'B').length}</AnswerCount>
@@ -373,7 +377,9 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell isCorrect={isCorrectForC}>
             <AlphabetCircle choice="C" color="yellow" />
-            <ChoiceText variant="h2">{choices.C}</ChoiceText>
+            {choices.B.startsWith(QImgBaseUrl) 
+              ? <img src={choices.C} alt="選択肢Cの画像"/> 
+              : <ChoiceText variant="h2">{choices.C}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForC}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'C').length}</AnswerCount>
@@ -384,7 +390,9 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell isCorrect={isCorrectForD}>
             <AlphabetCircle choice="D" color="green" />
-            <ChoiceText variant="h2">{choices.D}</ChoiceText>
+            {choices.D.startsWith(QImgBaseUrl) 
+              ? <img src={choices.D} alt="選択肢Dの画像"/> 
+              : <ChoiceText variant="h2">{choices.D}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForD}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'D').length}</AnswerCount>

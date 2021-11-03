@@ -139,4 +139,5 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 <!-- TODO '/client'で正解オープンと同時にclient画面で「正解/不正解」を表示し、不正解ならグレーアウト -->
 <!-- TODO チャンピオンランキング前にゴング入れる -->
 <!-- TODO 問題を文字だけでなく画像で出せるようにする -->
-
+<!-- TODO 問題を文字だけでなく画像も管理画面から追加できるようにする -->
+<!-- TODO styled-componentsの分離 -->
