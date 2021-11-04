@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import firebase from 'firebase/clientApp';
-import AdminLogo from '../../../components/atoms/AdminLogo';
 import AdminSidebar from '../../../components/molecules/AdminSidebar';
 import AdminQuestion from '../../../components/organisms/AdminQuestion';
 import AddQuestion from '../../../components/organisms/AddQuestion';
@@ -9,8 +8,7 @@ import { ParsedUrlQuery } from 'querystring';
 import { Box, Grid } from '@material-ui/core';
 import { Question } from '../../../components/types/question';
 import styled from 'styled-components';
-// import Image from 'next/image';
-// import NextImage from '../../../components/atoms/NextImage';
+import Image from 'next/image';
 const db = firebase.firestore();
 
 type Props = {
@@ -51,7 +49,7 @@ export const getStaticProps: GetStaticProps<Props> = async (
 };
 
 const StyledBox = styled(Box)`
-  margin-bottom: 28px;
+  margin-bottom: 10px;
 `;
 
 const MainContainer = styled(Grid)`
@@ -67,7 +65,7 @@ const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
   return (
     <>
       <StyledBox>
-        <AdminLogo url={logo} />
+        <Image src={logo} alt="ロゴ" width={1000} height={80}/>
       </StyledBox>
       <MainContainer container spacing={3}>
         <Grid item xs={3}>
