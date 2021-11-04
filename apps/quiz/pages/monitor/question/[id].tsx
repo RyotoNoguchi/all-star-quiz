@@ -14,6 +14,7 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import React from 'react';
 import useInterval from "use-interval";
 import useSound from 'use-sound';
+import Image from 'next/image';
 const gongUrl = 'https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fgong.mp3?alt=media&token=3a66f8d8-23f8-48d0-a1ed-b785d2a8db3c'
 
 import { Question as QuestionType, Answer} from "../../../components/types/question";
@@ -340,6 +341,11 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
     return <Cue questionNumber={questionId} />;
   } 
 
+  const srcA = choices.A
+  const srcB = choices.B
+  const srcC = choices.C
+  const srcD = choices.D
+
   return (
     <>
       <QuestionContainer container spacing={3}>
@@ -352,7 +358,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
           <QuestionCell isCorrect={isCorrectForA}>
             <AlphabetCircle choice="A" color="red" />
             {choices.A.startsWith(QImgBaseUrl) 
-              ? <img src={choices.A} alt="選択肢Aの画像"/> 
+              ? <Image loader={() => srcA} src={srcA} alt="選択肢Aの画像" width={300} height={300} priority/> 
               : <ChoiceText variant="h2">{choices.A}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForA}>
@@ -365,7 +371,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
           <QuestionCell isCorrect={isCorrectForB}>
             <AlphabetCircle choice="B" color="blue" />
             {choices.B.startsWith(QImgBaseUrl) 
-              ? <img src={choices.B} alt="選択肢Bの画像"/> 
+              ? <Image loader={() => srcB} src={srcB} alt="選択肢Bの画像" width={300} height={300} priority/> 
               : <ChoiceText variant="h2">{choices.B}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForB}>
@@ -378,7 +384,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
           <QuestionCell isCorrect={isCorrectForC}>
             <AlphabetCircle choice="C" color="yellow" />
             {choices.B.startsWith(QImgBaseUrl) 
-              ? <img src={choices.C} alt="選択肢Cの画像"/> 
+              ? <Image loader={() => srcC} src={srcC} alt="選択肢Cの画像" width={300} height={300} priority/> 
               : <ChoiceText variant="h2">{choices.C}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForC}>
@@ -391,7 +397,7 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
           <QuestionCell isCorrect={isCorrectForD}>
             <AlphabetCircle choice="D" color="green" />
             {choices.D.startsWith(QImgBaseUrl) 
-              ? <img src={choices.D} alt="選択肢Dの画像"/> 
+              ? <Image loader={() => srcD} src={srcD} alt="選択肢Dの画像" width={300} height={300} priority/> 
               : <ChoiceText variant="h2">{choices.D}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForD}>

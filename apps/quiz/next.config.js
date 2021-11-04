@@ -15,8 +15,8 @@ const nextConfig = {
 
 module.exports = withNx(nextConfig);
 
-// module.exports = {
-//   images: {
-//     domain: ['https://firebasestorage.googleapis.com']//指定しなければエラーが発生する
-//   },
-// }
+module.exports = {
+  images: {
+    domains: ['firebasestorage.googleapis.com'] //指定しなければ"Invalid src prop 〜〜"というエラーが発生する
+  },
+}
