@@ -15,6 +15,8 @@ import React from 'react';
 import useInterval from "use-interval";
 import useSound from 'use-sound';
 import Image from 'next/image';
+import { animate, motion, Variants } from 'framer-motion';
+
 const gongUrl = 'https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fgong.mp3?alt=media&token=3a66f8d8-23f8-48d0-a1ed-b785d2a8db3c'
 
 import { Question as QuestionType, Answer} from "../../../components/types/question";
@@ -358,7 +360,9 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
           <QuestionCell isCorrect={isCorrectForA}>
             <AlphabetCircle choice="A" color="red" />
             {choices.A.startsWith(QImgBaseUrl) 
-              ? <Image loader={() => srcA} src={srcA} alt="選択肢Aの画像" width={300} height={300} priority/> 
+              ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
+                  <Image loader={() => srcA} src={srcA} alt="選択肢Aの画像" width={320} height={320} priority/> 
+                </motion.div>
               : <ChoiceText variant="h2">{choices.A}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForA}>
@@ -371,7 +375,9 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
           <QuestionCell isCorrect={isCorrectForB}>
             <AlphabetCircle choice="B" color="blue" />
             {choices.B.startsWith(QImgBaseUrl) 
-              ? <Image loader={() => srcB} src={srcB} alt="選択肢Bの画像" width={300} height={300} priority/> 
+              ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
+              <Image loader={() => srcB} src={srcB} alt="選択肢Bの画像" width={320} height={320} priority/> 
+            </motion.div>
               : <ChoiceText variant="h2">{choices.B}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForB}>
@@ -383,8 +389,10 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell isCorrect={isCorrectForC}>
             <AlphabetCircle choice="C" color="yellow" />
-            {choices.B.startsWith(QImgBaseUrl) 
-              ? <Image loader={() => srcC} src={srcC} alt="選択肢Cの画像" width={300} height={300} priority/> 
+            {choices.C.startsWith(QImgBaseUrl) 
+              ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
+              <Image loader={() => srcC} src={srcC} alt="選択肢Cの画像" width={320} height={320} priority/> 
+            </motion.div>
               : <ChoiceText variant="h2">{choices.C}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForC}>
@@ -397,7 +405,9 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
           <QuestionCell isCorrect={isCorrectForD}>
             <AlphabetCircle choice="D" color="green" />
             {choices.D.startsWith(QImgBaseUrl) 
-              ? <Image loader={() => srcD} src={srcD} alt="選択肢Dの画像" width={300} height={300} priority/> 
+              ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
+              <Image loader={() => srcD} src={srcD} alt="選択肢Dの画像" width={320} height={320} priority/> 
+            </motion.div>
               : <ChoiceText variant="h2">{choices.D}</ChoiceText>}
             {isNumberCountShown && (
               <CountAnswerBox isCorrect={isCorrectForD}>
