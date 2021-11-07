@@ -5,6 +5,8 @@ import { Answer } from "../../components/types/question";
 import { io } from 'socket.io-client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { colors } from '../../components/styles/colors';
+import React, { useEffect, useRef, useState } from 'react';
+import SelectedAnswer from '../../components/atoms/SelectedAnswer';
 import {
   Box,
   BoxProps,
@@ -13,7 +15,6 @@ import {
   Typography,
   TypographyProps,
 } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
 
 const ClientContainer = styled(Container)<ContainerProps>`
   /* transform: translateY(-30px); */
@@ -65,16 +66,24 @@ const Home: React.FC = () => {
   const [isDisabled, setIsDisabled] = useState(true)
   const startTime = useRef<Date>(null)
   const finishTime = useRef<Date>(null)
+  const [isAnswerDisplayed, setIsAnswerDisplayed] = useState(false)
+  const [selectedAnswer, setSelectedAnswer] = useState<Answer>("A")
 
   useEffect(() => {
+  socket.open()
   socket.on('ready_go', ()=> {
     setIsDisabled(false)
     startTime.current = new Date()
-        })
+  })
+  return function cleanup() {
+    socket.close()
+  }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
   const addAnswerDocument = async (answer: Answer) => {
+    console.log('answer', answer);
+    
     finishTime.current = new Date()
     const answerTime = Math.round((finishTime.current.getTime() - startTime.current.getTime()) / 10) / 100
     setIsDisabled(true)
@@ -84,6 +93,8 @@ const Home: React.FC = () => {
       user: user.displayName,
       time: answerTime.toFixed(2), // 2.50などと0埋めするため
     });
+    setSelectedAnswer(answer)
+    setIsAnswerDisplayed(true)
   }
 
   return (
@@ -95,10 +106,21 @@ const Home: React.FC = () => {
           <TopTitlePart data-text={title3rdRow}>{title3rdRow}</TopTitlePart>
         </TopTitle>
         <StyledBox>
-          <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="A" buttonColor="red"/>
-          <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="B" buttonColor="blue"/>
-          <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="C" buttonColor="yellow"/>
-          <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="D" buttonColor="green"/>
+          {isAnswerDisplayed 
+            ? 
+            <>
+              <Typography variant="h2">あなたが</Typography>
+              <Typography variant="h2">選択した回答</Typography>
+              <SelectedAnswer answer={selectedAnswer}>{selectedAnswer}</SelectedAnswer>
+            </>
+            :
+            <>
+              <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="A" buttonColor="red"/>
+              <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="B" buttonColor="blue"/>
+              <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="C" buttonColor="yellow"/>
+              <ChoiceButton isDisabled={isDisabled} addAnswerDocument={addAnswerDocument} choice="D" buttonColor="green"/>
+            </>
+          }
         </StyledBox>
       </ClientContainer>
     </>
