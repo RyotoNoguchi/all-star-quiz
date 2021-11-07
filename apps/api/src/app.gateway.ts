@@ -99,4 +99,10 @@ export class AppGateway
   showChampionRanking(@MessageBody() correctAnswer: string): void {
     this.server.emit('show_champion_ranking', correctAnswer)
   }
+
+  @SubscribeMessage('check_answer')
+  CheckAnswer(@MessageBody() correctAnswer: string): void {
+    console.log("受け取ったcorrectAnswer", correctAnswer);
+    this.server.emit('check_answer', correctAnswer)
+  }
 }

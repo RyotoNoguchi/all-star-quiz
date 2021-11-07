@@ -1,9 +1,8 @@
-import Typography from "@mui/material/Typography";
-import { ReactNode } from "hoist-non-react-statics/node_modules/@types/react";
 import { useMemo } from "react";
-import styled from "styled-components";
 import { colors } from "../../styles/colors";
 import { Answer } from "../../types/question";
+import styled from "styled-components";
+import Typography from "@mui/material/Typography";
 
 const StyledTypography = styled(Typography)<{color: string}>`
   color: ${p => p.color};

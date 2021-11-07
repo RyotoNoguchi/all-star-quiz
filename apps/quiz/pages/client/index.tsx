@@ -53,6 +53,18 @@ const StyledBox = styled(Box)`
   text-align: center;
   margin-top: 50px;
 `
+const StyledTypography = styled(Typography)`
+  color: red;
+  font-weight: bold;
+  font-size: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+`
+
 const title = 'アソビュー オールスター感謝祭 2021';
 const titleArray = title.split(' ');
 const title1stRow = titleArray[0];
@@ -67,22 +79,30 @@ const Home: React.FC = () => {
   const startTime = useRef<Date>(null)
   const finishTime = useRef<Date>(null)
   const [isAnswerDisplayed, setIsAnswerDisplayed] = useState(false)
-  const [selectedAnswer, setSelectedAnswer] = useState<Answer>("A")
+  const [selectedAnswer, setSelectedAnswer] = useState<Answer>(null)
+  const [isRight, setIsRight] = useState(false)
 
   useEffect(() => {
   socket.open()
-  socket.on('ready_go', ()=> {
+  socket.on('ready_go', () => {
     setIsDisabled(false)
     startTime.current = new Date()
+  })
+  socket.on('check_answer', (correctAnswer) => {
+    console.log('選んだ選択肢', selectedAnswer);
+    if (selectedAnswer === correctAnswer) {
+      setIsRight(true)
+    }
   })
   return function cleanup() {
     socket.close()
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [selectedAnswer])
   
   const addAnswerDocument = async (answer: Answer) => {
-    console.log('answer', answer);
+    setSelectedAnswer(answer)
+    console.log('選んだ選択肢', selectedAnswer);
     
     finishTime.current = new Date()
     const answerTime = Math.round((finishTime.current.getTime() - startTime.current.getTime()) / 10) / 100
@@ -93,7 +113,6 @@ const Home: React.FC = () => {
       user: user.displayName,
       time: answerTime.toFixed(2), // 2.50などと0埋めするため
     });
-    setSelectedAnswer(answer)
     setIsAnswerDisplayed(true)
   }
 
@@ -106,9 +125,12 @@ const Home: React.FC = () => {
           <TopTitlePart data-text={title3rdRow}>{title3rdRow}</TopTitlePart>
         </TopTitle>
         <StyledBox>
-          {isAnswerDisplayed 
+          { isAnswerDisplayed 
             ? 
             <>
+            { isRight && 
+              <StyledTypography variant="h1">◯</StyledTypography>
+            }
               <Typography variant="h2">あなたが</Typography>
               <Typography variant="h2">選択した回答</Typography>
               <SelectedAnswer answer={selectedAnswer}>{selectedAnswer}</SelectedAnswer>
