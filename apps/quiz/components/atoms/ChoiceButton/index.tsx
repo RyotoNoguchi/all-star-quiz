@@ -28,7 +28,7 @@ const StyledButton = styled(({buttonColor, ...props}) => <Button {...props}/>)`
 
 const ChoiceButton: React.FC<ButtonProps> = ({
   isDisabled = true,
-  buttonColor: colorProp = "red",
+  buttonColor: colorProp = "red", // 初期値が"red"でpropsとして渡されてきた値で実際は決まる
   choice, 
   addAnswerDocument
 }) => {
@@ -38,7 +38,7 @@ const ChoiceButton: React.FC<ButtonProps> = ({
     blue: colors.circleBlue,
     yellow: colors.circleYellow,
     green: colors.circleGreen
-  }[colorProp]), [colorProp])
+  }[colorProp]), [colorProp]) // 親から渡ってきたcolorPropが"blue"なら第一引数で"blue"に該当する色が"buttonColor"になる
 
   return (
     <>

@@ -288,6 +288,9 @@ const Question: React.FC<QuestionType> = ({id, question, answer, choices}) => {
         setIsQuestionDisplayed(true);
         setIsTopPage(false);
         setIsPlaying(true)
+        setTimeout(() => {
+          socket.emit('check_answer', correctAnswer)
+        }, 20000);
       });
       socket.on('final_ready_go', () => {
         setIsQuestionDisplayed(true);
