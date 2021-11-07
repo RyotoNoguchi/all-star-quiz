@@ -3,12 +3,12 @@ import firebase from 'firebase/clientApp';
 import AdminSidebar from '../../../components/molecules/AdminSidebar';
 import AdminQuestion from '../../../components/organisms/AdminQuestion';
 import AddQuestion from '../../../components/organisms/AddQuestion';
+import Image from 'next/image';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { Box, Grid } from '@material-ui/core';
+import { Box, Grid } from '@mui/material';
+import { MainContainer, StyledBox } from './styled'
 import { Question } from '../../../components/types/question';
-import styled from 'styled-components';
-import Image from 'next/image';
 const db = firebase.firestore();
 
 type Props = {
@@ -48,16 +48,6 @@ export const getStaticProps: GetStaticProps<Props> = async (
   };
 };
 
-const StyledBox = styled(Box)`
-  margin-bottom: 10px;
-`;
-
-const MainContainer = styled(Grid)`
-  background-image: linear-gradient(#2d3870, #586dd4);
-  border-radius: 16px;
-  height: 720px;
-  padding-right: 8px;
-`;
 
 type ShowContent = 'QUESTION_LIST' | 'ADD_NEW_QUESTION';
 const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
