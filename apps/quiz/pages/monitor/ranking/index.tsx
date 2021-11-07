@@ -18,6 +18,7 @@ import AnswerTime from '../../../components/atoms/AnswerTime';
 import { colors, textShadows } from '../../../components/styles/colors';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { AnswerInfo } from "../../../components/types/client";
+import { NextPageProps } from "../../../components/types/pageTransition";
 const db = firebase.firestore()
 
 const isLastRow = (idx: number): boolean => {
@@ -72,8 +73,8 @@ const Ranking: React.FC = () => {
         return prev
       })
     });
-    socket.on('go_to_designated_page', (nextQuestionId) => {
-      router.push(`/monitor/question/${nextQuestionId}`)
+    socket.on('go_to_designated_page', (data: NextPageProps) => {
+      router.push(`/monitor/question/${data.nextQuestionId}`)
     })
     return function cleanup() {
       setIsRankingRowsShow(false)

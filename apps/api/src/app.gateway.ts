@@ -50,7 +50,6 @@ export class AppGateway
 
   @SubscribeMessage('go_to_question_page')
   goToAnotherPage(@MessageBody() nextQuestionId: string): void {
-    // console.log(`受け取ったURL: http://localhost:4200${path}`);
     this.server.emit(GO_TO_DESIGNATED_PAGE, nextQuestionId)
   }
 
@@ -60,9 +59,8 @@ export class AppGateway
   }
 
   @SubscribeMessage('go_to_next_question')
-  goToNextQuestion(@MessageBody() path: string): void {
-    console.log(`受け取ったURL: http://localhost:4200${path}`);
-    this.server.emit(GO_TO_DESIGNATED_PAGE, path)
+  goToNextQuestion(@MessageBody() data: unknown): void {
+    this.server.emit(GO_TO_DESIGNATED_PAGE, data)
   }
 
   @SubscribeMessage('display_cue_page')
@@ -102,7 +100,6 @@ export class AppGateway
 
   @SubscribeMessage('check_answer')
   CheckAnswer(@MessageBody() correctAnswer: string): void {
-    console.log("受け取ったcorrectAnswer", correctAnswer);
     this.server.emit('check_answer', correctAnswer)
   }
 }

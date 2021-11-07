@@ -69,7 +69,9 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     docs.forEach(doc => { docIds.push(doc.id)})
     // TODO ↓の「test」を「answers」に変更
     docIds.map(async (docId) => { await db.collection('test').doc(docId).delete()})
-    socket.emit('go_to_question_page', nextQuestionId);
+    console.log("現在の問題の正解の選択肢",correctAnswer);
+    
+    socket.emit('go_to_question_page', {nextQuestionId, correctAnswer});
   };
 
   const goToWorstRanking = () => {
