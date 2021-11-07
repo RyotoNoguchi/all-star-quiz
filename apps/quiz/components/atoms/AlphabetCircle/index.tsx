@@ -1,37 +1,34 @@
-import { useMemo } from "react"
-import { colors } from "../../styles/colors"
-import Avatar from "@material-ui/core/Avatar";
-import styled from "styled-components";
+import { useMemo } from 'react';
+import { colors } from '../../styles/colors';
+import { ChoiceAvatar } from './styled';
 
-interface AvatarProps {
-  color: 'red' | 'blue' | 'green' | 'yellow'
-  choice: 'A' | 'B' | 'C' | 'D'
-}
+type Props = {
+  color: 'red' | 'blue' | 'green' | 'yellow';
+  choice: 'A' | 'B' | 'C' | 'D';
+};
 
-const StyledAvatar = styled(Avatar)<{color:string}>`
-  font-size: 32px;
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background-image: ${p => p.color};
-`
-
-const AlphabetCircle: React.FC<AvatarProps> = ({ 
+const AlphabetCircle: React.FC<Props> = ({
   color: colorProp = 'red',
-  choice
+  choice,
 }) => {
-  const circleColor =  useMemo(() => ({
-    red: colors.circleRed,
-    blue: colors.circleBlue,
-    yellow: colors.circleYellow,
-    green: colors.circleGreen
-  }[colorProp]), [colorProp])
-  
+  const circleColor = useMemo(
+    () =>
+      ({
+        red: colors.circleRed,
+        blue: colors.circleBlue,
+        yellow: colors.circleYellow,
+        green: colors.circleGreen,
+      }[colorProp]),
+    [colorProp]
+  );
+
   return (
     <>
-      <StyledAvatar color={circleColor} alt={choice}>{choice}</StyledAvatar>
+      <ChoiceAvatar $color={circleColor} alt={choice}>
+        {choice}
+      </ChoiceAvatar>
     </>
-  )
-}
+  );
+};
 
-export default AlphabetCircle
+export default AlphabetCircle;
