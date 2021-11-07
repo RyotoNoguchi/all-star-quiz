@@ -1,38 +1,25 @@
-import styled from 'styled-components';
-import { Typography, TypographyProps } from '@material-ui/core';
-import {
-  rankRowTdChildCSS,
-  animationDefault,
-  blinkAnswerPersonName,
-  blinkChampionTypography,
-} from '../../styles/animations';
+import { ReactNode } from 'hoist-non-react-statics/node_modules/@types/react';
+import { AnswerTimeText } from './styled';
 
-const StyledTypography = styled(({ isChangeColorRow, isChampion, ...props }) => <Typography {...props} />)<TypographyProps>`
-  ${rankRowTdChildCSS};
-  animation: ${(p) => p.isChangeColorRow && blinkAnswerPersonName};
-  animation: ${(p) =>
-    p.isChangeColorRow && p.isChampion && blinkChampionTypography};
-  ${animationDefault};
-`;
-
-interface Props {
+type Props = {
   isChangeColorRow: boolean;
   isChampion?: boolean;
-}
+  children: ReactNode;
+};
 
-const AnswerTime: React.FC<Props> = ({
+const AnswerTime: React.VFC<Props> = ({
   isChangeColorRow,
   isChampion = false,
   children,
 }) => {
   return (
     <>
-      <StyledTypography
-        isChangeColorRow={isChangeColorRow}
-        isChampion={isChampion}
+      <AnswerTimeText
+        $isChangeColorRow={isChangeColorRow}
+        $isChampion={isChampion}
       >
         {children}
-      </StyledTypography>
+      </AnswerTimeText>
     </>
   );
 };
