@@ -15,7 +15,7 @@ import React from 'react';
 import useInterval from "use-interval";
 import useSound from 'use-sound';
 import Image from 'next/image';
-import { animate, motion, Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const gongUrl = 'https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fgong.mp3?alt=media&token=3a66f8d8-23f8-48d0-a1ed-b785d2a8db3c'
 

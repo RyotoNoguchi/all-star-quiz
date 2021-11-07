@@ -1,9 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import firebase from '../../../../../firebase/clientApp';
-import { useRouter } from 'next/router';
-import { Table } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import firebase from '../../../../../firebase/clientApp';
 import RankingTableContainer from '../../../components/organisms/RankingTableContainer';
 import RankingTitleBox from '../../../components/molecules/RankingTitleBox';
 import MotionTableBody from '../../../components/molecules/MotionTableBody';
@@ -15,17 +12,21 @@ import HyphenRotation from '../../../components/atoms/HyphenRotation';
 import Rank from '../../../components/atoms/Rank';
 import AnswerPersonName from '../../../components/atoms/AnswerPersonName';
 import AnswerTime from '../../../components/atoms/AnswerTime';
+import { useRouter } from 'next/router';
+import { Table } from '@material-ui/core';
+import { io } from 'socket.io-client';
 import { colors, textShadows } from '../../../components/styles/colors';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { AnswerInfo } from "../../../components/types/client";
 import { NextPageProps } from "../../../components/types/pageTransition";
+import { rankingRowVariant, tbodyVariant} from './variants'
 const db = firebase.firestore()
 
 const isLastRow = (idx: number): boolean => {
   return idx + 1 === 10 ? true : false;
 };
 
-const Ranking: React.FC = () => {
+const Ranking: React.VFC = () => {
   const router = useRouter();
   const socket = io('http://localhost:3333');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
@@ -35,34 +36,8 @@ const Ranking: React.FC = () => {
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
 
-  const tbodyVariant = {
-    hidden: {
-      opacity: 0,
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        when: 'beforeChildren',
-        staggerChildren: 0.4,
-      },
-    },
-  };
-
-  const rankingRowVariant = {
-    hidden: {
-      opacity: 0,
-    },
-    visible: (i: number) => ({
-      opacity: 1,
-      transition: {
-        delay: i,
-      },
-    }),
-  };
-
   useEffect(() => {
     socket.on('show_worst_ranking', (questionId) => {
-      // setQuestionId(questionId);
       setIsRankingRowsShow(true);
       setIsRankingRowsShow((prev) => {
         if (prev) {
