@@ -49,7 +49,7 @@ const TopTitlePart = styled(Box)<BoxProps>`
   }
 `;
 
-const StyledBox = styled(Box)`
+const StyledBox = styled(Box)<BoxProps>`
   text-align: center;
   margin-top: 50px;
 `;
