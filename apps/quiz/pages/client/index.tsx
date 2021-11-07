@@ -53,10 +53,10 @@ const StyledBox = styled(Box)`
   text-align: center;
   margin-top: 50px;
 `
-const StyledTypography = styled(Typography)`
-  color: red;
+const StyledTypography = styled(Typography)<{$isCorrect: boolean}>`
+  color: ${p => p.$isCorrect ? "red" : "blue"};
   font-weight: bold;
-  font-size: 400px;
+  font-size: ${p => p.$isCorrect ? "400px" : "800px"};
   position: absolute;
   top: 50%;
   left: 50%;
@@ -71,6 +71,8 @@ const title1stRow = titleArray[0];
 const title2ndRow = titleArray[1];
 const title3rdRow = titleArray[2];
 
+type IsRight = 'CORRECT' | 'INCORRECT'
+
 const Home: React.FC = () => {
   const socket = io('http://localhost:3333');
   const db = firebase.firestore();
@@ -80,7 +82,7 @@ const Home: React.FC = () => {
   const finishTime = useRef<Date>(null)
   const [isAnswerDisplayed, setIsAnswerDisplayed] = useState(false)
   const [selectedAnswer, setSelectedAnswer] = useState<Answer>(null)
-  const [isRight, setIsRight] = useState(false)
+  const [verifyAnswer, setVerifyAnswer] = useState<IsRight>(null)
 
   useEffect(() => {
   socket.open()
@@ -91,7 +93,9 @@ const Home: React.FC = () => {
   socket.on('check_answer', (correctAnswer) => {
     console.log('選んだ選択肢', selectedAnswer);
     if (selectedAnswer === correctAnswer) {
-      setIsRight(true)
+      setVerifyAnswer('CORRECT')
+    } else {
+      setVerifyAnswer('INCORRECT')
     }
   })
   return function cleanup() {
@@ -128,9 +132,9 @@ const Home: React.FC = () => {
           { isAnswerDisplayed 
             ? 
             <>
-            { isRight && 
-              <StyledTypography variant="h1">◯</StyledTypography>
-            }
+            { verifyAnswer === 'CORRECT' && <StyledTypography variant="h1" $isCorrect={true}>◯</StyledTypography> }
+            {verifyAnswer === 'INCORRECT' && <StyledTypography variant="h1" $isCorrect={false}>☓</StyledTypography>}
+            
               <Typography variant="h2">あなたが</Typography>
               <Typography variant="h2">選択した回答</Typography>
               <SelectedAnswer answer={selectedAnswer}>{selectedAnswer}</SelectedAnswer>
