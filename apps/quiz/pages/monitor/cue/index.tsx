@@ -1,15 +1,11 @@
-import { Typography } from "@material-ui/core";
-import styled from "styled-components";
-
-const TopBackGroundImg = styled.section<{url:string}>`
-  /* background-image: url(${p => p.url}); */
-`
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 
 const Cue = ({questionNumber}) => {
   return (
-    <TopBackGroundImg url={'https://dummyimage.com/600x400/4aabcc/0011ff.jpg'}>
+    <Box component="section">
       <Typography variant="h1">問題{questionNumber}です！</Typography >
-    </TopBackGroundImg>
+    </Box>
   )
 }
 
