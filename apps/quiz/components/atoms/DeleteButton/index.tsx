@@ -4,7 +4,6 @@ import { GridRenderCellParams } from '@mui/x-data-grid';
 import firebase from "firebase/clientApp";
 const db = firebase.firestore()
 
-
 const DeleteButton: React.FC<{ params: GridRenderCellParams }> = ({ 
     params,
   }) => {
