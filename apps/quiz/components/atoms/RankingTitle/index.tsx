@@ -1,8 +1,15 @@
-import { Typography, TypographyProps } from "@material-ui/core";
+import Typography, { TypographyProps } from "@mui/material/Typography";
+import { ReactNode } from "hoist-non-react-statics/node_modules/@types/react";
 import styled from "styled-components";
 import { Colors, TextShadows } from "../../styles/colors"
 
-const StyledTypography = styled(({ color, textShadow, ...props }) => (<Typography {...props} />))<TypographyProps>`
+type RankingTitleTextProps = {
+  typography?: TypographyProps
+  $color: Colors
+  $textShadow: TextShadows
+}
+
+const RankingTitleText = styled(Typography)<RankingTitleTextProps>`
   text-align: center;
   font-size: 3.2rem;
   line-height: 1.43;
@@ -11,24 +18,25 @@ const StyledTypography = styled(({ color, textShadow, ...props }) => (<Typograph
   font-weight: 900;
   border-collapse: separate;
   width: 80%;
-  color: ${props => props.color};
-  text-shadow: ${props => props.textShadow};
+  color: ${props => props.$color};
+  text-shadow: ${props => props.$textShadow};
 `
-interface Props {
+type Props = {
   color: Colors
   textShadow: TextShadows
+  children: ReactNode
 }
 
-const RankingTitle: React.FC<Props> = ({
+const RankingTitle: React.VFC<Props> = ({
   color,
   textShadow,
   children
 }) => {
   return (
     <>
-      <StyledTypography color={color} textShadow={textShadow}>
+      <RankingTitleText $color={color} $textShadow={textShadow}>
         {children}
-      </StyledTypography>
+      </RankingTitleText>
     </>
   )
 }
