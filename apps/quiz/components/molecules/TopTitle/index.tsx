@@ -1,10 +1,15 @@
-import { Typography } from "@mui/material";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 import { colors } from "../../styles/colors";
 import styled from "styled-components";
 
 type PageType = 'MONITOR' | 'CLIENT'
 
-export const TopTitle = styled(Typography)<{$pageType: PageType}>`
+type TopTitleProps = {
+  typography?: TypographyProps
+  $pageType: PageType
+}
+
+export const TopTitle = styled(Typography)<TopTitleProps>`
   font-family: 'Dela Gothic One', cursive;
   font-size: ${p => p.$pageType === 'MONITOR' ? '8rem' : '40px'};
   font-weight: 400;

@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import { flipRow } from '../../styles/animations';
 import { motion, Variants } from 'framer-motion';
+import { ReactNode } from 'hoist-non-react-statics/node_modules/@types/react';
 
-interface Props {
-  iterationCount: number;
-  isChangeColorRow: boolean;
-  variants: Variants;
-  custom: number;
+type Props = {
+  iterationCount: number
+  isChangeColorRow: boolean
+  variants: Variants
+  custom: number
+  children: ReactNode
 }
 
 const StyledTr = styled(motion.tr)<Props>`
@@ -16,14 +18,14 @@ const StyledTr = styled(motion.tr)<Props>`
   animation-delay: 0.3s;
   animation-duration: 0.4s;
   animation-timing-function: linear;
-  animation-iteration-count: ${(props) => props.iterationCount};
+  animation-iteration-count: ${(p) => p.iterationCount};
   animation-name: ${flipRow};
-  animation-delay: ${(props) => props.isChangeColorRow && '4s'};
-  animation-iteration-count: ${(props) => props.isChangeColorRow && 4};
+  animation-delay: ${(p) => p.isChangeColorRow && '4s'};
+  animation-iteration-count: ${(p) => p.isChangeColorRow && 4};
   animation-direction: reverse;
 `;
 
-const RankRow: React.FC<Props> = ({
+const RankRow: React.VFC<Props> = ({
   iterationCount,
   isChangeColorRow,
   variants,
