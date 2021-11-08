@@ -1,11 +1,16 @@
 import { useMemo } from "react";
-import { colors } from "../../styles/colors";
+import { Colors, colors } from "../../styles/colors";
 import { Answer } from "../../types/question";
 import styled from "styled-components";
-import Typography from "@mui/material/Typography";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 
-const StyledTypography = styled(Typography)<{color: string}>`
-  color: ${p => p.color};
+type SelectedAnswerTextProps = {
+  typography?: TypographyProps
+  $color: Colors
+}
+
+const SelectedAnswerText = styled(Typography)<SelectedAnswerTextProps>`
+  color: ${p => p.$color};
   font-weight: bold;
   text-shadow: 2px 2px #555, -1px -1px #555;
 `
@@ -21,7 +26,7 @@ const SelectedAnswer: React.FC<{answer: Answer}> = ({
   }[answer]), [answer])
   return (
     <>
-      <StyledTypography variant="h1" color={color}>{answer}</StyledTypography>
+      <SelectedAnswerText variant="h1" $color={color}>{answer}</SelectedAnswerText>
     </>
   )
 }

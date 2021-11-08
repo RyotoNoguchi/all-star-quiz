@@ -2,7 +2,13 @@ import styled from 'styled-components';
 import { Box, BoxProps } from '@material-ui/core';
 import { blinkRank, animationDefault, blinkChampionRank } from '../../styles/animations';
 
-const StyledSpan = styled(({ isChangeColorRow, isChampion, ...props }) => <Box {...props} />)<BoxProps>`
+type RankProps = {
+  box?: BoxProps
+  $isChangeColorRow: boolean
+  $isChampion: boolean
+}
+
+const StyledSpan = styled(Box)<RankProps>`
   width: 6.25rem;
   background-image: radial-gradient(#2d3870, #2945d0);
   box-shadow: 2px 2px 2px rgb(94 94 94), -2px -2px 2px rgb(94 94 94);
@@ -17,12 +23,12 @@ const StyledSpan = styled(({ isChangeColorRow, isChampion, ...props }) => <Box {
   font-size: 36px;
   padding: 0;
   text-shadow: none;
-  animation: ${(p) => p.isChangeColorRow && blinkRank};
-  animation: ${(p) => p.isChangeColorRow && p.isChampion && blinkChampionRank};
+  animation: ${(p) => p.$isChangeColorRow && blinkRank};
+  animation: ${(p) => p.$isChangeColorRow && p.$isChampion && blinkChampionRank};
   ${animationDefault};
 `;
 
-interface Props {
+type Props = {
   isChampion?: boolean
   isChangeColorRow: boolean;
 }
@@ -34,7 +40,7 @@ const Rank: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <StyledSpan component="span" isChangeColorRow={isChangeColorRow} isChampion={isChampion}>
+      <StyledSpan component="span" $isChangeColorRow={isChangeColorRow} $isChampion={isChampion}>
         {children}
       </StyledSpan>
     </>

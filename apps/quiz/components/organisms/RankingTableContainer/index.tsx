@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TableContainer, TableContainerProps } from '@material-ui/core';
+import TableContainer, { TableContainerProps } from '@mui/material/TableContainer';
 
 const StyledTableContainer = styled(TableContainer)<TableContainerProps>`
   background-image: radial-gradient(#11f1fd, skyblue);

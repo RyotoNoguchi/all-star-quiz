@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import DetailButton from '../../atoms/DetailButton';
 import DeleteButton from '../../atoms/DeleteButton';
-import Paper from '@mui/material/Paper';
+import Paper, { PaperProps } from '@mui/material/Paper';
 import { Question } from '../../types/question'
 import {
   DataGrid,
@@ -43,11 +43,10 @@ const columns: GridColDef[] = [
   },
 ];
 
-const StyledPaper = styled(Paper)`
+const StyledPaper = styled(Paper)<PaperProps>`
   border-radius: 12px;
   height: 680px;
   margin-top: 12px;
-  /* background-image: linear-gradient(#4161eef9, #cfd4ec); */
   background-color: #fff;
 `;
 

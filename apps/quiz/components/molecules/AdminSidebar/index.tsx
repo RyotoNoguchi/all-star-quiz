@@ -1,4 +1,4 @@
-import { Box, Grid, List, ListItemButton, ListItemIcon, Typography, ListItemText, Collapse } from '@mui/material/';
+import { Box, Grid, List, ListItemButton, ListItemIcon, Typography, ListItemText, Collapse, TypographyProps, GridProps, BoxProps } from '@mui/material/';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
@@ -10,7 +10,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import styled from 'styled-components';
 import { useState } from 'react';
 
-const StyledTypography = styled(Typography)`
+const StyledTypography = styled(Typography)<TypographyProps>`
   text-align: left;
   font-weight: 400;
   margin-left: 12px;
@@ -21,9 +21,8 @@ const StyledMenuBookIcon = styled(MenuBookIcon)`
   margin-left: 7px;
 `
 
-const MenuContainer = styled(Grid)`
+const MenuContainer = styled(Grid)<GridProps>`
   font-size: 2rem;
-  /* background-image: linear-gradient(#a1aff8, #8590c9); */
   background-image: none;
   background-color: #fff;
   border-radius: 16px;
@@ -43,7 +42,7 @@ const StyledFormatListNumberedIcon = styled(FormatListNumberedIcon)`
   font-size: 2rem;
 `;
 
-const MenuTitle = styled(Box)`
+const MenuTitle = styled(Box)<BoxProps>`
   display: flex;
   align-items: center;
 `

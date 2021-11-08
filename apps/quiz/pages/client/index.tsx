@@ -1,69 +1,20 @@
+import React, { useEffect, useRef, useState } from 'react';
+import router from 'next/router';
 import firebase from '../../../../firebase/clientApp';
-import styled from 'styled-components';
 import ChoiceButton from '../../components/atoms/ChoiceButton';
+import SelectedAnswer from '../../components/atoms/SelectedAnswer';
+import Typography from '@mui/material/Typography';
 import { Answer } from '../../components/types/question';
 import { io } from 'socket.io-client';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { colors } from '../../components/styles/colors';
-import React, { useEffect, useRef, useState } from 'react';
-import SelectedAnswer from '../../components/atoms/SelectedAnswer';
-import router from 'next/router';
 import { NextPageProps } from '../../components/types/pageTransition';
 import {
-  Box,
-  BoxProps,
-  Container,
-  ContainerProps,
-  Typography,
-  TypographyProps,
-} from '@mui/material';
-
-const ClientContainer = styled(Container)<ContainerProps>``;
-
-const TopTitle = styled(Typography)<TypographyProps>`
-  font-family: 'Dela Gothic One', cursive;
-  font-size: 2rem;
-  font-weight: 400;
-`;
-
-const TopTitlePart = styled(Box)<BoxProps>`
-  display: inline-block;
-  position: relative;
-  background-clip: border-box;
-  background: linear-gradient(
-    ${colors.titleOrange},
-    ${colors.titleYellow},
-    ${colors.titleOrange}
-  );
-  -webkit-background-clip: text; //テキストでくり抜く
-  -webkit-text-fill-color: transparent; //くり抜いた部分は背景を表示
-  &::after {
-    background: none;
-    content: attr(data-text);
-    left: 0;
-    position: absolute;
-    text-shadow: 6px 6px 1px ${colors.titlePurple},
-      -6px -6px 1px ${colors.titlePurple};
-    top: 0;
-    z-index: -1;
-  }
-`;
-
-const StyledBox = styled(Box)`
-  text-align: center;
-  margin-top: 50px;
-`;
-const StyledTypography = styled(Typography)<{ $isCorrect: boolean }>`
-  color: ${(p) => (p.$isCorrect ? 'red' : 'blue')};
-  font-weight: bold;
-  font-size: ${(p) => (p.$isCorrect ? '400px' : '800px')};
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-`;
+  AnswerCheckIcon,
+  StyledBox,
+  TopTitlePart,
+  TopTitle,
+  ClientContainer,
+} from './styled';
 
 const title = 'アソビュー オールスター感謝祭 2021';
 const titleArray = title.split(' ');
@@ -143,14 +94,14 @@ const Home: React.FC = () => {
           {isAnswerDisplayed ? (
             <>
               {verifyAnswer === 'CORRECT' && (
-                <StyledTypography variant="h1" $isCorrect={true}>
+                <AnswerCheckIcon variant="h1" $isCorrect={true}>
                   ◯
-                </StyledTypography>
+                </AnswerCheckIcon>
               )}
               {verifyAnswer === 'INCORRECT' && (
-                <StyledTypography variant="h1" $isCorrect={false}>
+                <AnswerCheckIcon variant="h1" $isCorrect={false}>
                   ☓
-                </StyledTypography>
+                </AnswerCheckIcon>
               )}
 
               <Typography variant="h2">あなたが</Typography>

@@ -1,36 +1,47 @@
-import { TableCell, TableCellProps } from '@material-ui/core';
+import TableCell, { TableCellProps } from '@mui/material/TableCell';
+import { ReactNode } from 'hoist-non-react-statics/node_modules/@types/react';
 import styled from 'styled-components';
 import {
   rankRowChild,
   blinkAnswerPersonNameBox,
   animationDefault,
-  blinkChampionRow
+  blinkChampionRow,
 } from '../../styles/animations';
 
-const StyledTableCell = styled(({ isChangeColorRow, isChampion, ...props }) => (<TableCell {...props} />))<TableCellProps>`
+type StyledTableCellProps = {
+  tableCell?: TableCellProps;
+  $isChangeColorRow: boolean;
+  $isChampion: boolean;
+};
+
+const StyledTableCell = styled(TableCell)<StyledTableCellProps>`
   ${rankRowChild};
   width: 80%;
   justify-content: flex-start;
-  animation: ${(p) => p.isChangeColorRow && blinkAnswerPersonNameBox};
-  animation: ${(p) => p.isChangeColorRow && p.isChampion && blinkChampionRow};
+  animation: ${(p) => p.$isChangeColorRow && blinkAnswerPersonNameBox};
+  animation: ${(p) => p.$isChangeColorRow && p.$isChampion && blinkChampionRow};
   ${animationDefault};
 `;
 
-interface Props {
+type Props = {
   isChampion?: boolean;
   isChangeColorRow: boolean;
-}
+  children: ReactNode;
+};
 
-const AnswerPersonNameBox: React.FC<Props> = ({ 
+const AnswerPersonNameBox: React.VFC<Props> = ({
   isChampion,
   isChangeColorRow,
-  children
-  }) => {
+  children,
+}) => {
   return (
     <>
-      <StyledTableCell isChangeColorRow={isChangeColorRow} isChampion={isChampion}>
+      <StyledTableCell
+        $isChangeColorRow={isChangeColorRow}
+        $isChampion={isChampion}
+      >
         {children}
-        </StyledTableCell>
+      </StyledTableCell>
     </>
   );
 };

@@ -1,15 +1,7 @@
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import React from 'react';
-import styled from 'styled-components';
+import { GameOverTitle } from './styled';
 import { TopTitle, TopTitlePart } from '../../../components/molecules/TopTitle';
-
-const GameOverTitle = styled(Typography)`
-  color: blueviolet;
-  font-weight: bold;
-  text-shadow: 2px 2px #555, -1px -1px #555;
-  font-size: 64px;
-`;
 
 const GameOver: React.VFC = () => {
   const title = 'アソビュー オールスター感謝祭 2021';
