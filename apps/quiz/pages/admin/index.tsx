@@ -64,14 +64,12 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     const nextQuestionId = (parseInt(questionId) + 1).toString()
     setQuestionId(nextQuestionId);
     setMonitorCurrentPath(`${MONITOR_BASE_URL}/${nextQuestionId}`)
-    const docs = await db.collection('test').get()
+    // テストの目的で行うなら↓の'answers'を'test'に変更すればOK
+    const docs = await db.collection('answers').get()
     const docIds: string[] = []
     docs.forEach(doc => { docIds.push(doc.id)})
-    // TODO ↓の「test」を「answers」に変更
-    docIds.map(async (docId) => { await db.collection('test').doc(docId).delete()})
-    console.log("現在の問題の正解の選択肢",correctAnswer);
-    
-    socket.emit('go_to_question_page', {nextQuestionId, correctAnswer});
+    docIds.map(async (docId) => { await db.collection('answers').doc(docId).delete()})
+        socket.emit('go_to_question_page', {nextQuestionId, correctAnswer});
   };
 
   const goToWorstRanking = () => {

@@ -35,7 +35,7 @@ text-shadow: 0 0 4px skyblue, 0 -2px #fff;
 
 export const QuestionText = styled(Typography)<TypographyProps>`
   margin: 0;
-  line-height: 3rem;
+  /* line-height: 3rem; */
   font-size: 2rem;
 `;
 
