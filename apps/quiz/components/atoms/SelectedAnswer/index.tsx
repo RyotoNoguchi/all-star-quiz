@@ -15,7 +15,7 @@ const SelectedAnswerText = styled(Typography)<SelectedAnswerTextProps>`
   text-shadow: 2px 2px #555, -1px -1px #555;
 `
 
-const SelectedAnswer: React.VFC<{answer: Answer}> = ({
+const SelectedAnswer: React.FC<{answer: Answer}> = ({
   answer,
 }) => {
   const color = useMemo(() => ({
