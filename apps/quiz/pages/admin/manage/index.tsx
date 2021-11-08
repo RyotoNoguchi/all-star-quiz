@@ -6,9 +6,10 @@ import AddQuestion from '../../../components/organisms/AddQuestion';
 import Image from 'next/image';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { MainContainer, StyledBox } from './styled'
 import { Question } from '../../../components/types/question';
+import AdminUser from '../../../components/organisms/AdminUser';
 const db = firebase.firestore();
 
 type Props = {
@@ -48,8 +49,9 @@ export const getStaticProps: GetStaticProps<Props> = async (
   };
 };
 
+// TODO "useContext"を使って`showContent`のstateを管理して、"AdminSidebarの深いところにある"ListItemButton"のonClickで変更できるようにする
 
-type ShowContent = 'QUESTION_LIST' | 'ADD_NEW_QUESTION';
+type ShowContent = 'QUESTION_LIST' | 'ADD_NEW_QUESTION' | 'ACTIVE_USER_LIST';
 const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
   const [showContent, setShowContent] = useState<ShowContent>('QUESTION_LIST')
   return (
@@ -58,12 +60,13 @@ const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
         <Image src={logo} alt="ロゴ" width={1000} height={80}/>
       </StyledBox>
       <MainContainer container spacing={3}>
-        <Grid item xs={3}>
+        <Grid item xs={3} style={{paddingLeft: '2px', paddingTop: '0', paddingRight: '4px'}}>
           <AdminSidebar />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={9} style={{paddingLeft: '8px', paddingTop: '0'}}>
           {showContent === 'QUESTION_LIST' && <AdminQuestion questions={questions}  />}
           {showContent === 'ADD_NEW_QUESTION' && <AddQuestion nextQuestionId={nextQuestionId} />}
+          {showContent === 'ACTIVE_USER_LIST' && <AdminUser/>}
         </Grid>
       </MainContainer>
     </>
