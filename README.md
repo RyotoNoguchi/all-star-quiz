@@ -131,7 +131,8 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 | 8 | test.hachiro800 | hachirotest800 |
 | 9 | test.kuro900 | kurotest900 |
 
-<!-- TODO '/admin/manage'の「Question」のメニューでListとNewボタン押下で切り替わるように修正 -->
-<!-- TODO '/admin/manage'の「User」のメニューで「Active」と「Inactive」ボタン作成して、削除フラグでユーザーを分類、Client画面で「Inactive」になっている場合はグレーダウンとボタンの非活性化に修正 -->
 <!-- TODO '/admin'画面のボタンのUI整える -->
+<!-- TODO '/admin/manage'の「User」のメニューで「Active」と「Inactive」ボタン作成して、削除フラグでユーザーを分類、Client画面で「Inactive」になっている場合はグレーダウンとボタンの非活性化に修正 -->
 <!-- TODO '/admin'画面で現在生き残っているユーザー一覧が確認できるようにする -->
+
+<!-- TODO '/admin/manage'の「Question」のメニューでListとNewボタン押下で切り替わるように修正 -->

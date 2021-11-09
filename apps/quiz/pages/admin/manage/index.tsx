@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import firebase from 'firebase/clientApp';
 import AdminSidebar from '../../../components/molecules/AdminSidebar';
 import AdminQuestion from '../../../components/organisms/AdminQuestion';
 import AddQuestion from '../../../components/organisms/AddQuestion';
 import Image from 'next/image';
+import AdminUser from '../../../components/organisms/AdminUser';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Grid } from '@mui/material';
 import { MainContainer, StyledBox } from './styled'
 import { Question } from '../../../components/types/question';
-import AdminUser from '../../../components/organisms/AdminUser';
+import { useAdminManageDisplayContentContext } from '../../../components/contexts/AdminManageContext'
 const db = firebase.firestore();
 
 type Props = {
@@ -51,9 +52,8 @@ export const getStaticProps: GetStaticProps<Props> = async (
 
 // TODO "useContext"を使って`showContent`のstateを管理して、"AdminSidebarの深いところにある"ListItemButton"のonClickで変更できるようにする
 
-type ShowContent = 'QUESTION_LIST' | 'ADD_NEW_QUESTION' | 'ACTIVE_USER_LIST';
 const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
-  const [showContent, setShowContent] = useState<ShowContent>('QUESTION_LIST')
+  const { displayContent } = useAdminManageDisplayContentContext()
   return (
     <>
       <StyledBox>
@@ -64,9 +64,9 @@ const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
           <AdminSidebar />
         </Grid>
         <Grid item xs={9} style={{paddingLeft: '8px', paddingTop: '0'}}>
-          {showContent === 'QUESTION_LIST' && <AdminQuestion questions={questions}  />}
-          {showContent === 'ADD_NEW_QUESTION' && <AddQuestion nextQuestionId={nextQuestionId} />}
-          {showContent === 'ACTIVE_USER_LIST' && <AdminUser/>}
+          {displayContent === 'QUESTION_LIST' && <AdminQuestion questions={questions}  />}
+          {displayContent === 'ADD_NEW_QUESTION' && <AddQuestion nextQuestionId={nextQuestionId} />}
+          {displayContent === 'ACTIVE_USER_LIST' && <AdminUser/>}
         </Grid>
       </MainContainer>
     </>
