@@ -6,7 +6,7 @@ import theme from '../components/styles/theme';
 import { CssBaseline, Container } from '@material-ui/core/';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { io } from 'socket.io-client';
+import { AdminManageDisplayContentProvider } from '../components/contexts/AdminManageContext'
 
 export const GO_TO_DESIGNATED_PAGE = 'go_to_designated_page'
 function CustomApp({ Component, pageProps }: AppProps) {
@@ -36,7 +36,9 @@ function CustomApp({ Component, pageProps }: AppProps) {
           <StylesProvider injectFirst>
             <Container>
               <main>
-                <Component {...pageProps} />
+                <AdminManageDisplayContentProvider>
+                  <Component {...pageProps} />
+                </AdminManageDisplayContentProvider>
               </main>
             </Container>
           </StylesProvider>

@@ -9,6 +9,7 @@ import PeopleAlt from '@material-ui/icons/PeopleAlt';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useAdminManageDisplayContentContext } from '../../../components/contexts/AdminManageContext'
 
 const StyledTypography = styled(Typography)<TypographyProps>`
   text-align: left;
@@ -49,7 +50,12 @@ const MenuTitle = styled(Box)<BoxProps>`
 
 
 const AdminSidebar: React.FC = () => {
+  const {changeDisplayContent} = useAdminManageDisplayContentContext()
   const [open, setOpen] = useState(true)
+  const handleClick = () => {
+    console.log('ADD_NEW_QUESTIONに変更しました');
+    changeDisplayContent('ADD_NEW_QUESTION')
+  }
   return (
     <>
       <MenuContainer>
@@ -67,13 +73,13 @@ const AdminSidebar: React.FC = () => {
           </ListItemButton>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={()=> changeDisplayContent('QUESTION_LIST')}>
                 <ListItemIcon>
                   <FormatListBulletedIcon />
                 </ListItemIcon>
                 <ListItemText primary="List" />
               </ListItemButton>
-              <ListItemButton>
+              <ListItemButton onClick={()=> handleClick()}>
                 <ListItemIcon>
                   <StarBorder />
                 </ListItemIcon>
