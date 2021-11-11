@@ -35,6 +35,8 @@ const Home: React.FC = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<Answer>(null);
   const [verifyAnswer, setVerifyAnswer] = useState<IsRight>(null);
 
+  console.log('Loading', loading, '|', 'Current User', user);
+  
   useEffect(() => {
     socket.open();
     socket.on('ready_go', () => {
