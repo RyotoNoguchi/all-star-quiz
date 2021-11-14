@@ -8,7 +8,7 @@ import ActiveUserList from '../../../components/organisms/ActiveUserList';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Grid } from '@mui/material';
-import { MainContainer, StyledBox } from './styled'
+import { MainContainer, StyledBox } from '../../../components/styles/admin/manageStyles'
 import { Question } from '../../../components/types/question';
 import { useAdminManageDisplayContentContext } from '../../../components/contexts/AdminManageContext'
 const db = firebase.firestore();

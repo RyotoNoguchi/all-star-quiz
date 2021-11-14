@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import React from 'react';
-import { GameOverTitle } from './styled';
+import { GameOverTitle } from '../../../components/styles/client/gameoverStyles';
 import { TopTitle, TopTitlePart } from '../../../components/molecules/TopTitle';
 
 const GameOver: React.VFC = () => {

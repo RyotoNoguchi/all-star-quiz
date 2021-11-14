@@ -1,7 +1,6 @@
 // styles/theme.ts
 
 import { createTheme } from '@material-ui/core/styles';
-import { orange } from '@material-ui/core/colors'
 
 // declare module '@material-ui/core/styles' {
 //   interface Theme {
