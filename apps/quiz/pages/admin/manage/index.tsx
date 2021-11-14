@@ -73,7 +73,7 @@ const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId, activeUsers 
   return (
     <>
       <StyledBox>
-        <Image src={logo} alt="ロゴ" width={1000} height={80}/>
+        <Image loader={() => logo} src={logo} alt="ロゴ" width={1000} height={80}/>
       </StyledBox>
       <MainContainer container spacing={3}>
         <Grid item xs={3} style={{paddingLeft: '2px', paddingTop: '0', paddingRight: '4px'}}>
