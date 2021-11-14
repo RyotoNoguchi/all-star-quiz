@@ -35,6 +35,8 @@ const Home: React.FC = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<Answer>(null);
   const [verifyAnswer, setVerifyAnswer] = useState<IsRight>(null);
 
+  console.log('Loading', loading, '|', 'Current User', user);
+  
   useEffect(() => {
     socket.open();
     socket.on('ready_go', () => {
@@ -46,6 +48,7 @@ const Home: React.FC = () => {
         setVerifyAnswer('CORRECT');
       } else {
         setVerifyAnswer('INCORRECT');
+        disableUser()
       }
     });
     socket.on('go_to_designated_page', (data: NextPageProps) => {
@@ -61,6 +64,10 @@ const Home: React.FC = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedAnswer]);
+
+  const disableUser = async () => {
+    await db.collection('users').doc(user.uid).set({disabled: true}, { merge: true })
+  }
 
   const addAnswerDocument = async (answer: Answer) => {
     setSelectedAnswer(answer);

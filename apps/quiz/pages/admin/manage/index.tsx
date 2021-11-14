@@ -4,7 +4,7 @@ import AdminSidebar from '../../../components/molecules/AdminSidebar';
 import AdminQuestion from '../../../components/organisms/AdminQuestion';
 import AddQuestion from '../../../components/organisms/AddQuestion';
 import Image from 'next/image';
-import AdminUser from '../../../components/organisms/AdminUser';
+import ActiveUserList from '../../../components/organisms/ActiveUserList';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Grid } from '@mui/material';
@@ -13,10 +13,15 @@ import { Question } from '../../../components/types/question';
 import { useAdminManageDisplayContentContext } from '../../../components/contexts/AdminManageContext'
 const db = firebase.firestore();
 
+type ActiveUser = {
+  id: number
+  name: string
+}
 type Props = {
   logo: string
   questions: Question[]
   nextQuestionId: string
+  activeUsers: ActiveUser[]
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (
@@ -40,11 +45,22 @@ export const getStaticProps: GetStaticProps<Props> = async (
 
   const nextQuestionId = (questions.length + 1).toString()
 
+  const activeUserCollection = await db.collection('users').where('disabled', '==', false).orderBy('displayName').get()
+  const activeUsers: ActiveUser[] = []
+  activeUserCollection.docs.forEach((d, idx) => {
+    activeUsers.push({
+      id: idx + 1,
+      name: d.data().displayName
+    }
+    )
+  })
+
   return {
     props: {     
       logo: asoviewLogoUrl,
       questions: questions, 
       nextQuestionId,
+      activeUsers,
     },
     revalidate: 10,
   };
@@ -52,7 +68,7 @@ export const getStaticProps: GetStaticProps<Props> = async (
 
 // TODO "useContext"を使って`showContent`のstateを管理して、"AdminSidebarの深いところにある"ListItemButton"のonClickで変更できるようにする
 
-const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
+const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId, activeUsers }) => {
   const { displayContent } = useAdminManageDisplayContentContext()
   return (
     <>
@@ -66,7 +82,7 @@ const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
         <Grid item xs={9} style={{paddingLeft: '8px', paddingTop: '0'}}>
           {displayContent === 'QUESTION_LIST' && <AdminQuestion questions={questions}  />}
           {displayContent === 'ADD_NEW_QUESTION' && <AddQuestion nextQuestionId={nextQuestionId} />}
-          {displayContent === 'ACTIVE_USER_LIST' && <AdminUser/>}
+          {displayContent === 'ACTIVE_USER_LIST' && <ActiveUserList activeUsers={activeUsers}/>}
         </Grid>
       </MainContainer>
     </>
