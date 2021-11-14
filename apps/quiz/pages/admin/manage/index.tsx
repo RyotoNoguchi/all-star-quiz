@@ -17,6 +17,7 @@ type Props = {
   logo: string
   questions: Question[]
   nextQuestionId: string
+  activeUsers: string[]
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (
@@ -40,11 +41,18 @@ export const getStaticProps: GetStaticProps<Props> = async (
 
   const nextQuestionId = (questions.length + 1).toString()
 
+  const activeUserCollection = await db.collection('users').where('disabled', '==', false).orderBy('displayName').get()
+  const activeUsers: string[] = []
+  activeUserCollection.docs.forEach(d => {
+    activeUsers.push(d.data().displayName)
+  })
+
   return {
     props: {     
       logo: asoviewLogoUrl,
       questions: questions, 
       nextQuestionId,
+      activeUsers,
     },
     revalidate: 10,
   };
@@ -52,7 +60,7 @@ export const getStaticProps: GetStaticProps<Props> = async (
 
 // TODO "useContext"を使って`showContent`のstateを管理して、"AdminSidebarの深いところにある"ListItemButton"のonClickで変更できるようにする
 
-const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
+const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId, activeUsers }) => {
   const { displayContent } = useAdminManageDisplayContentContext()
   return (
     <>
@@ -66,7 +74,7 @@ const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
         <Grid item xs={9} style={{paddingLeft: '8px', paddingTop: '0'}}>
           {displayContent === 'QUESTION_LIST' && <AdminQuestion questions={questions}  />}
           {displayContent === 'ADD_NEW_QUESTION' && <AddQuestion nextQuestionId={nextQuestionId} />}
-          {displayContent === 'ACTIVE_USER_LIST' && <ActiveUserList/>}
+          {displayContent === 'ACTIVE_USER_LIST' && <ActiveUserList activeUsers={activeUsers}/>}
         </Grid>
       </MainContainer>
     </>
