@@ -14,7 +14,7 @@ import {
   TopTitlePart,
   TopTitle,
   ClientContainer,
-} from './styled';
+} from '../../components/styles/client/styles';
 
 const title = 'アソビュー オールスター感謝祭 2021';
 const titleArray = title.split(' ');
@@ -40,6 +40,10 @@ const Home: React.FC = () => {
   useEffect(() => {
     socket.open();
     socket.on('ready_go', () => {
+      setIsDisabled(false);
+      startTime.current = new Date();
+    });
+    socket.on('final_ready_go', () => {
       setIsDisabled(false);
       startTime.current = new Date();
     });

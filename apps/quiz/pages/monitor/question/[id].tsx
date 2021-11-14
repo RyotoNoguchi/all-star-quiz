@@ -14,7 +14,7 @@ import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
 import { ParsedUrlQuery } from 'querystring';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { motion } from 'framer-motion';
-import {QuestionContainer, QuestionBox, QuestionMark, QuestionText, CountDownCircle, ChoiceBox, QuestionCell, ChoiceText, CountAnswerBox, AnswerCount} from './styled'
+import {QuestionContainer, QuestionBox, QuestionMark, QuestionText, CountDownCircle, ChoiceBox, QuestionCell, ChoiceText, CountAnswerBox, AnswerCount} from '../../../components/styles/monitor/questionStyles'
 
 const gongUrl = 'https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fgong.mp3?alt=media&token=3a66f8d8-23f8-48d0-a1ed-b785d2a8db3c'
 
@@ -163,6 +163,9 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         setIsTopPage(false);
         setIsPlaying(true)
         setIsLastQuestion(true)
+        setTimeout(() => {
+          socket.emit('check_answer', correctAnswer)
+        }, 20000);
       })
       socket.on('go_to_designated_page', (nextQuestionId) => {
         resetQuestion();

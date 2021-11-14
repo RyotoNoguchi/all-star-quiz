@@ -19,7 +19,7 @@ import { colors, textShadows } from '../../../components/styles/colors';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { AnswerInfo } from "../../../components/types/client";
 import { NextPageProps } from "../../../components/types/pageTransition";
-import { rankingRowVariant, tbodyVariant} from './variants'
+import { rankingRowVariant, tbodyVariant} from '../../../components/variants/rankingVariant'
 const db = firebase.firestore()
 
 const isLastRow = (idx: number): boolean => {

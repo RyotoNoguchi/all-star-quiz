@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Box, { BoxProps } from '@mui/material/Box'
 import Container, { ContainerProps } from '@mui/material/Container'
 import Typography, { TypographyProps } from '@mui/material/Typography'
-import { colors } from '../../components/styles/colors';
+import { colors } from '../colors';
 
 export const ClientContainer = styled(Container)<ContainerProps>``;
 
