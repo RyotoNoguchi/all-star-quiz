@@ -7,29 +7,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-
-type ActiveUser = {
-  id: number;
-  name: string;
-};
+import { ActiveUser } from '../../../components/types/admin'
 
 type Column = {
   id: 'name' | 'number';
   label: string;
-  minWidth?: number;
+  width?: number;
 };
 
 const columns: readonly Column[] = [
-  { id: 'number', label: 'No.', minWidth: 100 },
-  { id: 'name', label: '名前', minWidth: 300 },
+  { id: 'number', label: 'No.', width: 20 },
+  { id: 'name', label: '名前', width: 300 },
 ];
 
-type Data = {
-  id: number;
-  name: string;
-};
-
-const createData = (user: ActiveUser): Data => {
+const createData = (user: ActiveUser): ActiveUser => {
   const id = user.id;
   const name = user.name;
   return { id, name };
@@ -69,7 +60,7 @@ const ActiveUserList: React.FC<{ activeUsers: ActiveUser[] }> = ({
             <TableHead>
               <TableRow>
                 {columns.map((c) => (
-                  <TableCell key={c.id}>{c.label}</TableCell>
+                  <TableCell key={c.id} style={{width: c.width}}>{c.label}</TableCell>
                 ))}
               </TableRow>
             </TableHead>
