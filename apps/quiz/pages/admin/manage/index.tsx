@@ -4,7 +4,7 @@ import AdminSidebar from '../../../components/molecules/AdminSidebar';
 import AdminQuestion from '../../../components/organisms/AdminQuestion';
 import AddQuestion from '../../../components/organisms/AddQuestion';
 import Image from 'next/image';
-import AdminUser from '../../../components/organisms/AdminUser';
+import ActiveUserList from '../../../components/organisms/ActiveUserList';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Grid } from '@mui/material';
@@ -66,7 +66,7 @@ const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId }) => {
         <Grid item xs={9} style={{paddingLeft: '8px', paddingTop: '0'}}>
           {displayContent === 'QUESTION_LIST' && <AdminQuestion questions={questions}  />}
           {displayContent === 'ADD_NEW_QUESTION' && <AddQuestion nextQuestionId={nextQuestionId} />}
-          {displayContent === 'ACTIVE_USER_LIST' && <AdminUser/>}
+          {displayContent === 'ACTIVE_USER_LIST' && <ActiveUserList/>}
         </Grid>
       </MainContainer>
     </>

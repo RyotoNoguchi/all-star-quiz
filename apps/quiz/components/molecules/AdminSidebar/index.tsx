@@ -52,10 +52,7 @@ const MenuTitle = styled(Box)<BoxProps>`
 const AdminSidebar: React.FC = () => {
   const {changeDisplayContent} = useAdminManageDisplayContentContext()
   const [open, setOpen] = useState(true)
-  const handleClick = () => {
-    console.log('ADD_NEW_QUESTIONに変更しました');
-    changeDisplayContent('ADD_NEW_QUESTION')
-  }
+
   return (
     <>
       <MenuContainer>
@@ -79,7 +76,7 @@ const AdminSidebar: React.FC = () => {
                 </ListItemIcon>
                 <ListItemText primary="List" />
               </ListItemButton>
-              <ListItemButton onClick={()=> handleClick()}>
+              <ListItemButton onClick={()=> changeDisplayContent('ADD_NEW_QUESTION')}>
                 <ListItemIcon>
                   <StarBorder />
                 </ListItemIcon>
@@ -87,7 +84,7 @@ const AdminSidebar: React.FC = () => {
               </ListItemButton>
             </List>
           </Collapse>
-          <ListItemButton style={{ padding: '10px 0' }}>
+          <ListItemButton style={{ padding: '10px 0' }} onClick={()=> changeDisplayContent('ACTIVE_USER_LIST')}>
             <ListItemIcon>
               <StyledPeopleAlt />
             </ListItemIcon>
