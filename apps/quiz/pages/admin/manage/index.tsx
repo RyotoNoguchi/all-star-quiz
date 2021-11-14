@@ -13,11 +13,15 @@ import { Question } from '../../../components/types/question';
 import { useAdminManageDisplayContentContext } from '../../../components/contexts/AdminManageContext'
 const db = firebase.firestore();
 
+type ActiveUser = {
+  id: number
+  name: string
+}
 type Props = {
   logo: string
   questions: Question[]
   nextQuestionId: string
-  activeUsers: string[]
+  activeUsers: ActiveUser[]
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (
@@ -42,9 +46,13 @@ export const getStaticProps: GetStaticProps<Props> = async (
   const nextQuestionId = (questions.length + 1).toString()
 
   const activeUserCollection = await db.collection('users').where('disabled', '==', false).orderBy('displayName').get()
-  const activeUsers: string[] = []
-  activeUserCollection.docs.forEach(d => {
-    activeUsers.push(d.data().displayName)
+  const activeUsers: ActiveUser[] = []
+  activeUserCollection.docs.forEach((d, idx) => {
+    activeUsers.push({
+      id: idx + 1,
+      name: d.data().displayName
+    }
+    )
   })
 
   return {

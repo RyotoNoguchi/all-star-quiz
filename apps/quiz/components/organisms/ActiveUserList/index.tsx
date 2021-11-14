@@ -8,25 +8,34 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
+type ActiveUser = {
+  id: number;
+  name: string;
+};
+
 type Column = {
-  id: 'name';
+  id: 'name' | 'number';
   label: string;
   minWidth?: number;
 };
 
 const columns: readonly Column[] = [
+  { id: 'number', label: 'No.', minWidth: 100 },
   { id: 'name', label: '名前', minWidth: 300 },
 ];
 
 type Data = {
+  id: number;
   name: string;
 };
 
-const createData = (name: string): Data => {
-  return { name };
+const createData = (user: ActiveUser): Data => {
+  const id = user.id;
+  const name = user.name;
+  return { id, name };
 };
 
-const ActiveUserList: React.FC<{ activeUsers: string[] }> = ({
+const ActiveUserList: React.FC<{ activeUsers: ActiveUser[] }> = ({
   activeUsers,
 }) => {
   const [page, setPage] = useState(0);
@@ -46,7 +55,15 @@ const ActiveUserList: React.FC<{ activeUsers: string[] }> = ({
 
   return (
     <>
-      <Paper sx={{ width: '100%', overflow: 'hidden', position: 'relative', top: '12px', borderRadius: '12px' }}>
+      <Paper
+        sx={{
+          width: '100%',
+          overflow: 'hidden',
+          position: 'relative',
+          top: '12px',
+          borderRadius: '12px',
+        }}
+      >
         <TableContainer sx={{ minHeight: '625px' }}>
           <Table stickyHeader aria-label="active user table">
             <TableHead>
@@ -62,8 +79,10 @@ const ActiveUserList: React.FC<{ activeUsers: string[] }> = ({
                 .map((row) => {
                   return (
                     <TableRow hover key={row.name}>
-                      {columns.map((c) => (
-                        <TableCell key={c.id}>{row.name}</TableCell>
+                      {columns.map((c, idx) => (
+                        <TableCell key={c.id}>
+                          {idx == 0 ? row.id : row.name}
+                        </TableCell>
                       ))}
                     </TableRow>
                   );
