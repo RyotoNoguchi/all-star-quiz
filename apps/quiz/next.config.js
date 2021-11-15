@@ -17,6 +17,8 @@ module.exports = withNx(nextConfig);
 
 module.exports = {
   images: {
-    domains: ['firebasestorage.googleapis.com'] //指定しなければ"Invalid src prop 〜〜"というエラーが発生する
+    domains: ['firebasestorage.googleapis.com'], //指定しなければ"Invalid src prop 〜〜"というエラーが発生する
+    loader: 'imgix', // this is a hack until the bug is fixed
+    path: ''
   },
 }
