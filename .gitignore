@@ -63,7 +63,8 @@ package-lock.json
 apps/quiz/components/Auth.tsx
 apps/quiz/components/VoterList.tsx
 
-
+# vercel
+.vercel/
 
 # test
 /apps/quiz-e2e
