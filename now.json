@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "allstar",
+  "name": "all-star-quiz",
   "builds": [
     { "src": "/dist/apps/api/main.js", "use": "@now/node" },
     { "src": "/dist/apps/quiz/*", "use": "@now/static" }
