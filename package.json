@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "heroku-postbuild": "nx build $PROJECT_NAME --prod",
     "nx": "nx",
     "start": "nx serve",
     "build": "nx build",
