@@ -40,20 +40,30 @@ const Home: React.FC = () => {
     socket.on('ready_go', () => {
       setIsDisabled(false);
       startTime.current = new Date();
+      setTimeout(() => {
+        setIsDisabled(true);
+        // setIsAnswerDisplayed(true);
+      }, 10000);
     });
     socket.on('final_ready_go', () => {
       setIsDisabled(false);
       startTime.current = new Date();
+      setTimeout(() => {
+        setIsDisabled(true);
+        // setIsAnswerDisplayed(true);
+      }, 10000);
     });
     socket.on('check_answer', (correctAnswer: Answer) => {
+      setIsAnswerDisplayed(true);
       if (selectedAnswer === correctAnswer) {
         setVerifyAnswer('CORRECT');
       } else {
         setVerifyAnswer('INCORRECT');
-        disableUser()
+        disableUser();
       }
     });
     socket.on('go_to_designated_page', (data: NextPageProps) => {
+      setSelectedAnswer(null)
       setVerifyAnswer(null);
       if (selectedAnswer === data.correctAnswer) {
         setIsAnswerDisplayed(false);
@@ -65,11 +75,14 @@ const Home: React.FC = () => {
       socket.close();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedAnswer]);
+  }, [selectedAnswer, verifyAnswer]);
 
   const disableUser = async () => {
-    await db.collection('users').doc(user.uid).set({disabled: true}, { merge: true })
-  }
+    await db
+      .collection('users')
+      .doc(user?.uid)
+      .set({ disabled: true }, { merge: true });
+  };
 
   const addAnswerDocument = async (answer: Answer) => {
     setSelectedAnswer(answer);
@@ -112,12 +125,15 @@ const Home: React.FC = () => {
                   ☓
                 </AnswerCheckIcon>
               )}
-
               <Typography variant="h2">あなたが</Typography>
               <Typography variant="h2">選択した回答</Typography>
-              <SelectedAnswer answer={selectedAnswer}>
-                {selectedAnswer}
-              </SelectedAnswer>
+              {selectedAnswer ? (
+                <SelectedAnswer answer={selectedAnswer}>
+                  {selectedAnswer}
+                </SelectedAnswer>
+              ) : (
+                <h1>未選択です</h1>
+              )}
             </>
           ) : (
             <>

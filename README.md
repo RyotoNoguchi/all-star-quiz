@@ -131,8 +131,15 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 | 8 | test.hachiro800 | hachirotest800 |
 | 9 | test.kuro900 | kurotest900 |
 
+### フロントもバックエンドもローカルで立ち上げる場合
+
+1. apiサーバーの接続先を`http://localhost:3333/`に変更する
+2. `allstar`ディレクトリ直下で`nx run quiz:serve`
+3. `http://localhost:4200`を開く
+
 <!-- TODO '/admin'画面のボタンのUI整える -->
 <!-- TODO '/admin/manage'の「User」のメニューで「Active」と「Inactive」ボタン作成して、削除フラグでユーザーを分類、Client画面で「Inactive」になっている場合はグレーダウンとボタンの非活性化に修正 -->
 <!-- TODO '/admin'画面で現在生き残っているユーザー一覧が確認できるようにする -->
-
-<!-- userコレクションのdisabledプロパティをフラグとしてactiveユーザー一覧を/admin/manage/に表示 -->
+<!-- SPの実機で見たときにUIが整うように修正 -->
+<!-- ブラウザの更新できないようにする？ -->
+<!-- gameoverになったユーザーの復活ボタン（次のラウンドボタン） -->

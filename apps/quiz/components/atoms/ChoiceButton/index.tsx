@@ -1,24 +1,28 @@
 import { useMemo } from 'react';
-import { colors } from '../../styles/colors';
+import { Colors, colors } from '../../styles/colors';
 import { Button } from '@material-ui/core';
 import styled from 'styled-components';
 import React from 'react';
 
-
 type ChoiceType = 'A' | 'B' | 'C' | 'D'
-interface ButtonProps {
+type ButtonProps = {
   isDisabled: boolean
   buttonColor: 'red' | 'blue' | 'green' | 'yellow'
   choice: ChoiceType,
   addAnswerDocument: (choice: ChoiceType) => void
 }
 
-const StyledButton = styled(({buttonColor, ...props}) => <Button {...props}/>)`
+type StyledButtonProps = {
+  buttonProps?: ButtonProps
+  $buttonColor: Colors
+}
+
+const StyledButton = styled(Button)<StyledButtonProps>`
   border-radius: 10%;
   display: inline-block;
-  width: 150px;
-  height: 150px;
-  background-image: ${p => p.buttonColor};
+  width: 100px;
+  height: 100px;
+  background-image: ${p => p.$buttonColor};
   padding: 0;
   margin: 16px;
   font-size: 50px;
@@ -45,7 +49,7 @@ const ChoiceButton: React.FC<ButtonProps> = ({
       <StyledButton 
         disabled={isDisabled}
         variant="contained" 
-        buttonColor={buttonColor} 
+        $buttonColor={buttonColor} 
         onClick={()=> addAnswerDocument(choice)}>
         {choice}
       </StyledButton>

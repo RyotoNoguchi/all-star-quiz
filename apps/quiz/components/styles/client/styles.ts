@@ -48,7 +48,7 @@ type AnswerCheckProps = {
 export const AnswerCheckIcon = styled(Typography)<AnswerCheckProps>`
   color: ${(p) => (p.$isCorrect ? 'red' : 'blue')};
   font-weight: bold;
-  font-size: ${(p) => (p.$isCorrect ? '400px' : '800px')};
+  font-size: ${(p) => (p.$isCorrect ? '300px' : '600px')};
   position: absolute;
   top: 50%;
   left: 50%;
