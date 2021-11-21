@@ -31,7 +31,6 @@ const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSide
   const [answerList, setAnswerList] = useState<AnswerInfo[]>(answers)
   const numberItemShow = 10;
   const totalNumber = answerList?.length
-  
   const Top10AnswerInfo: AnswerInfo[] = []
   if (answerList.length >= 10) {
     for (let i = 0; i < numberItemShow; i++) {
@@ -73,7 +72,6 @@ const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSide
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answerList, correctAnswer]);
-  
   return (
     <>
       <ChampionRankingTableContainer answerInfo={Top10AnswerInfo} isRankingRowsShow={isRankingRowsShow} />

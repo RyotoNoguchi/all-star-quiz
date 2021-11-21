@@ -117,6 +117,8 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   }
 
   const showChampionRanking = () => {
+    console.log('correctAnswer', correctAnswer);
+    
     playChampionRanking()
     setIsReadyGoBtnDisabled(true)
     socket.emit('show_champion_ranking', correctAnswer)
@@ -130,6 +132,8 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     db.collection('questions').where('questionId', '==', questionId).get().then((snapShot) => {
       snapShot.forEach((doc) => { setCorrectAnswer(doc.data().correctAnswer)})
     })
+    console.log('correctAnswer', correctAnswer);
+    
   }, [correctAnswer, questionId])
 
   return (
