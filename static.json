@@ -1,5 +1,5 @@
 {
-  "root": "dist/apps/quiz/exported/",
+  "root": "dist/apps/quiz/",
   "routes": {
     "/**/*.html": "index.html"
   },
