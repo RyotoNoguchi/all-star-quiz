@@ -1,5 +1,5 @@
 import Typography, { TypographyProps } from "@mui/material/Typography";
-import { ReactNode } from "hoist-non-react-statics/node_modules/@types/react";
+import { ReactNode } from "react";
 import styled from "styled-components";
 import { Colors, TextShadows } from "../../styles/colors"
 

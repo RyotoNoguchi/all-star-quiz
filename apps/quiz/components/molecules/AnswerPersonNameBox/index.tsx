@@ -1,5 +1,5 @@
 import TableCell, { TableCellProps } from '@mui/material/TableCell';
-import { ReactNode } from 'hoist-non-react-statics/node_modules/@types/react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 import {
   rankRowChild,

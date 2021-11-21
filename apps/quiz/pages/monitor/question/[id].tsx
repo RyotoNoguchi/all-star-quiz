@@ -73,7 +73,7 @@ const countdownSec = 10;
 const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
   
   const router = useRouter();
-  const socket = io('http://localhost:3333');
+  const socket = io('https://all-star-quiz-api.herokuapp.com/');
   const [questionId, setQuestionId] = useState(id);
   const [currentPath, setCurrentPath] = useState(
     `/monitor/question/${questionId}`

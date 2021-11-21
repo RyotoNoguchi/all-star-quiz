@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const socket = io('http://localhost:3333');
+  const socket = io('https://all-star-quiz-api.herokuapp.com/');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
   const [answerList, setAnswerList] = useState<AnswerInfo[]>(answers)

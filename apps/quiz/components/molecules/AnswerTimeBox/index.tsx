@@ -6,7 +6,7 @@ import {
   blinkChampionRow,
 } from '../../styles/animations';
 import { TableCell, TableCellProps } from '@material-ui/core';
-import { ReactNode } from 'hoist-non-react-statics/node_modules/@types/react';
+import { ReactNode } from 'react';
 
 type StyledTableCellProps = {
   tableCell?: TableCellProps;
