@@ -25,8 +25,6 @@ const ChampionRankingTableContainer: React.FC<Props> = ({
   answerInfo,
   isRankingRowsShow,
 }) => {
-  console.log("params", answerInfo);
-  
   const tbodyVariant = {
     hidden: {
       opacity: 0,

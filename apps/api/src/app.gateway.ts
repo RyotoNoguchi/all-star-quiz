@@ -33,21 +33,6 @@ export class AppGateway
   @WebSocketServer()
   server: Server;
 
-  // @SubscribeMessage('go_to_top_page')
-  // goToTopPage(@MessageBody() payload: string): WsResponse<string> {
-  //   console.log(`現在のURL: http://localhost:4200${payload}`);
-
-  //   return { event: GO_TO_DESIGNATED_PAGE, data: payload };
-  //   // this.server.emit('message', message); // サーバーに接続しているすべてのユーザにemitとしたときは←のようにする
-  //   // return { event: 'mapToClient', data: message }; // client.emit('mapToClient', data)と同じだが、型定義できない
-  // }
-
-  // @SubscribeMessage('go_to_cue_page')
-  // goToCuePage(@MessageBody() payload: string): void {
-  //   console.log(`受け取ったURL: http://localhost:4200${payload}`);
-  //   this.server.emit(GO_TO_DESIGNATED_PAGE, payload)
-  // }
-
   @SubscribeMessage('go_to_question_page')
   goToAnotherPage(@MessageBody() nextQuestionId: string): void {
     this.server.emit(GO_TO_DESIGNATED_PAGE, nextQuestionId)

@@ -32,7 +32,6 @@ const ImageUploadTest: React.FC = () => {
       const imageCollection = await db.collection("images").get()
       const asoviewLogo = imageCollection.docs.find(doc => doc.data().name === 'アソビューロゴ')?.data()?.url
       setLogoUrl(asoviewLogo)
-      console.log(imageCollection.docs.find(doc => doc.data().name === 'アソビューロゴ')?.id);
     } 
     fetchImg()
   }, [])

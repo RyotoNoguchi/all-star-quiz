@@ -21,7 +21,6 @@ export const AdminManageDisplayContentProvider: React.FC = ({ children }) => {
     useState<DisplayContentType>('QUESTION_LIST');
   const changeDisplayContent = useCallback(
     (displayContent: DisplayContentType) => {
-      console.log('displayContent', displayContent);
       setDisplayContent(displayContent);
     },
     []
