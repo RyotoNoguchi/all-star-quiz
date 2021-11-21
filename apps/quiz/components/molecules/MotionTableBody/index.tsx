@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { motion, Variants } from 'framer-motion';
-import { ReactNode } from 'hoist-non-react-statics/node_modules/@types/react';
+import { ReactNode } from 'react';
 
 const StyledMotionTbody = styled(motion.tbody)``;
 
