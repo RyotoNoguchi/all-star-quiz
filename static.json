@@ -1,0 +1,12 @@
+{
+  "root": "dist/apps/quiz/",
+  "routes": {
+    "/**/*.html": "index.html"
+  },
+  "proxies": {
+    "/api/": {
+      "origin": "https://all-star-quiz-api.herokuapp.com/api/"
+    }
+  }
+}
+
