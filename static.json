@@ -1,5 +1,5 @@
 {
-  "root": "dist/apps/quiz/",
+  "root": "dist/apps/quiz/.next",
   "routes": {
     "/**/*.html": "index.html"
   },
