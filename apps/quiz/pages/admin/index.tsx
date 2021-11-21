@@ -46,7 +46,7 @@ const StyledBox = styled(Box)`
 `
 
 const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, championRankingUrl}) => {
-  const socket = io('http://localhost:3333');
+  const socket = io('https://all-star-quiz-api.herokuapp.com/');
   const MONITOR_BASE_URL = '/monitor/question';
   const [questionId, setQuestionId] = useState('1');
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
@@ -80,8 +80,6 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   }
 
   const goToChampionRanking = () => {
-    console.log('チャンピオンボタンが押されました');
-    
     setIsReadyGoBtnDisabled(false)
     const championRankingPagePath = '/monitor/champion'
     setMonitorCurrentPath(championRankingPagePath)

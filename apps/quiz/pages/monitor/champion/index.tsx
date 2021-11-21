@@ -25,13 +25,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const socket = io('http://localhost:3333');
+  const socket = io('https://all-star-quiz-api.herokuapp.com/');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
   const [answerList, setAnswerList] = useState<AnswerInfo[]>(answers)
   const numberItemShow = 10;
   const totalNumber = answerList?.length
-  
   const Top10AnswerInfo: AnswerInfo[] = []
   if (answerList.length >= 10) {
     for (let i = 0; i < numberItemShow; i++) {
@@ -73,7 +72,6 @@ const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSide
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [answerList, correctAnswer]);
-  
   return (
     <>
       <ChampionRankingTableContainer answerInfo={Top10AnswerInfo} isRankingRowsShow={isRankingRowsShow} />

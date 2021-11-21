@@ -19,7 +19,6 @@ const EditQuestion: React.FC<{q: Question}> = ({q}) => {
     answer: answer,
     choices: q.choices
   };
-  // FIXME setIsDisabledが反映されず、編集モードと閲覧モードで切り替えができない
   return (
     <>
       <FormPaper>

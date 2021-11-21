@@ -28,7 +28,7 @@ const isLastRow = (idx: number): boolean => {
 
 const Ranking: React.VFC = () => {
   const router = useRouter();
-  const socket = io('http://localhost:3333');
+  const socket = io('https://all-star-quiz-api.herokuapp.com/');
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState('');
   const [answers, answersLoading, answersError] = useCollectionData(

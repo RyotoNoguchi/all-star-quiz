@@ -25,7 +25,7 @@ const title3rdRow = titleArray[2];
 type IsRight = 'CORRECT' | 'INCORRECT';
 
 const Home: React.FC = () => {
-  const socket = io('http://localhost:3333');
+  const socket = io('https://all-star-quiz-api.herokuapp.com/');
   const db = firebase.firestore();
   const [user, loading, error] = useAuthState(firebase.auth());
   const [isDisabled, setIsDisabled] = useState(true);
@@ -35,8 +35,6 @@ const Home: React.FC = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<Answer>(null);
   const [verifyAnswer, setVerifyAnswer] = useState<IsRight>(null);
 
-  console.log('Loading', loading, '|', 'Current User', user);
-  
   useEffect(() => {
     socket.open();
     socket.on('ready_go', () => {
