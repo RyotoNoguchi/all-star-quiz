@@ -8,6 +8,7 @@ import firebase from '../../../../firebase/clientApp';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Answer } from '../../components/types/question';
+import { API_BASE_URL } from '../_app'
 
 const db = firebase.firestore()
 
@@ -46,7 +47,7 @@ const StyledBox = styled(Box)`
 `
 
 const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, championRankingUrl}) => {
-  const socket = io('https://all-star-quiz-api.herokuapp.com/');
+  const socket = io(API_BASE_URL);
   const MONITOR_BASE_URL = '/monitor/question';
   const [questionId, setQuestionId] = useState('1');
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
@@ -84,12 +85,6 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     const championRankingPagePath = '/monitor/champion'
     setMonitorCurrentPath(championRankingPagePath)
     socket.emit('go_to_champion_ranking_page', championRankingPagePath)
-  }
-
-  const displayCuePage = () => {
-    playActive()
-    setIsReadyGoBtnDisabled(false)
-    socket.emit('display_cue_page');    
   }
 
   const displayTopPage = () => {
@@ -142,27 +137,6 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
       </Typography>
       {/* TODO HStackを導入して横のmargin開ける */}
       <StyledBox>
-        <StyledButton
-          color="primary"
-          variant="contained"
-          onClick={() => displayCuePage()}
-        >
-          CUE
-        </StyledButton>
-        <StyledButton
-          color="primary"
-          variant="contained"
-          onClick={() => displayTopPage()}
-        >
-          TOP
-        </StyledButton>
-        <StyledButton
-          color="primary"
-          variant="contained"
-          onClick={() => goToQuestion()}
-        >
-          INDEX
-        </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"

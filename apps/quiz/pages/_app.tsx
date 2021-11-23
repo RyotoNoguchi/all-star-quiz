@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { AdminManageDisplayContentProvider } from '../components/contexts/AdminManageContext'
 
 export const GO_TO_DESIGNATED_PAGE = 'go_to_designated_page'
+export const API_BASE_URL = 'https://all-star-quiz-api.herokuapp.com/'
 function CustomApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     // Remove the server-side injected CSS.

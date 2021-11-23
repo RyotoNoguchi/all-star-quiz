@@ -103,6 +103,7 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
     setIsCorrectForD(false);
     setIsTopPage(false);
     setIsQuestionDisplayed(false);
+  
   };
   // https://usehooks-typescript.com/react-hook/use-interval
   useInterval(() => {
@@ -210,10 +211,10 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
     return <Index />;
   }
 
-  if (!isQuestionDisplayed) {
-    // [READY-GO]ボタンが押下される前
-    return <Cue questionNumber={questionId} />;
-  } 
+  // if (!isQuestionDisplayed) {
+  //   // [READY-GO]ボタンが押下される前
+  //   return <Cue questionNumber={questionId} />;
+  // } 
 
   const srcA = choices.A
   const srcB = choices.B
