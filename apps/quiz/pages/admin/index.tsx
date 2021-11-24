@@ -58,6 +58,7 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   const [isOpenWorstRankingBtnDisabled, setIsOpenWorstRankingBtnDisabled] = useState(true)
   const [isChampionRankingDisabled, setIsChampionRankingDisabled] = useState(true)
   const [isOpenChampionRankingBtnDisabled, setIsOpenChampionRankingBtnDisabled] = useState(true)
+  const [isQuestionBtnDisabled, setIsQuestionBtnDisabled] = useState(true)
   const [playActive] = useSound(cueUrl, { volume: 0.5 })
   const [playCountDown] = useSound(countdownUrl, { volume: 0.5 })
   const [playWorstRanking] = useSound(worstRankingUrl, { volume: 0.5 })
@@ -187,6 +188,7 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isQuestionBtnDisabled}
           onClick={() => goToQuestionManage()}
         >
           Q Manage

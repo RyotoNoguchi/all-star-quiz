@@ -8,6 +8,7 @@ import { Answer } from '../../components/types/question';
 import { io } from 'socket.io-client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { NextPageProps } from '../../components/types/pageTransition';
+import { API_BASE_URL } from "../_app";
 import {
   AnswerCheckIcon,
   StyledBox,
@@ -25,7 +26,7 @@ const title3rdRow = titleArray[2];
 type IsRight = 'CORRECT' | 'INCORRECT';
 
 const Home: React.FC = () => {
-  const socket = io('https://all-star-quiz-api.herokuapp.com/');
+  const socket = io(API_BASE_URL);
   const db = firebase.firestore();
   const [user, loading, error] = useAuthState(firebase.auth());
   const [isDisabled, setIsDisabled] = useState(true);

@@ -20,6 +20,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { AnswerInfo } from "../../../components/types/client";
 import { NextPageProps } from "../../../components/types/pageTransition";
 import { rankingRowVariant, tbodyVariant} from '../../../components/variants/rankingVariant'
+import { API_BASE_URL } from "../../_app";
 const db = firebase.firestore()
 
 const isLastRow = (idx: number): boolean => {
@@ -28,7 +29,7 @@ const isLastRow = (idx: number): boolean => {
 
 const Ranking: React.VFC = () => {
   const router = useRouter();
-  const socket = io('https://all-star-quiz-api.herokuapp.com/');
+  const socket = io(API_BASE_URL);
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState('');
   const [answers, answersLoading, answersError] = useCollectionData(

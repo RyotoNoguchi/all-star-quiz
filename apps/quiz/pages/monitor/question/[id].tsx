@@ -14,6 +14,7 @@ import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
 import { ParsedUrlQuery } from 'querystring';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { motion } from 'framer-motion';
+import { API_BASE_URL } from "../../_app";
 import {QuestionContainer, QuestionBox, QuestionMark, QuestionText, CountDownCircle, ChoiceBox, QuestionCell, ChoiceText, CountAnswerBox, AnswerCount} from '../../../components/styles/monitor/questionStyles'
 
 const gongUrl = 'https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fgong.mp3?alt=media&token=3a66f8d8-23f8-48d0-a1ed-b785d2a8db3c'
@@ -73,7 +74,7 @@ const countdownSec = 10;
 const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
   
   const router = useRouter();
-  const socket = io('https://all-star-quiz-api.herokuapp.com/');
+  const socket = io(API_BASE_URL);
   const [questionId, setQuestionId] = useState(id);
   const [currentPath, setCurrentPath] = useState(
     `/monitor/question/${questionId}`

@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://all-star-quiz-api.herokuapp.com/",
+    "target": "https://localhost:3333",
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": {
