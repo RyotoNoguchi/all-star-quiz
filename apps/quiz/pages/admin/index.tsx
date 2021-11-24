@@ -53,6 +53,11 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
   const [monitorCurrentPath, setMonitorCurrentPath] = useState(`${MONITOR_BASE_URL}/${questionId}`);
   const [isReadyGoBtnDisabled, setIsReadyGoBtnDisabled] = useState(false)
+  const [isNextBtnDisabled, setIsNextBtnDisabled] = useState(true)
+  const [isWorstRankingBtnDisabled, setIsWorstRankingBtnDisabled] = useState(true)
+  const [isOpenWorstRankingBtnDisabled, setIsOpenWorstRankingBtnDisabled] = useState(true)
+  const [isChampionRankingDisabled, setIsChampionRankingDisabled] = useState(true)
+  const [isOpenChampionRankingBtnDisabled, setIsOpenChampionRankingBtnDisabled] = useState(true)
   const [playActive] = useSound(cueUrl, { volume: 0.5 })
   const [playCountDown] = useSound(countdownUrl, { volume: 0.5 })
   const [playWorstRanking] = useSound(worstRankingUrl, { volume: 0.5 })
@@ -85,10 +90,6 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     const championRankingPagePath = '/monitor/champion'
     setMonitorCurrentPath(championRankingPagePath)
     socket.emit('go_to_champion_ranking_page', championRankingPagePath)
-  }
-
-  const displayTopPage = () => {
-    socket.emit('display_top_page')
   }
 
   const readyGo = () => {
@@ -140,6 +141,7 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isNextBtnDisabled}
           onClick={() => goToQuestion()}
         >
           NEXT
@@ -153,29 +155,33 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isWorstRankingBtnDisabled}
           onClick={() => goToWorstRanking()}
-        >
+          >
           Worst Ranking
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isOpenWorstRankingBtnDisabled}
           onClick={() => showWorstRanking()}
-        >
+          >
           Open Worst Ranking
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isChampionRankingDisabled}
           onClick={() => goToChampionRanking()}
-        >
+          >
           Champion Ranking
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isOpenChampionRankingBtnDisabled}
           onClick={() => showChampionRanking()}
-        >
+          >
           Open Champion Ranking
         </StyledButton>
         <StyledButton
