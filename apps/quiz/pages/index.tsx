@@ -1,13 +1,15 @@
 import Box from '@mui/material/Box';
-import React from 'react';
+import React, {useEffect} from 'react';
 import router from 'next/router';
-import { TopTitle, TopTitlePart } from '../components/molecules/TopTitle';
+import {TopTitle, TopTitlePart} from '../components/molecules/TopTitle';
 
 
 const Index: React.VFC = () => {
-  // useEffect(() => {
-  //   router.push('/monitor/question/1')
-  // }, [])
+  useEffect(() => {
+    if (location.pathname === '/') {
+      router.push('/monitor/question/1')
+    }
+  }, [])
   const title = 'アソビュー オールスター感謝祭 2021';
   const titleArray = title.split(' ');
   const title1stRow = titleArray[0];
