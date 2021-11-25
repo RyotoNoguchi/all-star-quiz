@@ -5,7 +5,6 @@ import useSound from 'use-sound';
 import Image from 'next/image';
 import firebase from '../../../../../firebase/clientApp';
 import AlphabetCircle from '../../../components/atoms/AlphabetCircle/index';
-import Cue from '../cue';
 import { io } from 'socket.io-client';
 import Index from '../../index';
 import { useRouter } from 'next/router';
@@ -107,7 +106,7 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
   
   };
   // https://usehooks-typescript.com/react-hook/use-interval
-  useInterval(() => {
+  useInterval( async() => {
     
     if (isQuestionDisplayed && countdownTimeSec > 0) {
       setCountdownTimeSec(countdownTimeSec - 1)
@@ -115,6 +114,19 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
     if (countdownTimeSec === 0) {
       // カウントダウンが0になった3400ms（「アンサーチェック！」）後に解答数枠を表示する
       setIsPlaying(false)
+      await startCountdown()
+      // 「アンサーチェック！」の後3000ms（「正解はこちら！」）後に正解を点滅させる
+      await openAnswer()
+      
+      setTimeout(() => {
+        socket.emit('answer_displayed')
+      }, 3000);
+    }
+
+  }, isPlaying ? 1000 : null)
+
+  const startCountdown = () => {
+    return new Promise<void>(resolve => {
       setTimeout(() => {
         setIsNumberCountShown(true);
         if (isLastQuestion) {
@@ -122,9 +134,14 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
             playGong()
           }, 7000);
         }
+        resolve();
       }, 3400);
+    })
+    
+  }
 
-      // カウントダウンが0になった7000ms（「正解はこちら！」）後に正解を点滅させる
+  const openAnswer = () => {
+    return new Promise<void>(resolve => {
       setTimeout(() => {
         switch (correctAnswer) {
           case 'A':
@@ -142,11 +159,11 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
           default:
             break;
         }
-      }, 7000);
-      
-    }
-
-  }, isPlaying ? 1000 : null)
+        resolve();
+      }, 3000);
+    })
+  }
+  
 
   useEffect(() => {
     setMounted(true)
@@ -211,11 +228,6 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
   if (isTopPage) {
     return <Index />;
   }
-
-  // if (!isQuestionDisplayed) {
-  //   // [READY-GO]ボタンが押下される前
-  //   return <Cue questionNumber={questionId} />;
-  // } 
 
   const srcA = choices.A
   const srcB = choices.B

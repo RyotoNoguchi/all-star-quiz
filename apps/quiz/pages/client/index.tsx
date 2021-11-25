@@ -43,7 +43,6 @@ const Home: React.FC = () => {
       startTime.current = new Date();
       setTimeout(() => {
         setIsDisabled(true);
-        // setIsAnswerDisplayed(true);
       }, 10000);
     });
     socket.on('final_ready_go', () => {
@@ -51,7 +50,6 @@ const Home: React.FC = () => {
       startTime.current = new Date();
       setTimeout(() => {
         setIsDisabled(true);
-        // setIsAnswerDisplayed(true);
       }, 10000);
     });
     socket.on('check_answer', (correctAnswer: Answer) => {

@@ -48,6 +48,9 @@ const Ranking: React.VFC = () => {
         }
         return prev
       })
+      setTimeout(() => {
+        socket.emit('ranking_display_completed')
+      }, 10000);
     });
     socket.on('go_to_designated_page', (data: NextPageProps) => {
       router.push(`/monitor/question/${data.nextQuestionId}`)

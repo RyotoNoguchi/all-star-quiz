@@ -65,6 +65,7 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   const [playChampionRanking] = useSound(championRankingUrl, { volume: 0.5 })
 
   const goToQuestion = async () => {
+    setIsNextBtnDisabled(true)
     // 初期ページが"/monitor/question/1
     playActive()
     setIsReadyGoBtnDisabled(false)
@@ -76,11 +77,14 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     const docIds: string[] = []
     docs.forEach(doc => { docIds.push(doc.id)})
     docIds.map(async (docId) => { await db.collection('answers').doc(docId).delete()})
-        socket.emit('go_to_question_page', {nextQuestionId, correctAnswer});
+    console.log('nextQuestionId', nextQuestionId);
+    
+    socket.emit('go_to_question_page', {nextQuestionId, correctAnswer});
   };
 
   const goToWorstRanking = () => {
-    setIsReadyGoBtnDisabled(false)
+    setIsWorstRankingBtnDisabled(true)
+    setIsOpenWorstRankingBtnDisabled(false)
     const worstRankingPagePath = '/monitor/ranking'
     setMonitorCurrentPath(worstRankingPagePath)
     socket.emit('go_to_worst_ranking_page', worstRankingPagePath)
@@ -107,7 +111,7 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
 
   const showWorstRanking = () => {
     playWorstRanking()
-    setIsReadyGoBtnDisabled(true)
+    setIsOpenWorstRankingBtnDisabled(true)
     socket.emit('show_worst_ranking', questionId)
   }
 
@@ -122,9 +126,22 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   }
 
   useEffect(() => {
+    socket.open()
+    socket.on('answer_displayed', () => {
+      setIsWorstRankingBtnDisabled(false)
+    })
+    socket.on('ranking_display_completed', () => {
+      setIsNextBtnDisabled(false)
+    })
+
     db.collection('questions').where('questionId', '==', questionId).get().then((snapShot) => {
       snapShot.forEach((doc) => { setCorrectAnswer(doc.data().correctAnswer)})
     })
+
+    return () => {
+      socket.close()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [correctAnswer, questionId])
 
   return (
