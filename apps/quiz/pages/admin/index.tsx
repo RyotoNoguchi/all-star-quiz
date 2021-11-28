@@ -17,6 +17,7 @@ type Props = {
   countdownUrl: string
   worstRankingUrl: string
   championRankingUrl: string
+  lastQuestionId: number
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (
@@ -27,12 +28,15 @@ export const getStaticProps: GetStaticProps<Props> = async (
   const countdownUrl = soundCollection.docs.find(doc => doc.data().name === 'countdown')?.data()?.url
   const worstRankingUrl = soundCollection.docs.find(doc => doc.data().name === 'worstRanking')?.data()?.url
   const championRankingUrl = soundCollection.docs.find(doc => doc.data().name === 'championRanking')?.data()?.url
+  const questionCollection = await db.collection('questions').get()
+  const lastQuestionId = questionCollection.docs.length
   return {
     props: {     
       cueUrl,
       countdownUrl,
       worstRankingUrl,
       championRankingUrl,
+      lastQuestionId,
     },
   };
 }
@@ -46,13 +50,14 @@ const StyledBox = styled(Box)`
   justify-content: space-around;
 `
 
-const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, championRankingUrl}) => {
+const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, championRankingUrl, lastQuestionId}) => {
   const socket = io(API_BASE_URL);
   const MONITOR_BASE_URL = '/monitor/question';
-  const [questionId, setQuestionId] = useState('1');
+  const [questionId, setQuestionId] = useState('7');
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
   const [monitorCurrentPath, setMonitorCurrentPath] = useState(`${MONITOR_BASE_URL}/${questionId}`);
   const [isReadyGoBtnDisabled, setIsReadyGoBtnDisabled] = useState(false)
+  const [isFinalReadyGoBtnDisabled, setIsFinalReadyGoBtnDisabled] = useState(true)
   const [isNextBtnDisabled, setIsNextBtnDisabled] = useState(true)
   const [isWorstRankingBtnDisabled, setIsWorstRankingBtnDisabled] = useState(true)
   const [isOpenWorstRankingBtnDisabled, setIsOpenWorstRankingBtnDisabled] = useState(true)
@@ -77,7 +82,6 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     const docIds: string[] = []
     docs.forEach(doc => { docIds.push(doc.id)})
     docIds.map(async (docId) => { await db.collection('answers').doc(docId).delete()})
-    console.log('nextQuestionId', nextQuestionId);
     
     socket.emit('go_to_question_page', {nextQuestionId, correctAnswer});
   };
@@ -91,7 +95,8 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   }
 
   const goToChampionRanking = () => {
-    setIsReadyGoBtnDisabled(false)
+    setIsChampionRankingDisabled(true)
+    setIsOpenChampionRankingBtnDisabled(false)
     const championRankingPagePath = '/monitor/champion'
     setMonitorCurrentPath(championRankingPagePath)
     socket.emit('go_to_champion_ranking_page', championRankingPagePath)
@@ -105,7 +110,7 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
 
   const finalReadyGo = () => {
     playCountDown()
-    setIsReadyGoBtnDisabled(true)
+    setIsFinalReadyGoBtnDisabled(true)
     socket.emit('final_ready_go');
   }
 
@@ -116,6 +121,7 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   }
 
   const showChampionRanking = () => {
+    setIsOpenChampionRankingBtnDisabled(true)
     playChampionRanking()
     setIsReadyGoBtnDisabled(true)
     socket.emit('show_champion_ranking', correctAnswer)
@@ -128,7 +134,13 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   useEffect(() => {
     socket.open()
     socket.on('answer_displayed', () => {
-      setIsWorstRankingBtnDisabled(false)
+      if (!(parseInt(questionId) === lastQuestionId)) {
+        setIsWorstRankingBtnDisabled(false)
+      } else {
+        setTimeout(() => {
+          setIsChampionRankingDisabled(false)
+        }, 3000);
+      }
     })
     socket.on('ranking_display_completed', () => {
       setIsNextBtnDisabled(false)
@@ -137,6 +149,15 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     db.collection('questions').where('questionId', '==', questionId).get().then((snapShot) => {
       snapShot.forEach((doc) => { setCorrectAnswer(doc.data().correctAnswer)})
     })
+
+    console.log('questionId', questionId);
+    console.log('lastQuestionId', lastQuestionId);
+    
+    if (parseInt(questionId) === lastQuestionId) {
+      setIsReadyGoBtnDisabled(true)
+      setIsFinalReadyGoBtnDisabled(false)
+    }
+
 
     return () => {
       socket.close()
@@ -167,7 +188,7 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
         <StyledButton disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => readyGo()}>
           READY-GO
         </StyledButton>
-        <StyledButton disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => finalReadyGo()}>
+        <StyledButton disabled={isFinalReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => finalReadyGo()}>
           FINAL READY-GO
         </StyledButton>
         <StyledButton
