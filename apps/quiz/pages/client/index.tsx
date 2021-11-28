@@ -28,7 +28,7 @@ type IsRight = 'CORRECT' | 'INCORRECT';
 const Home: React.FC = () => {
   const socket = io(API_BASE_URL);
   const db = firebase.firestore();
-  const [user, loading, error] = useAuthState(firebase.auth());
+  const [user] = useAuthState(firebase.auth());
   const [isDisabled, setIsDisabled] = useState(true);
   const startTime = useRef<Date>(null);
   const finishTime = useRef<Date>(null);
@@ -61,10 +61,12 @@ const Home: React.FC = () => {
         disableUser();
       }
     });
-    socket.on('go_to_designated_page', (data: NextPageProps) => {
+    socket.on('go_to_designated_page', async(data: NextPageProps) => {
+      const disabled = await (await db.collection('users').doc(user?.uid).get()).data().disabled
+      console.log('disabled', disabled);
       setSelectedAnswer(null)
-      setVerifyAnswer(null);
-      if (selectedAnswer === data.correctAnswer) {
+      setVerifyAnswer(null)
+      if (selectedAnswer === data.correctAnswer && disabled === false) {
         setIsAnswerDisplayed(false);
       } else {
         router.push('/client/gameover');
@@ -77,10 +79,12 @@ const Home: React.FC = () => {
   }, [selectedAnswer, verifyAnswer]);
 
   const disableUser = async () => {
-    await db
-      .collection('users')
-      .doc(user?.uid)
-      .set({ disabled: true }, { merge: true });
+    if (user?.uid) {      
+      await db
+        .collection('users')
+        .doc(user?.uid)
+        .set({ disabled: true }, { merge: true });
+    }
   };
 
   const addAnswerDocument = async (answer: Answer) => {
@@ -96,6 +100,7 @@ const Home: React.FC = () => {
       .collection('answers')
       .doc(user.uid)
       .set({
+        uid: user.uid,
         answer,
         user: user.displayName,
         time: answerTime.toFixed(2), // 2.50などと0埋めするため
