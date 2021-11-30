@@ -17,7 +17,7 @@ import {
   ClientContainer,
 } from '../../components/styles/client/styles';
 
-const title = 'アソビュー オールスター感謝祭 2021';
+const title = 'XXXX オールスター感謝祭 2021';
 const titleArray = title.split(' ');
 const title1stRow = titleArray[0];
 const title2ndRow = titleArray[1];
@@ -122,8 +122,8 @@ const Home: React.FC = () => {
     <>
       <ClientContainer disableGutters>
         <TopTitle variant="h1">
-          <TopTitlePart data-text={title1stRow}>{title1stRow}</TopTitlePart>
-          <TopTitlePart data-text={title2ndRow}>{title2ndRow}</TopTitlePart>
+          <TopTitlePart data-text={title1stRow}>{title1stRow}</TopTitlePart><br/>
+          <TopTitlePart data-text={title2ndRow}>{title2ndRow}</TopTitlePart><br/>
           <TopTitlePart data-text={title3rdRow}>{title3rdRow}</TopTitlePart>
         </TopTitle>
         <StyledBox>

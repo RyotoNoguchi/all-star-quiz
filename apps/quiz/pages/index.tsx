@@ -10,7 +10,7 @@ const Index: React.VFC = () => {
       router.push('/monitor/question/1')
     }
   }, [])
-  const title = 'アソビュー オールスター感謝祭 2021';
+  const title = 'XXXX オールスター感謝祭 2021';
   const titleArray = title.split(' ');
   const title1stRow = titleArray[0];
   const title2ndRow = titleArray[1];

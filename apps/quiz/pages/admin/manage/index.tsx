@@ -66,14 +66,14 @@ export const getStaticProps: GetStaticProps<Props> = async (
   };
 };
 
-// TODO "useContext"を使って`showContent`のstateを管理して、"AdminSidebarの深いところにある"ListItemButton"のonClickで変更できるようにする
 
 const Manage: React.FC<Props> = ({ logo, questions, nextQuestionId, activeUsers }) => {
   const { displayContent } = useAdminManageDisplayContentContext()
   return (
     <>
       <StyledBox>
-        <Image loader={() => logo} src={logo} alt="ロゴ" width={1000} height={80}/>
+        {/* ロゴひょうじしたかったらコメントアウト解除 */}
+        {/* <Image loader={() => logo} src={logo} alt="ロゴ" width={1000} height={80}/> */} 
       </StyledBox>
       <MainContainer container spacing={3}>
         <Grid item xs={3} style={{paddingLeft: '2px', paddingTop: '0', paddingRight: '4px'}}>
