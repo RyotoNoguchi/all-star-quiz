@@ -6,8 +6,8 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
-// const API_BASE_URL = "https://all-star-quiz-api.herokuapp.com/"
-const API_BASE_URL = 'http://localhost:3333'
+const API_BASE_URL = "https://all-star-quiz-api.herokuapp.com/"
+// const API_BASE_URL = 'http://localhost:3333'
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   // app.useStaticAssets('../../quiz/pages/index.tsx');
