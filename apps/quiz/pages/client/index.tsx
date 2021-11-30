@@ -80,6 +80,7 @@ const Home: React.FC = () => {
       } else {
         router.push('/client/gameover');
       }
+      await db.collection('users').doc(user?.uid).set({ disabled: false }, { merge: true });
     });
     return function cleanup() {
       socket.close();
