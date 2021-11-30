@@ -41,6 +41,11 @@ const Home: React.FC = () => {
     window.onpopstate = function () {
         history.go(1);
     };
+    window.addEventListener('beforeunload', function(e){
+      const message = '本当に更新してよろしいですか？';
+      e.returnValue = message;
+      return message;
+    });
     socket.open();
     socket.on('ready_go', () => {
       setIsDisabled(false);
