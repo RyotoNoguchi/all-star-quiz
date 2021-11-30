@@ -111,10 +111,6 @@ const Ranking: React.VFC = () => {
       db.collection('users').doc(lastPersonUid)
       .set({ disabled: true }, { merge: true });
     }
-    return () => {
-      db.collection('users').doc(lastPersonUid)
-      .set({ disabled: false }, { merge: true });
-    }
   }, [lastPersonUid])
   
   return (
