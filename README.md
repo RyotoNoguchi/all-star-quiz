@@ -117,7 +117,7 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 
 |  No.  |  E-mail  |  Password  |
 | ---- | ---- | ---- |
-| 1 | test.ichiro100 | ichirotest100 |
+| 1 | test.ichiro100 | ichirotest10000 |
 | 2 | test.jiro76 | jirotest200 |
 | 3 | test.saburo300 | saburotest300 |
 | 4 | test.shiro400 | shirotest400 |

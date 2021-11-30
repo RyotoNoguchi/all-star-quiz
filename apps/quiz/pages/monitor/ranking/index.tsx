@@ -107,6 +107,8 @@ const Ranking: React.VFC = () => {
   }, [answers])
 
   useEffect(() => {
+    console.log('レンダリングされました');
+    
     if (lastPersonUid) {
       db.collection('users').doc(lastPersonUid)
       .set({ disabled: true }, { merge: true });
