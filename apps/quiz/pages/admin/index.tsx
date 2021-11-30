@@ -88,7 +88,9 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
 
   const goToWorstRanking = () => {
     setIsWorstRankingBtnDisabled(true)
-    setIsOpenWorstRankingBtnDisabled(false)
+    setTimeout(() => {
+      setIsOpenWorstRankingBtnDisabled(false)
+    }, 3000);
     const worstRankingPagePath = '/monitor/ranking'
     setMonitorCurrentPath(worstRankingPagePath)
     socket.emit('go_to_worst_ranking_page', worstRankingPagePath)

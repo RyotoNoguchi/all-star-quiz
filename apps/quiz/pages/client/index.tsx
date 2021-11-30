@@ -37,6 +37,10 @@ const Home: React.FC = () => {
   const [verifyAnswer, setVerifyAnswer] = useState<IsRight>(null);
 
   useEffect(() => {
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
     socket.open();
     socket.on('ready_go', () => {
       setIsDisabled(false);
@@ -129,8 +133,8 @@ const Home: React.FC = () => {
                   ☓
                 </AnswerCheckIcon>
               )}
-              <Typography variant="h2">あなたが</Typography>
-              <Typography variant="h2">選択した回答</Typography>
+              <Typography variant="h2">あなたの</Typography>
+              <Typography variant="h2">解答</Typography>
               {selectedAnswer ? (
                 <SelectedAnswer answer={selectedAnswer}>
                   {selectedAnswer}
