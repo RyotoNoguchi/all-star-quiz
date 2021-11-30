@@ -166,6 +166,12 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
 
 
   useEffect(() => {
+    (async () => {
+      const docs = await db.collection('answers').get()
+      const docIds: string[] = []
+      docs.forEach(doc => { docIds.push(doc.id)})
+      docIds.map(async (docId) => { await db.collection('answers').doc(docId).delete()})
+    })()
     setMounted(true)
     socket.open()
     setMounted((prev) => {
