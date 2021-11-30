@@ -6,6 +6,7 @@ import { Answer } from "../../../components/types/question";
 import firebase from '../../../../../firebase/clientApp'
 import ChampionRankingTableContainer from "../../../components/organisms/ChampingRankingTableContainer";
 const db = firebase.firestore()
+import { API_BASE_URL } from "../../_app";
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const docs = await db.collection("answers").orderBy("time", "asc").get()
@@ -15,6 +16,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       answer: doc.data().answer,
       time: doc.data().time,
       user: doc.data().user,
+      uid: doc.data().uid,
     })
   })
   return {
@@ -25,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 }
 
 const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const socket = io('https://all-star-quiz-api.herokuapp.com/');
+  const socket = io(API_BASE_URL);
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
   const [answerList, setAnswerList] = useState<AnswerInfo[]>(answers)
@@ -38,6 +40,7 @@ const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSide
         answer: answerList[i]?.answer,
         time: answerList[i]?.time,
         user: answerList[i]?.user,
+        uid: answerList[i]?.uid,
         rank: (i + 1).toString(),
       });
     }
@@ -47,6 +50,7 @@ const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSide
         answer: answerList[i]?.answer,
         time: answerList[i]?.time,
         user: answerList[i]?.user,
+        uid: answerList[i]?.uid,
         rank: (i + 1).toString(),
       });
     }
@@ -55,6 +59,7 @@ const ChampionRanking: React.FC<AnswerInfo[]> = ({ answers }: InferGetServerSide
         answer: '---',
         time: '---',
         user: '---',
+        uid: '---',
         rank: '---',
       });
     }

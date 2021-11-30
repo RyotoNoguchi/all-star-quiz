@@ -8,6 +8,7 @@ import firebase from '../../../../firebase/clientApp';
 import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { ParsedUrlQuery } from 'querystring';
 import { Answer } from '../../components/types/question';
+import { API_BASE_URL } from '../_app'
 
 const db = firebase.firestore()
 
@@ -16,6 +17,7 @@ type Props = {
   countdownUrl: string
   worstRankingUrl: string
   championRankingUrl: string
+  lastQuestionId: number
 }
 
 export const getStaticProps: GetStaticProps<Props> = async (
@@ -26,12 +28,15 @@ export const getStaticProps: GetStaticProps<Props> = async (
   const countdownUrl = soundCollection.docs.find(doc => doc.data().name === 'countdown')?.data()?.url
   const worstRankingUrl = soundCollection.docs.find(doc => doc.data().name === 'worstRanking')?.data()?.url
   const championRankingUrl = soundCollection.docs.find(doc => doc.data().name === 'championRanking')?.data()?.url
+  const questionCollection = await db.collection('questions').get()
+  const lastQuestionId = questionCollection.docs.length
   return {
     props: {     
       cueUrl,
       countdownUrl,
       worstRankingUrl,
       championRankingUrl,
+      lastQuestionId,
     },
   };
 }
@@ -45,19 +50,27 @@ const StyledBox = styled(Box)`
   justify-content: space-around;
 `
 
-const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, championRankingUrl}) => {
-  const socket = io('https://all-star-quiz-api.herokuapp.com/');
+const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, championRankingUrl, lastQuestionId}) => {
+  const socket = io(API_BASE_URL);
   const MONITOR_BASE_URL = '/monitor/question';
   const [questionId, setQuestionId] = useState('1');
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
   const [monitorCurrentPath, setMonitorCurrentPath] = useState(`${MONITOR_BASE_URL}/${questionId}`);
   const [isReadyGoBtnDisabled, setIsReadyGoBtnDisabled] = useState(false)
+  const [isFinalReadyGoBtnDisabled, setIsFinalReadyGoBtnDisabled] = useState(true)
+  const [isNextBtnDisabled, setIsNextBtnDisabled] = useState(true)
+  const [isWorstRankingBtnDisabled, setIsWorstRankingBtnDisabled] = useState(true)
+  const [isOpenWorstRankingBtnDisabled, setIsOpenWorstRankingBtnDisabled] = useState(true)
+  const [isChampionRankingDisabled, setIsChampionRankingDisabled] = useState(true)
+  const [isOpenChampionRankingBtnDisabled, setIsOpenChampionRankingBtnDisabled] = useState(true)
+  const [isQuestionBtnDisabled, setIsQuestionBtnDisabled] = useState(true)
   const [playActive] = useSound(cueUrl, { volume: 0.5 })
   const [playCountDown] = useSound(countdownUrl, { volume: 0.5 })
   const [playWorstRanking] = useSound(worstRankingUrl, { volume: 0.5 })
   const [playChampionRanking] = useSound(championRankingUrl, { volume: 0.5 })
 
   const goToQuestion = async () => {
+    setIsNextBtnDisabled(true)
     // 初期ページが"/monitor/question/1
     playActive()
     setIsReadyGoBtnDisabled(false)
@@ -69,31 +82,26 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     const docIds: string[] = []
     docs.forEach(doc => { docIds.push(doc.id)})
     docIds.map(async (docId) => { await db.collection('answers').doc(docId).delete()})
-        socket.emit('go_to_question_page', {nextQuestionId, correctAnswer});
+    
+    socket.emit('go_to_question_page', {nextQuestionId, correctAnswer});
   };
 
   const goToWorstRanking = () => {
-    setIsReadyGoBtnDisabled(false)
+    setIsWorstRankingBtnDisabled(true)
+    setTimeout(() => {
+      setIsOpenWorstRankingBtnDisabled(false)
+    }, 3000);
     const worstRankingPagePath = '/monitor/ranking'
     setMonitorCurrentPath(worstRankingPagePath)
     socket.emit('go_to_worst_ranking_page', worstRankingPagePath)
   }
 
   const goToChampionRanking = () => {
-    setIsReadyGoBtnDisabled(false)
+    setIsChampionRankingDisabled(true)
+    setIsOpenChampionRankingBtnDisabled(false)
     const championRankingPagePath = '/monitor/champion'
     setMonitorCurrentPath(championRankingPagePath)
     socket.emit('go_to_champion_ranking_page', championRankingPagePath)
-  }
-
-  const displayCuePage = () => {
-    playActive()
-    setIsReadyGoBtnDisabled(false)
-    socket.emit('display_cue_page');    
-  }
-
-  const displayTopPage = () => {
-    socket.emit('display_top_page')
   }
 
   const readyGo = () => {
@@ -104,17 +112,18 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
 
   const finalReadyGo = () => {
     playCountDown()
-    setIsReadyGoBtnDisabled(true)
+    setIsFinalReadyGoBtnDisabled(true)
     socket.emit('final_ready_go');
   }
 
   const showWorstRanking = () => {
     playWorstRanking()
-    setIsReadyGoBtnDisabled(true)
+    setIsOpenWorstRankingBtnDisabled(true)
     socket.emit('show_worst_ranking', questionId)
   }
 
   const showChampionRanking = () => {
+    setIsOpenChampionRankingBtnDisabled(true)
     playChampionRanking()
     setIsReadyGoBtnDisabled(true)
     socket.emit('show_champion_ranking', correctAnswer)
@@ -125,9 +134,37 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
   }
 
   useEffect(() => {
+    socket.open()
+    socket.on('answer_displayed', () => {
+      if (!(parseInt(questionId) === lastQuestionId)) {
+        setIsWorstRankingBtnDisabled(false)
+      } else {
+        setTimeout(() => {
+          setIsChampionRankingDisabled(false)
+        }, 3000);
+      }
+    })
+    socket.on('ranking_display_completed', () => {
+      setIsNextBtnDisabled(false)
+    })
+
     db.collection('questions').where('questionId', '==', questionId).get().then((snapShot) => {
       snapShot.forEach((doc) => { setCorrectAnswer(doc.data().correctAnswer)})
     })
+
+    console.log('questionId', questionId);
+    console.log('lastQuestionId', lastQuestionId);
+    
+    if (parseInt(questionId) === lastQuestionId) {
+      setIsReadyGoBtnDisabled(true)
+      setIsFinalReadyGoBtnDisabled(false)
+    }
+
+
+    return () => {
+      socket.close()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [correctAnswer, questionId])
 
   return (
@@ -145,27 +182,7 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
         <StyledButton
           color="primary"
           variant="contained"
-          onClick={() => displayCuePage()}
-        >
-          CUE
-        </StyledButton>
-        <StyledButton
-          color="primary"
-          variant="contained"
-          onClick={() => displayTopPage()}
-        >
-          TOP
-        </StyledButton>
-        <StyledButton
-          color="primary"
-          variant="contained"
-          onClick={() => goToQuestion()}
-        >
-          INDEX
-        </StyledButton>
-        <StyledButton
-          color="primary"
-          variant="contained"
+          disabled={isNextBtnDisabled}
           onClick={() => goToQuestion()}
         >
           NEXT
@@ -173,40 +190,45 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
         <StyledButton disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => readyGo()}>
           READY-GO
         </StyledButton>
-        <StyledButton disabled={isReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => finalReadyGo()}>
+        <StyledButton disabled={isFinalReadyGoBtnDisabled} color="secondary" variant="contained" onClick={() => finalReadyGo()}>
           FINAL READY-GO
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isWorstRankingBtnDisabled}
           onClick={() => goToWorstRanking()}
-        >
+          >
           Worst Ranking
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isOpenWorstRankingBtnDisabled}
           onClick={() => showWorstRanking()}
-        >
+          >
           Open Worst Ranking
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isChampionRankingDisabled}
           onClick={() => goToChampionRanking()}
-        >
+          >
           Champion Ranking
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isOpenChampionRankingBtnDisabled}
           onClick={() => showChampionRanking()}
-        >
+          >
           Open Champion Ranking
         </StyledButton>
         <StyledButton
           color="primary"
           variant="contained"
+          disabled={isQuestionBtnDisabled}
           onClick={() => goToQuestionManage()}
         >
           Q Manage

@@ -5,7 +5,6 @@ import useSound from 'use-sound';
 import Image from 'next/image';
 import firebase from '../../../../../firebase/clientApp';
 import AlphabetCircle from '../../../components/atoms/AlphabetCircle/index';
-import Cue from '../cue';
 import { io } from 'socket.io-client';
 import Index from '../../index';
 import { useRouter } from 'next/router';
@@ -14,6 +13,7 @@ import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
 import { ParsedUrlQuery } from 'querystring';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { motion } from 'framer-motion';
+import { API_BASE_URL } from "../../_app";
 import {QuestionContainer, QuestionBox, QuestionMark, QuestionText, CountDownCircle, ChoiceBox, QuestionCell, ChoiceText, CountAnswerBox, AnswerCount} from '../../../components/styles/monitor/questionStyles'
 
 const gongUrl = 'https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/sound%2Fgong.mp3?alt=media&token=3a66f8d8-23f8-48d0-a1ed-b785d2a8db3c'
@@ -58,7 +58,7 @@ export const getStaticProps: GetStaticProps<QuestionType> = async (context: GetS
   })
   const question = questions[0]
   return {
-    props: { 
+    props: {
       id: question.id,
       question: question.question,
       answer: question.answer,
@@ -71,9 +71,9 @@ export const getStaticProps: GetStaticProps<QuestionType> = async (context: GetS
 const countdownSec = 10;
 
 const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
-  
+
   const router = useRouter();
-  const socket = io('https://all-star-quiz-api.herokuapp.com/');
+  const socket = io(API_BASE_URL);
   const [questionId, setQuestionId] = useState(id);
   const [currentPath, setCurrentPath] = useState(
     `/monitor/question/${questionId}`
@@ -93,7 +93,7 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
   const [playGong] = useSound(gongUrl, { volume: 0.5 })
   const QImgBaseUrl = 'https://firebasestorage.googleapis.com'
 
-  
+
   const resetQuestion = () => {
     setCountdownTimeSec(countdownSec);
     setIsNumberCountShown(false);
@@ -103,16 +103,30 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
     setIsCorrectForD(false);
     setIsTopPage(false);
     setIsQuestionDisplayed(false);
+
   };
   // https://usehooks-typescript.com/react-hook/use-interval
-  useInterval(() => {
-    
+  useInterval( async() => {
+
     if (isQuestionDisplayed && countdownTimeSec > 0) {
       setCountdownTimeSec(countdownTimeSec - 1)
     }
     if (countdownTimeSec === 0) {
       // カウントダウンが0になった3400ms（「アンサーチェック！」）後に解答数枠を表示する
       setIsPlaying(false)
+      await startCountdown()
+      // 「アンサーチェック！」の後3000ms（「正解はこちら！」）後に正解を点滅させる
+      await openAnswer()
+
+      setTimeout(() => {
+        socket.emit('answer_displayed')
+      }, 3000);
+    }
+
+  }, isPlaying ? 1000 : null)
+
+  const startCountdown = () => {
+    return new Promise<void>(resolve => {
       setTimeout(() => {
         setIsNumberCountShown(true);
         if (isLastQuestion) {
@@ -120,9 +134,14 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
             playGong()
           }, 7000);
         }
+        resolve();
       }, 3400);
+    })
 
-      // カウントダウンが0になった7000ms（「正解はこちら！」）後に正解を点滅させる
+  }
+
+  const openAnswer = () => {
+    return new Promise<void>(resolve => {
       setTimeout(() => {
         switch (correctAnswer) {
           case 'A':
@@ -140,11 +159,11 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
           default:
             break;
         }
-      }, 7000);
-      
-    }
+        resolve();
+      }, 3000);
+    })
+  }
 
-  }, isPlaying ? 1000 : null)
 
   useEffect(() => {
     setMounted(true)
@@ -175,12 +194,6 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         setCurrentPath(newCurrentPath);
         router.push(newCurrentPath);
       });
-      socket.on('display_cue_page', () => {
-        setIsTopPage(false);
-      });
-      socket.on('display_top_page', () => {
-        setIsTopPage(true);
-      }); 
       socket.on('go_to_worst_ranking_page', (path) => {
         resetQuestion()
         const newCurrentPath = path;
@@ -194,7 +207,7 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         router.push(newCurrentPath)
       })
       return prev
-    })  
+    })
     setMounted(false)
     return function cleanup() {
       socket.close()
@@ -209,11 +222,6 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
   if (isTopPage) {
     return <Index />;
   }
-
-  if (!isQuestionDisplayed) {
-    // [READY-GO]ボタンが押下される前
-    return <Cue questionNumber={questionId} />;
-  } 
 
   const srcA = choices.A
   const srcB = choices.B
@@ -231,9 +239,9 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell $isCorrect={isCorrectForA}>
             <AlphabetCircle choice="A" color="red" />
-            {choices.A.startsWith(QImgBaseUrl) 
+            {choices.A.startsWith(QImgBaseUrl)
               ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
-                  <Image loader={() => srcA} src={srcA} alt="選択肢Aの画像" width={320} height={320} priority/> 
+                  <Image loader={() => srcA} src={srcA} alt="選択肢Aの画像" width={320} height={320} priority/>
                 </motion.div>
               : <ChoiceText variant="h2">{choices.A}</ChoiceText>}
             {isNumberCountShown && (
@@ -246,9 +254,9 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell $isCorrect={isCorrectForB}>
             <AlphabetCircle choice="B" color="blue" />
-            {choices.B.startsWith(QImgBaseUrl) 
+            {choices.B.startsWith(QImgBaseUrl)
               ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
-              <Image loader={() => srcB} src={srcB} alt="選択肢Bの画像" width={320} height={320} priority/> 
+              <Image loader={() => srcB} src={srcB} alt="選択肢Bの画像" width={320} height={320} priority/>
             </motion.div>
               : <ChoiceText variant="h2">{choices.B}</ChoiceText>}
             {isNumberCountShown && (
@@ -261,9 +269,9 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell $isCorrect={isCorrectForC}>
             <AlphabetCircle choice="C" color="yellow" />
-            {choices.C.startsWith(QImgBaseUrl) 
+            {choices.C.startsWith(QImgBaseUrl)
               ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
-              <Image loader={() => srcC} src={srcC} alt="選択肢Cの画像" width={320} height={320} priority/> 
+              <Image loader={() => srcC} src={srcC} alt="選択肢Cの画像" width={320} height={320} priority/>
             </motion.div>
               : <ChoiceText variant="h2">{choices.C}</ChoiceText>}
             {isNumberCountShown && (
@@ -276,9 +284,9 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell $isCorrect={isCorrectForD}>
             <AlphabetCircle choice="D" color="green" />
-            {choices.D.startsWith(QImgBaseUrl) 
+            {choices.D.startsWith(QImgBaseUrl)
               ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
-              <Image loader={() => srcD} src={srcD} alt="選択肢Dの画像" width={320} height={320} priority/> 
+              <Image loader={() => srcD} src={srcD} alt="選択肢Dの画像" width={320} height={320} priority/>
             </motion.div>
               : <ChoiceText variant="h2">{choices.D}</ChoiceText>}
             {isNumberCountShown && (

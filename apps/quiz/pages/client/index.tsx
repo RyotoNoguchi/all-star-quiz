@@ -8,6 +8,7 @@ import { Answer } from '../../components/types/question';
 import { io } from 'socket.io-client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { NextPageProps } from '../../components/types/pageTransition';
+import { API_BASE_URL } from "../_app";
 import {
   AnswerCheckIcon,
   StyledBox,
@@ -25,9 +26,9 @@ const title3rdRow = titleArray[2];
 type IsRight = 'CORRECT' | 'INCORRECT';
 
 const Home: React.FC = () => {
-  const socket = io('https://all-star-quiz-api.herokuapp.com/');
+  const socket = io(API_BASE_URL);
   const db = firebase.firestore();
-  const [user, loading, error] = useAuthState(firebase.auth());
+  const [user] = useAuthState(firebase.auth());
   const [isDisabled, setIsDisabled] = useState(true);
   const startTime = useRef<Date>(null);
   const finishTime = useRef<Date>(null);
@@ -36,26 +37,45 @@ const Home: React.FC = () => {
   const [verifyAnswer, setVerifyAnswer] = useState<IsRight>(null);
 
   useEffect(() => {
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
+    window.addEventListener('beforeunload', function(e){
+      const message = '本当に更新してよろしいですか？';
+      e.returnValue = message;
+      return message;
+    });
     socket.open();
     socket.on('ready_go', () => {
       setIsDisabled(false);
       startTime.current = new Date();
+      setTimeout(() => {
+        setIsDisabled(true);
+      }, 10000);
     });
     socket.on('final_ready_go', () => {
       setIsDisabled(false);
       startTime.current = new Date();
+      setTimeout(() => {
+        setIsDisabled(true);
+      }, 10000);
     });
     socket.on('check_answer', (correctAnswer: Answer) => {
+      setIsAnswerDisplayed(true);
       if (selectedAnswer === correctAnswer) {
         setVerifyAnswer('CORRECT');
       } else {
         setVerifyAnswer('INCORRECT');
-        disableUser()
+        disableUser();
       }
     });
-    socket.on('go_to_designated_page', (data: NextPageProps) => {
-      setVerifyAnswer(null);
-      if (selectedAnswer === data.correctAnswer) {
+    socket.on('go_to_designated_page', async(data: NextPageProps) => {
+      const disabled = await (await db.collection('users').doc(user?.uid).get()).data().disabled
+      console.log('disabled', disabled);
+      setSelectedAnswer(null)
+      setVerifyAnswer(null)
+      if (selectedAnswer === data.correctAnswer && disabled === false) {
         setIsAnswerDisplayed(false);
       } else {
         router.push('/client/gameover');
@@ -65,11 +85,16 @@ const Home: React.FC = () => {
       socket.close();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedAnswer]);
+  }, [selectedAnswer, verifyAnswer]);
 
   const disableUser = async () => {
-    await db.collection('users').doc(user.uid).set({disabled: true}, { merge: true })
-  }
+    if (user?.uid) {      
+      await db
+        .collection('users')
+        .doc(user?.uid)
+        .set({ disabled: true }, { merge: true });
+    }
+  };
 
   const addAnswerDocument = async (answer: Answer) => {
     setSelectedAnswer(answer);
@@ -84,6 +109,7 @@ const Home: React.FC = () => {
       .collection('answers')
       .doc(user.uid)
       .set({
+        uid: user.uid,
         answer,
         user: user.displayName,
         time: answerTime.toFixed(2), // 2.50などと0埋めするため
@@ -112,12 +138,15 @@ const Home: React.FC = () => {
                   ☓
                 </AnswerCheckIcon>
               )}
-
-              <Typography variant="h2">あなたが</Typography>
-              <Typography variant="h2">選択した回答</Typography>
-              <SelectedAnswer answer={selectedAnswer}>
-                {selectedAnswer}
-              </SelectedAnswer>
+              <Typography variant="h2">あなたの</Typography>
+              <Typography variant="h2">解答</Typography>
+              {selectedAnswer ? (
+                <SelectedAnswer answer={selectedAnswer}>
+                  {selectedAnswer}
+                </SelectedAnswer>
+              ) : (
+                <h1>未選択です</h1>
+              )}
             </>
           ) : (
             <>

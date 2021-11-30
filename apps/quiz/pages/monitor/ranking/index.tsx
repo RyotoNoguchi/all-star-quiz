@@ -20,6 +20,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { AnswerInfo } from "../../../components/types/client";
 import { NextPageProps } from "../../../components/types/pageTransition";
 import { rankingRowVariant, tbodyVariant} from '../../../components/variants/rankingVariant'
+import { API_BASE_URL } from "../../_app";
 const db = firebase.firestore()
 
 const isLastRow = (idx: number): boolean => {
@@ -28,15 +29,18 @@ const isLastRow = (idx: number): boolean => {
 
 const Ranking: React.VFC = () => {
   const router = useRouter();
-  const socket = io('https://all-star-quiz-api.herokuapp.com/');
+  const socket = io(API_BASE_URL);
   const [isRankingRowsShow, setIsRankingRowsShow] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState('');
-  const [answers, answersLoading, answersError] = useCollectionData(
+  const [answers] = useCollectionData(
     db.collection('answers').where('answer', '==', correctAnswer).orderBy('time', 'asc'),
     { snapshotListenOptions: { includeMetadataChanges: true } }
-  );
-
+  );  
+  const [lastPersonUid, setLastPersonUid] = useState('')
+  const [answerList, setAnswerList] = useState<AnswerInfo[]>()
+  
   useEffect(() => {
+    socket.open()
     socket.on('show_worst_ranking', (questionId) => {
       setIsRankingRowsShow(true);
       setIsRankingRowsShow((prev) => {
@@ -47,6 +51,9 @@ const Ranking: React.VFC = () => {
         }
         return prev
       })
+      setTimeout(() => {
+        socket.emit('ranking_display_completed')
+      }, 10000);
     });
     socket.on('go_to_designated_page', (data: NextPageProps) => {
       router.push(`/monitor/question/${data.nextQuestionId}`)
@@ -57,38 +64,55 @@ const Ranking: React.VFC = () => {
     }
   }, []);
 
-  const itemNumber = 10;
-  const totalNumber = answers?.length;
-  const answerList: AnswerInfo[] = [];
-  if (totalNumber > 10) {
-    const screenTop = totalNumber - itemNumber;
-    for (let i = screenTop; i < totalNumber; i++) {
-      answerList.push({
-        answer: answers[i].answer,
-        time: answers[i].time,
-        user: answers[i].user,
-        rank: (i + 1).toString(),
-      });
+  useEffect(() => {
+    const itemNumber = 10;
+    const totalNumber = answers?.length;
+    const answerList: AnswerInfo[] = [];
+  
+    if (totalNumber > 10) {
+      const screenTop = totalNumber - itemNumber;
+      for (let i = screenTop; i < totalNumber; i++) {
+        answerList.push({
+          answer: answers[i].answer,
+          time: answers[i].time,
+          user: answers[i].user,
+          uid: answers[i].uid,
+          rank: (i + 1).toString(),
+        });
+        setAnswerList(answerList)
+        setLastPersonUid(answerList[totalNumber-1]?.uid)
+      }
+    } else {
+      for (let i = 0; i < 10 - totalNumber; i++) {
+        answerList.push({
+          answer: '---',
+          time: '---',
+          user: '---',
+          uid: '---',
+          rank: '---',
+        });
+      }
+      for (let i = 0; i < totalNumber; i++) {
+        answerList.push({
+            answer: answers[i].answer,
+            time: answers[i].time,
+            user: answers[i].user,
+            uid: answers[i].uid,
+            rank: (i + 1).toString(),
+          });
+          setAnswerList(answerList)
+          setLastPersonUid(answerList[9]?.uid)
+      }
     }
-  } else {
-    for (let i = 0; i < 10 - totalNumber; i++) {
-      answerList.push({
-        answer: '---',
-        time: '---',
-        user: '---',
-        rank: '---',
-      });
-    }
-    for (let i = 0; i < totalNumber; i++) {
-      answerList.push({
-        answer: answers[i].answer,
-        time: answers[i].time,
-        user: answers[i].user,
-        rank: (i + 1).toString(),
-      });
-    }
-  }
+  }, [answers])
 
+  useEffect(() => {
+    if (lastPersonUid) {
+      db.collection('users').doc(lastPersonUid)
+      .set({ disabled: true }, { merge: true });
+    }
+  }, [lastPersonUid])
+  
   return (
     <>
       <RankingTableContainer>
@@ -103,7 +127,7 @@ const Ranking: React.VFC = () => {
         <Table arial-label="worst ranking table">
           {isRankingRowsShow && (
             <MotionTableBody variants={tbodyVariant}>
-              {answerList.map((answerPerson: AnswerInfo, idx: number) => {
+              {answerList?.map((answerPerson: AnswerInfo, idx: number) => {
                 return (
                   <RankRow
                     isChangeColorRow={isLastRow(idx)}

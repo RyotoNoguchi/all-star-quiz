@@ -77,8 +77,6 @@ Run `nx dep-graph` to see a diagram of the dependencies of your projects.
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
 
-
-
 ## ☁ Nx Cloud
 
 ### Distributed Computation Caching & Distributed Task Execution
@@ -91,19 +89,18 @@ Teams using Nx gain the advantage of building full-stack applications with their
 
 Visit [Nx Cloud](https://nx.app/) to learn more.
 
-## Next.js + Nest.js + Axios + React + TypeScript　+ firebase Monorepo環境構築
-
+<!-- ## Next.js + Nest.js + Axios + React + TypeScript　+ firebase Monorepo環境構築 -->
+<!--
 1. npx create-nx-workspace
 2. yarn add @nrwl/nest @nrwl/react -D
-3. nx g @nrwl/nest:app api <!-- :appはアプリケーションを作るという意味。apiはディレクトリの名前を決める -->
+3. nx g @nrwl/nest:app api // :appはアプリケーションを作るという意味。apiはディレクトリの名前を決める //
 4. nx serve api
-5. yarn add axios
 6. sudo yarn add firebase react-firebase-hooks react-firebaseui
 7. yarn add g firebase-tools
 8. yarn add firebase-functions
 9. firebase login
 10. firebase init functions
-11. firebase deploy --only functions <!-- /functions/src/index.tsに書いたfirebaseを操作する関数を有効すにする --> 　
+11. firebase deploy --only functions // /functions/src/index.tsに書いたfirebaseを操作する関数を有効すにする //
 12. yarn add cors
 13. yarn add socket.io
 14. yarn add socket.io-client
@@ -111,11 +108,10 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 16. yarn add -D @types/socket.io
 17. yarn add socket-controllers
 18. yarn add reflect-metadata
-19. yarn add @material-ui/core @material-ui/icons <!-- https://www.youtube.com/watch?v=0rnVfshKqDI -->
+19. yarn add @material-ui/core @material-ui/icons // https://www.youtube.com/watch?v=0rnVfshKqDI //
 20. yarn add formik
 21. yarn add yup
-22. nx run api:serve <!-- バックエンド側のサーバー立てる>
-23. nx run quiz:serve<!-- フロントエンドエンド側のサーバー立てる>
+-->
 
 ### テスト用Googleアカウント一覧
 
@@ -131,8 +127,13 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 | 8 | test.hachiro800 | hachirotest800 |
 | 9 | test.kuro900 | kurotest900 |
 
-<!-- TODO '/admin'画面のボタンのUI整える -->
-<!-- TODO '/admin/manage'の「User」のメニューで「Active」と「Inactive」ボタン作成して、削除フラグでユーザーを分類、Client画面で「Inactive」になっている場合はグレーダウンとボタンの非活性化に修正 -->
-<!-- TODO '/admin'画面で現在生き残っているユーザー一覧が確認できるようにする -->
+### フロントもバックエンドもローカルで立ち上げる場合
 
-<!-- userコレクションのdisabledプロパティをフラグとしてactiveユーザー一覧を/admin/manage/に表示 -->
+1. apiサーバーの接続先を`http://localhost:3333/`に変更する
+2. `allstar`ディレクトリ直下で`nx run quiz:serve`
+3. `allstar`ディレクトリ直下で`nx run api:serve`
+4. `http://localhost:4200`を開く
+
+<!-- gameoverになったユーザーの復活ボタン（次のラウンドボタン） -->
+<!-- テストケース作成してバグの洗い出し -->
+<!-- 問題をラウンド別に分けて画面操作でラウンドを分けれるようにする -->

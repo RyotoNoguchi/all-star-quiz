@@ -87,4 +87,14 @@ export class AppGateway
   CheckAnswer(@MessageBody() correctAnswer: string): void {
     this.server.emit('check_answer', correctAnswer)
   }
+
+  @SubscribeMessage('answer_displayed')
+  AnswerDisplayed() {
+    this.server.emit('answer_displayed')
+  }
+
+  @SubscribeMessage('ranking_display_completed')
+  RankingDisplayCompleted() {
+    this.server.emit('ranking_display_completed')
+  }
 }

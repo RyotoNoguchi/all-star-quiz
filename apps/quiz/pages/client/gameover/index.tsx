@@ -1,9 +1,22 @@
 import Box from '@mui/material/Box';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { GameOverTitle } from '../../../components/styles/client/gameoverStyles';
 import { TopTitle, TopTitlePart } from '../../../components/molecules/TopTitle';
 
 const GameOver: React.VFC = () => {
+
+  useEffect(() => {
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        history.go(1);
+    };
+    window.addEventListener('beforeunload', function(e){
+      const message = '本当に更新してよろしいですか？';
+      e.returnValue = message;
+      return message;
+    });
+  }, [])
+  
   const title = 'アソビュー オールスター感謝祭 2021';
   const titleArray = title.split(' ');
   const title1stRow = titleArray[0];
