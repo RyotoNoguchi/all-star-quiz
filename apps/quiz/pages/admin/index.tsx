@@ -77,10 +77,10 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     const nextQuestionId = (parseInt(questionId) + 1).toString()
     setQuestionId(nextQuestionId);
     setMonitorCurrentPath(`${MONITOR_BASE_URL}/${nextQuestionId}`)
-    const docs = await db.collection('answers').get()
-    const docIds: string[] = []
-    docs.forEach(doc => { docIds.push(doc.id)})
-    docIds.map(async (docId) => { await db.collection('answers').doc(docId).delete()})
+    // const docs = await db.collection('answers').get()
+    // const docIds: string[] = []
+    // docs.forEach(doc => { docIds.push(doc.id)})
+    // docIds.map(async (docId) => { await db.collection('answers').doc(docId).delete()})
     
     socket.emit('go_to_question_page', {nextQuestionId, correctAnswer});
   };
