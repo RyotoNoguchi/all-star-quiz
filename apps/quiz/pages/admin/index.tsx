@@ -77,7 +77,6 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
     const nextQuestionId = (parseInt(questionId) + 1).toString()
     setQuestionId(nextQuestionId);
     setMonitorCurrentPath(`${MONITOR_BASE_URL}/${nextQuestionId}`)
-    // テストの目的で行うなら↓の'answers'を'test'に変更すればOK
     const docs = await db.collection('answers').get()
     const docIds: string[] = []
     docs.forEach(doc => { docIds.push(doc.id)})
