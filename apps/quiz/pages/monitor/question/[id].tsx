@@ -229,10 +229,10 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
     return <Index />;
   }
 
-  const srcA = choices.A
-  const srcB = choices.B
-  const srcC = choices.C
-  const srcD = choices.D
+  const srcA = choices?.A
+  const srcB = choices?.B
+  const srcC = choices?.C
+  const srcD = choices?.D
 
   return (
     <>
