@@ -91,7 +91,8 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(answer as Answer)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [playGong] = useSound(gongUrl, { volume: 0.5 })
-  const QImgBaseUrl = 'https://firebasestorage.googleapis.com'
+  const QImgBaseUrl = 'https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/img'
+  const QAnimatedImgBaseUrl = 'https://firebasestorage.googleapis.com/v0/b/allstar-thanks-giving.appspot.com/o/animated-img'
 
 
   const resetQuestion = () => {
@@ -245,11 +246,21 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell $isCorrect={isCorrectForA}>
             <AlphabetCircle choice="A" color="red" />
-            {choices.A.startsWith(QImgBaseUrl)
-              ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
+            {
+              (() => {
+                if (choices.A.startsWith(QAnimatedImgBaseUrl)) {
+                  return (
+                    <motion.div initial={{clipPath: 'circle(5% at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
                   <Image loader={() => srcA} src={srcA} alt="選択肢Aの画像" width={320} height={320} priority/>
                 </motion.div>
-              : <ChoiceText variant="h2">{choices.A}</ChoiceText>}
+                  )
+                } else if (choices.A.startsWith(QImgBaseUrl)) {
+                  return <Image loader={() => srcA} src={srcA} alt="選択肢Aの画像" width={320} height={160} priority/>
+                } else {
+                  return <ChoiceText variant="h2">{choices.A}</ChoiceText>
+                }
+              })()
+            }
             {isNumberCountShown && (
               <CountAnswerBox $isCorrect={isCorrectForA}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'A').length}</AnswerCount>
@@ -260,11 +271,21 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell $isCorrect={isCorrectForB}>
             <AlphabetCircle choice="B" color="blue" />
-            {choices.B.startsWith(QImgBaseUrl)
-              ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
-              <Image loader={() => srcB} src={srcB} alt="選択肢Bの画像" width={320} height={320} priority/>
-            </motion.div>
-              : <ChoiceText variant="h2">{choices.B}</ChoiceText>}
+            {
+              (() => {
+                if (choices.B.startsWith(QAnimatedImgBaseUrl)) {
+                  return (
+                    <motion.div initial={{clipPath: 'circle(5% at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
+                  <Image loader={() => srcB} src={srcB} alt="選択肢Bの画像" width={320} height={320} priority/>
+                </motion.div>
+                  )
+                } else if (choices.B.startsWith(QImgBaseUrl)) {
+                  return <Image loader={() => srcB} src={srcB} alt="選択肢Bの画像" width={320} height={160} priority/>
+                } else {
+                  return <ChoiceText variant="h2">{choices.B}</ChoiceText>
+                }
+              })()
+            }
             {isNumberCountShown && (
               <CountAnswerBox $isCorrect={isCorrectForB}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'B').length}</AnswerCount>
@@ -275,11 +296,21 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell $isCorrect={isCorrectForC}>
             <AlphabetCircle choice="C" color="yellow" />
-            {choices.C.startsWith(QImgBaseUrl)
-              ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
-              <Image loader={() => srcC} src={srcC} alt="選択肢Cの画像" width={320} height={320} priority/>
-            </motion.div>
-              : <ChoiceText variant="h2">{choices.C}</ChoiceText>}
+            {
+              (() => {
+                if (choices.C.startsWith(QAnimatedImgBaseUrl)) {
+                  return (
+                    <motion.div initial={{clipPath: 'circle(5% at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
+                  <Image loader={() => srcC} src={srcC} alt="選択肢Cの画像" width={320} height={320} priority/>
+                </motion.div>
+                  )
+                } else if (choices.C.startsWith(QImgBaseUrl)) {
+                  return <Image loader={() => srcC} src={srcC} alt="選択肢Cの画像" width={320} height={160} priority/>
+                } else {
+                  return <ChoiceText variant="h2">{choices.C}</ChoiceText>
+                }
+              })()
+            }
             {isNumberCountShown && (
               <CountAnswerBox $isCorrect={isCorrectForC}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'C').length}</AnswerCount>
@@ -290,11 +321,21 @@ const Question: React.VFC<QuestionType> = ({id, question, answer, choices}) => {
         <ChoiceBox item xs={6}>
           <QuestionCell $isCorrect={isCorrectForD}>
             <AlphabetCircle choice="D" color="green" />
-            {choices.D.startsWith(QImgBaseUrl)
-              ? <motion.div initial={{clipPath: 'circle(0 at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
-              <Image loader={() => srcD} src={srcD} alt="選択肢Dの画像" width={320} height={320} priority/>
-            </motion.div>
-              : <ChoiceText variant="h2">{choices.D}</ChoiceText>}
+            {
+              (() => {
+                if (choices.D.startsWith(QAnimatedImgBaseUrl)) {
+                  return (
+                    <motion.div initial={{clipPath: 'circle(5% at 50% 50%)'}} animate={{ clipPath: 'circle(100% at 50% 50%)'}} transition={{ ease: [1, .02, 1, .42], duration: 10}}>
+                  <Image loader={() => srcD} src={srcD} alt="選択肢Dの画像" width={320} height={320} priority/>
+                </motion.div>
+                  )
+                } else if (choices.D.startsWith(QImgBaseUrl)) {
+                  return <Image loader={() => srcD} src={srcD} alt="選択肢Dの画像" width={320} height={160} priority/>
+                } else {
+                  return <ChoiceText variant="h2">{choices.D}</ChoiceText>
+                }
+              })()
+            }
             {isNumberCountShown && (
               <CountAnswerBox $isCorrect={isCorrectForD}>
                 <AnswerCount variant="body1">{answers?.docs.filter((doc)=>doc.data().answer === 'D').length}</AnswerCount>
