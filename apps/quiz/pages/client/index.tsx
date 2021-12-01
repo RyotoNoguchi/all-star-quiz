@@ -72,7 +72,6 @@ const Home: React.FC = () => {
     });
     socket.on('go_to_designated_page', async(data: NextPageProps) => {
       const disabled = await (await db.collection('users').doc(user?.uid).get()).data().disabled
-      console.log('disabled', disabled);
       setSelectedAnswer(null)
       setVerifyAnswer(null)
       if (selectedAnswer === data.correctAnswer && disabled === false) {
