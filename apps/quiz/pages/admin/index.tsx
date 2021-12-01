@@ -53,7 +53,7 @@ const StyledBox = styled(Box)`
 const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, championRankingUrl, lastQuestionId}) => {
   const socket = io(API_BASE_URL);
   const MONITOR_BASE_URL = '/monitor/question';
-  const [questionId, setQuestionId] = useState('1');
+  const [questionId, setQuestionId] = useState('7');
   const [correctAnswer, setCorrectAnswer] = useState<Answer>(null)
   const [monitorCurrentPath, setMonitorCurrentPath] = useState(`${MONITOR_BASE_URL}/${questionId}`);
   const [isReadyGoBtnDisabled, setIsReadyGoBtnDisabled] = useState(false)
