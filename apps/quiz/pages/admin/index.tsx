@@ -71,17 +71,11 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
 
   const goToQuestion = async () => {
     setIsNextBtnDisabled(true)
-    // 初期ページが"/monitor/question/1
     playActive()
     setIsReadyGoBtnDisabled(false)
     const nextQuestionId = (parseInt(questionId) + 1).toString()
     setQuestionId(nextQuestionId);
     setMonitorCurrentPath(`${MONITOR_BASE_URL}/${nextQuestionId}`)
-    // const docs = await db.collection('answers').get()
-    // const docIds: string[] = []
-    // docs.forEach(doc => { docIds.push(doc.id)})
-    // docIds.map(async (docId) => { await db.collection('answers').doc(docId).delete()})
-    
     socket.emit('go_to_question_page', {nextQuestionId, correctAnswer});
   };
 
@@ -151,9 +145,6 @@ const Index: React.FC<Props> = ({cueUrl, countdownUrl, worstRankingUrl, champion
       snapShot.forEach((doc) => { setCorrectAnswer(doc.data().correctAnswer)})
     })
 
-    console.log('questionId', questionId);
-    console.log('lastQuestionId', lastQuestionId);
-    
     if (parseInt(questionId) === lastQuestionId) {
       setIsReadyGoBtnDisabled(true)
       setIsFinalReadyGoBtnDisabled(false)
